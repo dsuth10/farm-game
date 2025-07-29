@@ -48,14 +48,20 @@ Each round represents 6 months and follows this sequence:
 ### 2. Calculation Requirements
 
 #### 2.1 Seasonal Economic Parameters
-Each round represents a different season with varying market conditions:
+Each round represents a different season with varying market conditions. Wool prices are calculated to achieve 60-70% profit margins with random fluctuations within this range:
+
+**Profit Margin Calculation:**
+- Total Cost per Sheep = Sheep Purchase Price + Feed Cost
+- Wool Price = Total Cost per Sheep × (1 + Profit Margin)
+- Profit Margin = Random value between 60% and 70%
+- This ensures realistic business scenarios with consistent profitability
 
 | Season (Round) | Wool Price | Feed Cost | Housing Cost | Sheep Purchase Price | Market Condition |
 |----------------|------------|-----------|--------------|---------------------|------------------|
-| Spring (1) | $18 per sheep | $12 per sheep | $8 per sheep | $45 per sheep | Growing season |
-| Summer (2) | $22 per sheep | $18 per sheep | $12 per sheep | $55 per sheep | Peak demand |
-| Autumn (3) | $20 per sheep | $15 per sheep | $10 per sheep | $50 per sheep | Stable market |
-| Winter (4) | $16 per sheep | $20 per sheep | $15 per sheep | $40 per sheep | High costs |
+| Spring (1) | $72 per sheep (60-70% profit margin) | $12 per sheep | $8 per sheep | $45 per sheep | Growing season |
+| Summer (2) | $88 per sheep (60-70% profit margin) | $18 per sheep | $12 per sheep | $55 per sheep | Peak demand |
+| Autumn (3) | $80 per sheep (60-70% profit margin) | $15 per sheep | $10 per sheep | $50 per sheep | Stable market |
+| Winter (4) | $64 per sheep (60-70% profit margin) | $20 per sheep | $15 per sheep | $40 per sheep | High costs |
 
 #### 2.2 Seasonal Price Display Requirements
 - **REQ-2.2.1**: Current season must be prominently displayed with seasonal icon

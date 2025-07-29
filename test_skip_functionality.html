@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skip Purchase Functionality Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+        input { padding: 5px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Skip Purchase Functionality Test</h1>
+    
+    <div class="test-section">
+        <h2>Test Instructions</h2>
+        <ol>
+            <li>Open the main game in another tab</li>
+            <li>Complete round 1 by purchasing some sheep and housing</li>
+            <li>Advance to round 2</li>
+            <li>Look for the "Skip Purchase - Use Existing Flock" button</li>
+            <li>Click it and verify that calculation inputs become enabled</li>
+        </ol>
+    </div>
+    
+    <div class="test-section">
+        <h2>Expected Behavior</h2>
+        <ul>
+            <li>Round 1: No skip button should appear</li>
+            <li>Round 2+: Skip button should appear in calculations section</li>
+            <li>After clicking skip: Calculation inputs should be enabled</li>
+            <li>After clicking skip: Purchase inputs should be disabled</li>
+            <li>Calculations should work with existing flock only</li>
+        </ul>
+    </div>
+    
+    <div class="test-section">
+        <h2>Debug Information</h2>
+        <p>Open browser console (F12) to see debug messages when testing.</p>
+        <p>Look for messages like:</p>
+        <ul>
+            <li>"Skip purchases enabled for round X"</li>
+            <li>"Creating skip purchase button"</li>
+            <li>"Handle skip purchase called"</li>
+        </ul>
+    </div>
+    
+    <div class="test-section">
+        <h2>Quick Test</h2>
+        <p>If you want to test the skip functionality quickly:</p>
+        <button onclick="testSkipFunctionality()">Simulate Skip Purchase</button>
+        <div id="testResult"></div>
+    </div>
+    
+    <script>
+        function testSkipFunctionality() {
+            const result = document.getElementById('testResult');
+            
+            // Simulate game state
+            const gameState = {
+                currentRound: 2,
+                flockSize: 5,
+                housingCapacity: 6,
+                canSkipPurchases: true
+            };
+            
+            if (gameState.canSkipPurchases && gameState.flockSize > 0) {
+                result.innerHTML = '<div class="success">✅ Skip functionality should work! Game state is valid for skipping.</div>';
+            } else {
+                result.innerHTML = '<div class="error">❌ Skip functionality should not work. Check game state.</div>';
+            }
+        }
+    </script>
+</body>
+</html> 

@@ -56,21 +56,22 @@ sheep-business-game/
 ## 🎮 How to Play
 
 ### Game Flow
-1. **Purchase Sheep**: Choose how many sheep to buy (0-20)
-2. **Calculate Costs**: Work out housing and feed costs
-3. **Calculate Income**: Determine wool income from your sheep
-4. **Calculate Profit**: Find your net profit or loss
-5. **Advance**: Move to the next round when all calculations are correct
+1. **Purchase Housing**: Choose how much to spend on housing units
+2. **Purchase Sheep**: Choose how many sheep to buy (0-20, limited by housing capacity)
+3. **Calculate Costs**: Work out feed costs for your sheep
+4. **Calculate Income**: Determine wool income from your sheep
+5. **Calculate Profit**: Find your net profit or loss (Wool Income - Feed Cost - Purchase Cost - Housing Cost)
+6. **Advance**: Move to the next round when all calculations are correct
 
 ### Seasonal Changes
-Each round represents a different season with varying market conditions:
+Each round represents a different season with varying market conditions. Wool prices are dynamically calculated to achieve 60-70% profit margins with random fluctuations within this range, ensuring realistic business scenarios with consistent profitability.
 
 | Season | Wool Price | Feed Cost | Housing Cost | Sheep Price | Market Condition |
 |--------|------------|-----------|--------------|-------------|------------------|
-| Spring | $18 | $12 | $8 | $45 | Growing season |
-| Summer | $22 | $18 | $12 | $55 | Peak demand |
-| Autumn | $20 | $15 | $10 | $50 | Stable market |
-| Winter | $16 | $20 | $15 | $40 | High costs |
+| Spring | $72 (60-70% profit margin) | $12 | $8 | $45 | Growing season |
+| Summer | $88 (60-70% profit margin) | $18 | $12 | $55 | Peak demand |
+| Autumn | $80 (60-70% profit margin) | $15 | $10 | $50 | Stable market |
+| Winter | $64 (60-70% profit margin) | $20 | $15 | $40 | High costs |
 
 ### Getting Help
 - **Hints**: Available after 2 incorrect attempts

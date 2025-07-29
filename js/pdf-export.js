@@ -139,7 +139,6 @@ class PDFExporter {
                             <th>Round</th>
                             <th>Season</th>
                             <th>Sheep Purchased</th>
-                            <th>Housing Cost</th>
                             <th>Feed Cost</th>
                             <th>Wool Income</th>
                             <th>Purchase Cost</th>
@@ -151,7 +150,6 @@ class PDFExporter {
 
         roundHistory.forEach((round, index) => {
             const calculations = round.calculations;
-            const housingCost = calculations.housingCost.correctAnswer || 0;
             const feedCost = calculations.feedCost.correctAnswer || 0;
             const woolIncome = calculations.woolIncome.correctAnswer || 0;
             const purchaseCost = round.sheepPurchased * round.seasonalPrices.sheepPurchasePrice;
@@ -162,7 +160,6 @@ class PDFExporter {
                     <td>${index + 1}</td>
                     <td>${round.season.charAt(0).toUpperCase() + round.season.slice(1)}</td>
                     <td>${round.sheepPurchased}</td>
-                    <td>$${housingCost}</td>
                     <td>$${feedCost}</td>
                     <td>$${woolIncome}</td>
                     <td>$${purchaseCost}</td>

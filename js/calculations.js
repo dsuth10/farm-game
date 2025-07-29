@@ -10,15 +10,7 @@ class GameCalculations {
         this.penaltyAmount = 10;
     }
 
-    /**
-     * Calculate housing cost for a given number of sheep
-     * @param {number} sheepCount - Number of sheep
-     * @param {number} housingCostPerSheep - Housing cost per sheep
-     * @returns {number} Total housing cost
-     */
-    calculateHousingCost(sheepCount, housingCostPerSheep) {
-        return sheepCount * housingCostPerSheep;
-    }
+
 
     /**
      * Calculate feed cost for a given number of sheep
@@ -43,13 +35,13 @@ class GameCalculations {
     /**
      * Calculate total profit/loss for a round
      * @param {number} woolIncome - Total wool income
-     * @param {number} housingCost - Total housing cost
      * @param {number} feedCost - Total feed cost
      * @param {number} purchaseCost - Total purchase cost for new sheep
+     * @param {number} housingCost - Total housing cost for the round
      * @returns {number} Net profit/loss
      */
-    calculateProfit(woolIncome, housingCost, feedCost, purchaseCost) {
-        return woolIncome - (housingCost + feedCost + purchaseCost);
+    calculateProfit(woolIncome, feedCost, purchaseCost, housingCost = 0) {
+        return woolIncome - (feedCost + purchaseCost + housingCost);
     }
 
     /**
@@ -166,37 +158,21 @@ class GameCalculations {
      * @returns {string} HTML formatted worked example
      */
     generateWorkedExample(calculationType, gameData) {
-        const { sheepCount, prices, sheepPurchased } = gameData;
+        const { sheepCount, prices, sheepPurchased, housingPurchased } = gameData;
         
         switch (calculationType) {
-            case 'housing':
-                return this.generateHousingExample(sheepCount, prices.housingCost);
             case 'feed':
                 return this.generateFeedExample(sheepCount, prices.feedCost);
             case 'wool':
                 return this.generateWoolExample(sheepCount, prices.woolPrice);
             case 'profit':
-                return this.generateProfitExample(sheepCount, prices, sheepPurchased);
+                return this.generateProfitExample(sheepCount, prices, sheepPurchased, housingPurchased);
             default:
                 return 'No example available for this calculation type.';
         }
     }
 
-    /**
-     * Generate housing cost worked example
-     */
-    generateHousingExample(sheepCount, housingCost) {
-        return `
-            <div class="worked-example">
-                <h4>Housing Cost Calculation</h4>
-                <p><strong>Formula:</strong> Housing Cost = Number of Sheep × Housing Cost per Sheep</p>
-                <p><strong>Step 1:</strong> Count your sheep: ${sheepCount} sheep</p>
-                <p><strong>Step 2:</strong> Multiply by housing cost: ${sheepCount} × $${housingCost}</p>
-                <p><strong>Step 3:</strong> Calculate: ${sheepCount} × $${housingCost} = $${sheepCount * housingCost}</p>
-                <p><strong>Answer:</strong> $${sheepCount * housingCost}</p>
-            </div>
-        `;
-    }
+
 
     /**
      * Generate feed cost worked example
@@ -233,23 +209,23 @@ class GameCalculations {
     /**
      * Generate profit calculation worked example
      */
-    generateProfitExample(sheepCount, prices, sheepPurchased) {
-        const housingCost = sheepCount * prices.housingCost;
+    generateProfitExample(sheepCount, prices, sheepPurchased, housingPurchased = 0) {
         const feedCost = sheepCount * prices.feedCost;
         const woolIncome = sheepCount * prices.woolPrice;
         const purchaseCost = sheepPurchased * prices.sheepPurchasePrice;
-        const totalCosts = housingCost + feedCost + purchaseCost;
+        const housingCost = housingPurchased * prices.housingCost;
+        const totalCosts = feedCost + purchaseCost + housingCost;
         const profit = woolIncome - totalCosts;
 
         return `
             <div class="worked-example">
                 <h4>Profit/Loss Calculation</h4>
-                <p><strong>Formula:</strong> Profit = Wool Income - (Housing Cost + Feed Cost + Purchase Cost)</p>
+                <p><strong>Formula:</strong> Profit = Wool Income - (Feed Cost + Purchase Cost + Housing Cost)</p>
                 <p><strong>Step 1:</strong> Calculate wool income: ${sheepCount} × $${prices.woolPrice} = $${woolIncome}</p>
-                <p><strong>Step 2:</strong> Calculate housing cost: ${sheepCount} × $${prices.housingCost} = $${housingCost}</p>
-                <p><strong>Step 3:</strong> Calculate feed cost: ${sheepCount} × $${prices.feedCost} = $${feedCost}</p>
-                <p><strong>Step 4:</strong> Calculate purchase cost: ${sheepPurchased} × $${prices.sheepPurchasePrice} = $${purchaseCost}</p>
-                <p><strong>Step 5:</strong> Add all costs: $${housingCost} + $${feedCost} + $${purchaseCost} = $${totalCosts}</p>
+                <p><strong>Step 2:</strong> Calculate feed cost: ${sheepCount} × $${prices.feedCost} = $${feedCost}</p>
+                <p><strong>Step 3:</strong> Calculate purchase cost: ${sheepPurchased} × $${prices.sheepPurchasePrice} = $${purchaseCost}</p>
+                <p><strong>Step 4:</strong> Calculate housing cost: ${housingPurchased} × $${prices.housingCost} = $${housingCost}</p>
+                <p><strong>Step 5:</strong> Add all costs: $${feedCost} + $${purchaseCost} + $${housingCost} = $${totalCosts}</p>
                 <p><strong>Step 6:</strong> Calculate profit: $${woolIncome} - $${totalCosts} = $${profit}</p>
                 <p><strong>Answer:</strong> $${profit}</p>
             </div>
@@ -266,14 +242,12 @@ class GameCalculations {
         const { sheepCount, prices } = gameData;
         
         switch (calculationType) {
-            case 'housing':
-                return `Remember: Housing cost = ${sheepCount} sheep × $${prices.housingCost} per sheep`;
             case 'feed':
                 return `Remember: Feed cost = ${sheepCount} sheep × $${prices.feedCost} per sheep`;
             case 'wool':
                 return `Remember: Wool income = ${sheepCount} sheep × $${prices.woolPrice} per sheep`;
             case 'profit':
-                return `Remember: Profit = Wool income - (Housing cost + Feed cost + Purchase cost)`;
+                return `Remember: Profit = Wool income - (Feed cost + Purchase cost + Housing cost)`;
             default:
                 return 'Think about the formula for this calculation.';
         }

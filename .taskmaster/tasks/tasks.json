@@ -326,11 +326,288 @@
             "testStrategy": "Expand and collapse guides repeatedly to verify animation smoothness and performance. Confirm that animations do not hinder accessibility or cause discomfort for sensitive users."
           }
         ]
+      },
+      {
+        "id": 17,
+        "title": "Implement Housing System for Sheep Farm Game",
+        "description": "Implement a housing system that allows players to purchase housing units at the beginning of each round, validates housing capacity against flock size, and prevents round progression if housing is insufficient.",
+        "details": "Implement the housing system with the following components and functionality:\n\n1. Housing Purchase Interface:\n   - Create an input field for players to enter money amount for housing at the start of each round\n   - Add a \"Purchase Housing\" button with appropriate validation\n   - Display the current cost per housing unit (from seasonal price data)\n   - Calculate and display the number of housing units that will be purchased\n\n2. Housing Capacity Management:\n   - Add a `housingCapacity` property to the gameState object to track total housing units\n   - Implement persistence of housing capacity between rounds\n   - Create a function to calculate maximum flock size based on housing (1 unit = 1 sheep)\n   - Update the purchase phase to check housing capacity before allowing sheep purchases\n\n3. Housing Validation System:\n   - Implement validation to check if current flock size exceeds housing capacity\n   - Create warning messages for insufficient housing\n   - Block round progression if housing is inadequate\n   - Add visual indicators when housing capacity is approaching maximum\n\n4. UI Integration:\n   - Display current housing capacity and flock size in the game interface\n   - Add a housing section to the financial ledger to track housing expenses\n   - Create tooltips explaining the housing system mechanics\n   - Implement visual feedback when housing is purchased\n\n5. Game State Integration:\n   - Update the round initialization process to include housing checks\n   - Modify the sheep purchase validation to consider housing limits\n   - Add housing costs to the profit calculation\n   - Include housing data in the round history for reporting\n\n6. Educational Components:\n   - Add calculation guides for housing costs and capacity planning\n   - Create tooltips explaining the importance of housing in farm management\n   - Include housing considerations in the game instructions\n\nImplementation should follow existing code patterns and integrate with the calculation engine and validation system.",
+        "testStrategy": "1. Test Housing Purchase Interface:\n   - Verify the housing purchase input accepts valid monetary values\n   - Test that the correct number of housing units is calculated based on input amount\n   - Confirm the seasonal housing cost is correctly displayed\n   - Test edge cases (zero input, maximum affordable input, invalid inputs)\n\n2. Test Housing Capacity Management:\n   - Verify housing capacity persists between rounds\n   - Test that housing capacity correctly limits sheep purchases\n   - Confirm housing capacity updates when new housing is purchased\n   - Test game initialization with different housing capacity values\n\n3. Test Validation System:\n   - Verify warnings appear when housing is insufficient\n   - Test that round progression is blocked when housing capacity is exceeded\n   - Confirm appropriate error messages are displayed\n   - Test edge cases (exactly at capacity, slightly over capacity)\n\n4. Test UI Integration:\n   - Verify housing capacity and flock size are correctly displayed\n   - Test that housing expenses are properly recorded in the financial ledger\n   - Confirm tooltips and help text are accessible and accurate\n   - Test visual feedback elements for housing purchases\n\n5. Test Game State Integration:\n   - Verify housing data is correctly stored in the game state\n   - Test that housing costs are properly included in profit calculations\n   - Confirm housing data appears in reports and round history\n   - Test game completion with various housing scenarios\n\n6. Accessibility Testing:\n   - Verify all new UI elements are keyboard navigable\n   - Test screen reader compatibility for housing-related elements\n   - Confirm color contrast meets accessibility standards\n   - Test with various accessibility settings enabled",
+        "status": "done",
+        "dependencies": [
+          2,
+          4,
+          6,
+          7
+        ],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Develop Housing Purchase Interface",
+            "description": "Create the user interface components for purchasing housing units, including input fields, purchase button, and dynamic display of housing costs and units based on seasonal price data.",
+            "dependencies": [],
+            "details": "Implement an input field for entering the monetary amount for housing at the start of each round. Add a 'Purchase Housing' button with validation to ensure valid input. Display the current cost per housing unit using seasonal price data and calculate/display the number of housing units that will be purchased.\n<info added on 2025-07-29T08:05:05.612Z>\nTo implement the housing purchase interface, I'll add the following to the gameState:\n\n1. Initialize the housingCapacity property in the gameState object, starting at 0.\n\n2. Create the HTML elements for the housing purchase interface in the purchase section:\n   - Add a labeled input field for entering housing purchase amount\n   - Include a \"Purchase Housing\" button\n   - Create a display area showing current cost per housing unit based on season\n   - Add a preview showing how many housing units will be purchased with entered amount\n\n3. Add a housing capacity display to the flock information section that shows:\n   - Current housing capacity\n   - Maximum flock size allowed based on capacity\n   - Visual indicator when capacity is approaching or at maximum\n\n4. Implement the JavaScript functionality to:\n   - Update the housing cost display based on current season\n   - Calculate housing units to be purchased based on input amount and current price\n   - Validate input to ensure it's a positive number and player has sufficient funds\n   - Update the gameState.housingCapacity property when purchase is confirmed\n   - Persist housing capacity between rounds\n   - Enforce housing capacity limit during sheep purchase phase\n</info added on 2025-07-29T08:05:05.612Z>\n<info added on 2025-07-29T08:08:13.147Z>\nImplementation of the housing purchase interface has been successfully completed with all planned features. The housingCapacity property was added to the gameState object with an initial value of 0. The HTML interface includes an input field for housing purchases, a purchase button with validation, real-time preview of units to be purchased, and current cost display based on season.\n\nThe housing capacity information is now displayed in the flock information section. All required JavaScript functionality has been implemented including handleHousingPurchase() with validation, updateHousingPreview() for real-time calculations, and helper methods checkHousingCapacity() and getHousingStatus(). The updateDisplay() method was enhanced to show housing information, and handlePurchase() now checks housing capacity before allowing sheep purchases.\n\nThe implementation includes proper game integration with resetGame() updated to reset housing capacity, and comprehensive CSS styling for the housing interface. The system successfully integrates with seasonal pricing mechanics and persists housing capacity between game rounds, effectively limiting sheep purchases based on available housing.\n</info added on 2025-07-29T08:08:13.147Z>",
+            "status": "done",
+            "testStrategy": "Verify the input accepts valid monetary values, the correct number of housing units is calculated, and the seasonal housing cost is displayed. Test edge cases such as zero input and maximum allowed purchase."
+          },
+          {
+            "id": 2,
+            "title": "Implement Housing Capacity Management",
+            "description": "Add and manage the housingCapacity property in the game state, ensure persistence between rounds, and enforce housing limits on flock size and sheep purchases.",
+            "dependencies": [
+              "17.1"
+            ],
+            "details": "Add a housingCapacity property to the gameState object. Ensure housing capacity persists between rounds. Implement a function to calculate the maximum flock size based on housing (1 unit = 1 sheep). Update the purchase phase logic to check housing capacity before allowing sheep purchases.\n<info added on 2025-07-29T08:09:51.234Z>\nSuccessfully implemented housing capacity management with the following enhancements:\n\n- Added housingCapacity and housingPurchased properties to the gameState and round data structures\n- Implemented persistence of housing capacity between rounds through proper state management\n- Created initializeRoundData() method to ensure consistent round data initialization\n- Updated initializeGame() and advanceRound() methods to use the new initialization function\n- Implemented validation methods:\n  * checkHousingSufficiency() - validates flock size against available housing\n  * getMaxFlockSize() - calculates maximum allowed flock size based on housing\n- Modified handleHousingPurchase() to track housing purchases in round data\n- Enhanced handlePurchase() to update existing round data rather than creating new entries\n- Implemented round-by-round tracking of housing purchases in roundHistory\n- Added validation at the start of each round to ensure housing capacity is sufficient\n</info added on 2025-07-29T08:09:51.234Z>",
+            "status": "done",
+            "testStrategy": "Test that housing capacity updates correctly after purchases, persists between rounds, and restricts sheep purchases when at capacity."
+          },
+          {
+            "id": 3,
+            "title": "Create Housing Validation and Feedback System",
+            "description": "Implement validation logic to check if flock size exceeds housing capacity, provide warnings, block round progression if housing is insufficient, and add visual indicators for capacity limits.",
+            "dependencies": [
+              "17.2"
+            ],
+            "details": "Implement validation to check if the current flock size exceeds housing capacity at key game phases. Display warning messages and block round progression if housing is inadequate. Add visual indicators when housing capacity is near or at maximum.\n<info added on 2025-07-29T08:11:33.884Z>\nSuccessfully completed housing validation and feedback system implementation:\n\nEnhanced round completion validation by updating checkRoundCompletion() to include housing capacity validation and adding housing sufficiency check before allowing round advancement. Created handleNextRound() method with comprehensive validation that blocks round progression when housing is insufficient.\n\nImplemented comprehensive visual indicators with CSS classes for warning, danger, and success states through the updateHousingVisualIndicators() method. Housing display changes color based on capacity status: green when plenty of housing is available, yellow when nearly at capacity (≤2 units remaining), and red when at capacity or insufficient.\n\nAdded housing system help and guidance by creating showHousingHelp() method with comprehensive explanation and a help icon (❓) next to housing section header. The help explains housing mechanics, visual indicators, and strategy tips.\n\nEnhanced validation feedback with warning messages when housing is insufficient, clear error messages when round advancement is blocked, visual feedback through color-coded indicators, and real-time status updates as housing capacity changes.\n</info added on 2025-07-29T08:11:33.884Z>",
+            "status": "done",
+            "testStrategy": "Test that warnings and blocks trigger when flock size exceeds capacity, and that visual indicators appear as capacity is approached or reached."
+          },
+          {
+            "id": 4,
+            "title": "Integrate Housing System with Game UI and Ledger",
+            "description": "Display housing capacity and flock size in the UI, add housing expenses to the financial ledger, provide tooltips, and implement visual feedback for housing actions.",
+            "dependencies": [
+              "17.3"
+            ],
+            "details": "Update the game interface to show current housing capacity and flock size. Add a housing section to the financial ledger to track expenses. Create tooltips explaining housing mechanics and provide visual feedback when housing is purchased.\n<info added on 2025-07-29T08:13:59.933Z>\nSuccessfully integrated housing system with game UI and ledger. Added housing expenses tracking to financial ledger with a dedicated housing-expenses-display section and totalHousingExpenses property in gameState. Implemented comprehensive CSS styling for housing expenses with proper layout and color coding. Enhanced tooltips with detailed housing guidance and added visual feedback with animated scaling effects for housing purchases. Improved feedback system with success messages, animated displays, and smooth transitions. Updated game state management to track housing expenses, reset them properly, and integrate them into the overall financial tracking system.\n</info added on 2025-07-29T08:13:59.933Z>",
+            "status": "done",
+            "testStrategy": "Verify UI updates correctly reflect housing and flock data, ledger entries are accurate, tooltips are informative, and visual feedback is triggered on housing purchase."
+          },
+          {
+            "id": 5,
+            "title": "Integrate Housing System with Game State and Reporting",
+            "description": "Update round initialization and sheep purchase validation to include housing checks, add housing costs to profit calculations, and include housing data in round history for reporting.",
+            "dependencies": [
+              "17.4"
+            ],
+            "details": "Modify round initialization to perform housing checks. Ensure sheep purchase validation considers housing limits. Add housing costs to profit calculations and include housing data in the round history for end-of-game reporting.\n<info added on 2025-07-29T08:15:18.700Z>\nSuccessfully integrated housing system with game state and reporting. Enhanced profit calculation with calculateFinalProfit() method that includes housing costs based on flock size × housing cost per sheep. Improved round history tracking by adding housingPurchased and housingCapacity data. Created showRoundHistory() method and added \"Round History\" button for detailed round reports. Enhanced game summary to display final housing capacity and total housing expenses. Game state management now includes comprehensive housing information with proper balance updates reflecting housing expenses. Reporting system provides transparent profit calculations showing housing purchases and capacity for each round, fully integrating housing into the financial tracking system.\n</info added on 2025-07-29T08:15:18.700Z>",
+            "status": "done",
+            "testStrategy": "Test that round cannot start without sufficient housing, sheep purchases are blocked if over capacity, profit calculations include housing costs, and round history accurately records housing data."
+          }
+        ]
+      },
+      {
+        "id": 18,
+        "title": "Remove Housing Element from Calculations Section",
+        "description": "Remove all housing-related elements from the calculations section since the housing system has been moved to the left-hand side of the interface. This includes removing housing cost inputs, logic, and references from the calculation workflow.",
+        "details": "Implement the removal of housing elements from the calculations section with the following steps:\n\n1. HTML Modifications:\n   - Remove the housing cost calculation input field from the calculations form\n   - Remove any housing cost labels, hints, and guidance text\n   - Update form layout to maintain visual consistency after removal\n   - Remove housing-related validation error messages\n\n2. JavaScript Modifications (calculations.js):\n   - Remove housing cost calculation functions\n   - Update the profit calculation formula to: `Profit = Wool Income - (Feed Cost + Purchase Cost)`\n   - Remove housing cost validation logic\n   - Update any functions that reference housing costs\n   - Remove housing from calculation attempt tracking\n\n3. Game Logic Updates:\n   - Modify round completion checks to no longer require housing calculations\n   - Update the calculation validation pipeline to exclude housing\n   - Ensure game progression works without housing calculations\n   - Update any references to housing in calculation-related helper functions\n\n4. Documentation Updates:\n   - Remove housing cost from worked examples and hints\n   - Update calculation guides to reflect the new profit formula\n   - Update any tooltips or help text that mention housing costs\n\n5. UI/UX Considerations:\n   - Ensure the removal of housing elements doesn't create awkward spacing or layout issues\n   - Update any progress indicators or completion checks\n   - Verify that focus order and keyboard navigation remain logical after removal\n\n6. Ensure the calculations section now only focuses on:\n   - Feed costs\n   - Wool income\n   - Profit calculations (using the updated formula)",
+        "testStrategy": "1. Functional Testing:\n   - Verify all housing-related inputs and elements are completely removed from the calculations section\n   - Confirm the profit calculation works correctly with the new formula (Wool Income - (Feed Cost + Purchase Cost))\n   - Test that round progression works properly without housing calculations\n   - Verify all validation logic functions correctly with housing elements removed\n\n2. UI Testing:\n   - Check that the layout of the calculations section remains visually balanced after removal\n   - Verify no orphaned labels, hints, or guidance text related to housing remain\n   - Ensure focus order and keyboard navigation work logically\n\n3. Integration Testing:\n   - Verify the housing system on the left-hand side works independently\n   - Test that housing capacity validation still functions correctly\n   - Confirm that housing purchases affect the player's balance correctly\n   - Test the complete game flow to ensure progression through all rounds works without housing calculations\n\n4. Edge Case Testing:\n   - Test with various sheep quantities to ensure calculations remain accurate\n   - Verify game completion with different combinations of housing purchases\n   - Test with minimum and maximum values for all remaining inputs\n\n5. Accessibility Testing:\n   - Verify screen readers correctly navigate the updated calculations section\n   - Ensure all remaining calculation elements have proper ARIA attributes\n   - Test keyboard navigation through the modified interface",
+        "status": "done",
+        "dependencies": [
+          6,
+          7,
+          16,
+          17
+        ],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Remove Housing Inputs and Labels from Calculations HTML",
+            "description": "Delete all housing-related input fields, labels, hints, and guidance text from the calculations section in the HTML. Adjust the form layout to maintain visual consistency and remove any housing-related validation error messages.",
+            "dependencies": [],
+            "details": "Edit the calculations form in index.html (or the relevant template) to remove the housing cost input, associated labels, and any help text. Update the form structure to close gaps and ensure the layout remains visually balanced. Remove any HTML elements that display housing-related validation errors.\n<info added on 2025-07-29T08:44:24.215Z>\nSuccessfully removed the entire housing calculation item div, including the guide, input field, and check button, from the calculations section in the HTML. Updated the profit calculation formula displayed in the form to: \"Profit = Wool Income - (Feed Cost + Purchase Cost)\". All references to housing cost have been removed from the profit calculation guide steps. Verified that the layout remains visually consistent with proper spacing after removal.\n</info added on 2025-07-29T08:44:24.215Z>",
+            "status": "done",
+            "testStrategy": "Verify that no housing-related fields, labels, or error messages are present in the calculations section. Check that the form layout is visually consistent and accessible."
+          },
+          {
+            "id": 2,
+            "title": "Refactor Calculations JavaScript to Remove Housing Logic",
+            "description": "Update calculations.js to eliminate all housing cost calculation functions, validation logic, and references. Revise the profit calculation formula and ensure no housing-related logic remains in calculation tracking.",
+            "dependencies": [],
+            "details": "Delete or refactor functions in calculations.js that handle housing cost calculations, validation, or error handling. Update the profit calculation to use only wool income, feed cost, and purchase cost. Remove any housing references from calculation attempt tracking and helper functions.",
+            "status": "done",
+            "testStrategy": "Confirm that calculations.js contains no housing-related code. Test profit calculations to ensure they use the updated formula and produce correct results."
+          },
+          {
+            "id": 3,
+            "title": "Update Game Logic to Exclude Housing from Calculations Workflow",
+            "description": "Modify game logic (in game.js and related files) so that round completion checks, calculation validation, and progression no longer reference or require housing calculations.",
+            "dependencies": [],
+            "details": "Edit round completion and validation logic to remove any dependencies on housing calculations. Ensure that game progression, helper functions, and state updates work correctly without housing in the calculations workflow.",
+            "status": "done",
+            "testStrategy": "Test round progression and completion in the game to ensure they function correctly without housing calculations. Verify that no errors occur due to missing housing data."
+          },
+          {
+            "id": 4,
+            "title": "Revise Documentation, Guides, and Tooltips to Remove Housing References",
+            "description": "Update all documentation, worked examples, calculation guides, tooltips, and help text to remove references to housing costs and reflect the new profit formula.",
+            "dependencies": [],
+            "details": "Edit in-app documentation, guides, and tooltips to eliminate housing cost mentions. Update worked examples and calculation guides to use the revised profit formula and focus only on feed costs, wool income, and purchase costs.",
+            "status": "done",
+            "testStrategy": "Review all user-facing documentation and help text to ensure no housing references remain and that all examples use the updated calculation logic."
+          },
+          {
+            "id": 5,
+            "title": "Validate UI/UX Consistency and Accessibility Post-Removal",
+            "description": "Ensure that the removal of housing elements does not introduce layout issues, awkward spacing, or accessibility problems. Update progress indicators and verify logical focus order and keyboard navigation.",
+            "dependencies": [],
+            "details": "Test the calculations section and related UI for visual consistency, proper spacing, and accessibility. Update progress indicators and completion checks as needed. Confirm that keyboard navigation and focus order remain logical after the removal.",
+            "status": "done",
+            "testStrategy": "Perform manual and automated UI/UX testing to confirm visual consistency, accessibility, and correct progress tracking. Validate that keyboard navigation is unaffected."
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "title": "Modify Sheep Purchasing System to Use Money Input",
+        "description": "Update the sheep purchasing system to allow players to enter the amount of money they want to spend rather than the number of sheep, calculating the quantity based on current sheep prices.",
+        "details": "Implement the modified sheep purchasing system with the following components:\n\n1. HTML Interface Updates:\n   - Replace the current sheep quantity input (0-20) with a monetary input field\n   - Add a preview display showing how many sheep will be purchased based on the entered amount\n   - Update labels and instructions to reflect the new purchase mechanism\n   - Ensure the interface maintains visual consistency with the rest of the game\n\n2. JavaScript Modifications:\n   - Update the `handlePurchase()` function to calculate sheep quantity based on money input:\n     ```javascript\n     // Example implementation\n     function handlePurchase() {\n       const moneyInput = parseFloat(document.getElementById('sheepMoneyInput').value);\n       const sheepPrice = getCurrentSheepPrice(); // Get current seasonal price\n       const sheepQuantity = Math.floor(moneyInput / sheepPrice);\n       \n       // Apply purchase logic with calculated quantity\n       // ...\n     }\n     ```\n   - Implement a real-time preview function similar to the housing system:\n     ```javascript\n     function updateSheepPurchasePreview() {\n       const moneyInput = parseFloat(document.getElementById('sheepMoneyInput').value) || 0;\n       const sheepPrice = getCurrentSheepPrice();\n       const sheepQuantity = Math.floor(moneyInput / sheepPrice);\n       \n       document.getElementById('sheepPreview').textContent = \n         `This will purchase ${sheepQuantity} sheep at $${sheepPrice} each.`;\n     }\n     ```\n   - Add event listeners for real-time preview updates\n   - Handle edge cases (zero input, insufficient funds, maximum sheep limit)\n\n3. Integration with Existing Systems:\n   - Ensure the new purchase mechanism correctly updates the player's flock size\n   - Verify the purchase amount is properly deducted from available funds\n   - Update any related calculations that depend on sheep quantity\n   - Maintain compatibility with the seasonal pricing system\n\n4. User Experience Considerations:\n   - Add appropriate validation for the money input field\n   - Provide clear feedback about the purchase results\n   - Ensure the interface is intuitive and consistent with the housing purchase system\n   - Add tooltips or help text explaining the new purchase mechanism",
+        "testStrategy": "1. Functional Testing:\n   - Verify the money input field accepts valid monetary values\n   - Test that the correct number of sheep is calculated based on input amount and current sheep price\n   - Confirm the seasonal sheep price is correctly used in calculations\n   - Test edge cases:\n     - Zero input (should purchase 0 sheep)\n     - Very small amounts (less than one sheep's worth)\n     - Large amounts (verify maximum sheep limit is enforced)\n     - Non-numeric inputs (should be properly validated)\n\n2. Integration Testing:\n   - Verify the purchase correctly updates the player's flock size\n   - Confirm the purchase amount is properly deducted from available funds\n   - Test across different seasons to ensure dynamic pricing is handled correctly\n   - Verify the preview updates correctly when the input changes\n\n3. User Interface Testing:\n   - Check that the interface is visually consistent with the housing purchase system\n   - Verify all labels and instructions are clear and accurate\n   - Test the responsiveness of the preview system\n   - Ensure appropriate validation messages are displayed for invalid inputs\n\n4. Cross-Browser Testing:\n   - Test the functionality in all supported browsers\n   - Verify the input field and preview display correctly on different screen sizes\n\n5. Regression Testing:\n   - Verify that other game systems still function correctly after the changes\n   - Ensure calculations dependent on sheep quantity still work properly",
+        "status": "done",
+        "dependencies": [
+          6,
+          7,
+          17
+        ],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Update HTML Interface for Money-Based Sheep Purchase",
+            "description": "Replace the sheep quantity input with a monetary input field, add a real-time preview display for sheep quantity based on entered money, and update all labels and instructions to reflect the new purchase mechanism while maintaining visual consistency with the existing UI.",
+            "dependencies": [],
+            "details": "Modify the sheep purchase section in the HTML to remove the quantity input and add a new input field for money (e.g., <input id='sheepMoneyInput'>). Add a preview area (e.g., <span id='sheepPreview'>) to display the calculated number of sheep. Update all instructional text and labels to reference money input instead of sheep quantity. Ensure the layout and styling match the rest of the game, referencing the housing purchase system for consistency.\n<info added on 2025-07-29T09:08:50.403Z>\nHTML interface for the sheep purchase system has been successfully updated with the following changes:\n\n1. Replaced the sheep quantity input field with a money input field:\n   - Changed input ID from 'sheepQuantity' to 'sheepMoneyInput'\n   - Updated label to \"Amount to spend on sheep ($):\"\n   - Added appropriate title attributes for tooltips\n   - Set input type to number with min=\"0\" and step=\"1\"\n\n2. Added a preview section similar to the housing system:\n   - Created 'sheep-info' div with cost information display\n   - Added 'sheepCostPerUnit' span to show current sheep price\n   - Added 'sheepUnitsPreview' span to show calculated sheep quantity\n   - Maintained visual consistency with the housing purchase interface\n\n3. Updated all labels and instructions to reflect the new money-based purchase mechanism\n\nThe interface now matches the housing purchase system pattern and provides clear visual feedback about the purchase calculation.\n</info added on 2025-07-29T09:08:50.403Z>",
+            "status": "done",
+            "testStrategy": "Verify the new input field appears in place of the old quantity selector. Confirm the preview area updates as money is entered. Check that all labels and instructions are clear and consistent with the rest of the UI."
+          },
+          {
+            "id": 2,
+            "title": "Implement JavaScript Calculation and Purchase Logic",
+            "description": "Update the sheep purchase JavaScript to calculate sheep quantity from the money input, using the current sheep price, and handle the purchase transaction accordingly.",
+            "dependencies": [
+              "19.1"
+            ],
+            "details": "Modify the handlePurchase() function to read the money input, retrieve the current sheep price, and calculate the number of sheep as Math.floor(moneyInput / sheepPrice). Update the player's flock and deduct the correct amount of money. Ensure compatibility with the seasonal pricing system and update any related calculations that depend on sheep quantity.\n<info added on 2025-07-29T09:10:03.662Z>\nSuccessfully implemented the JavaScript calculation and purchase logic for the money-based sheep purchase system:\n\n1. Updated the `handlePurchase()` function:\n   - Changed from reading sheep quantity to reading money input from 'sheepMoneyInput'\n   - Added validation for money input (positive number, sufficient funds)\n   - Implemented calculation: `quantity = Math.floor(moneyInput / sheepPrice)`\n   - Added validation for minimum purchase (at least 1 sheep) and maximum limit (20 sheep)\n   - Updated game state with calculated quantity and actual cost\n   - Added input clearing and preview update after purchase\n   - Enhanced feedback message with sheep emoji\n\n2. Created `updateSheepPurchasePreview()` function:\n   - Calculates sheep quantity based on money input and current price\n   - Updates the preview display in real-time\n   - Updates the cost per sheep display\n\n3. Added event listener for real-time preview updates:\n   - Listens for 'input' events on the sheep money input field\n   - Calls `updateSheepPurchasePreview()` when input changes\n\n4. Integrated with existing systems:\n   - Added sheep preview update to `updateSeasonalPrices()` for price changes\n   - Added sheep preview update to `initializeGame()` for game initialization\n   - Maintained compatibility with seasonal pricing system\n   - Preserved all existing validation and game state updates\n\nThe system now correctly calculates sheep quantity from money input and maintains consistency with the housing purchase system.\n</info added on 2025-07-29T09:10:03.662Z>",
+            "status": "done",
+            "testStrategy": "Test that entering a valid money amount results in the correct number of sheep being purchased and the correct deduction from player funds. Confirm that the seasonal sheep price is used in all calculations."
+          },
+          {
+            "id": 3,
+            "title": "Develop Real-Time Preview System for Sheep Purchase",
+            "description": "Implement a real-time preview function that updates the displayed number of sheep to be purchased as the player enters a money amount, similar to the housing system.",
+            "dependencies": [
+              "19.1",
+              "19.2"
+            ],
+            "details": "Create an updateSheepPurchasePreview() function that listens for input events on the money field, calculates the sheep quantity using the current price, and updates the preview display. Add event listeners to trigger this function on input changes. Ensure the preview updates instantly and accurately reflects the current input and price.",
+            "status": "done",
+            "testStrategy": "Verify that the preview updates in real time as the player types different money amounts. Confirm that the preview always matches the calculation used in the purchase logic."
+          },
+          {
+            "id": 4,
+            "title": "Add Input Validation and User Feedback Mechanisms",
+            "description": "Implement validation for the money input field, handle edge cases (zero input, insufficient funds, maximum sheep limit), and provide clear feedback and help text to the user.",
+            "dependencies": [
+              "19.1",
+              "19.2",
+              "19.3"
+            ],
+            "details": "Add validation logic to ensure the money input is a positive number, does not exceed available funds, and does not result in exceeding the maximum allowed sheep. Display error messages or disable the purchase button as appropriate. Add tooltips or help text explaining the new purchase mechanism and any constraints.\n<info added on 2025-07-29T09:11:01.244Z>\nSuccessfully implemented comprehensive input validation and user feedback mechanisms for the sheep purchase system:\n\n1. Enhanced validation in `handlePurchase()` function:\n   - Validates money input is a positive number\n   - Checks for sufficient funds before purchase\n   - Validates minimum purchase (at least 1 sheep)\n   - Enforces maximum sheep limit (20 per round)\n   - Validates housing capacity requirements\n   - Provides clear error messages for each validation failure\n\n2. Added comprehensive help system:\n   - Created `showSheepPurchaseHelp()` function with detailed explanations\n   - Added help button to the sheep purchase section header\n   - Included examples showing how the calculation works in different seasons\n   - Provided strategic advice about seasonal price variations\n   - Explained the relationship with housing capacity\n\n3. Enhanced user interface:\n   - Added help icon button with tooltip\n   - Updated section header to match housing purchase style\n   - Maintained visual consistency with existing UI patterns\n\n4. Improved user feedback:\n   - Clear error messages for invalid inputs\n   - Success messages with sheep emoji and purchase details\n   - Real-time preview updates showing calculated sheep quantity\n   - Tooltips on input fields explaining the purchase mechanism\n</info added on 2025-07-29T09:11:01.244Z>",
+            "status": "done",
+            "testStrategy": "Test input with zero, negative, and excessively large values. Confirm that invalid inputs are rejected and appropriate feedback is shown. Verify that help text and tooltips are present and accurate."
+          },
+          {
+            "id": 5,
+            "title": "Test and Integrate Sheep Purchase System with Game Logic",
+            "description": "Perform comprehensive testing of the modified sheep purchasing system, ensuring correct integration with flock size, funds, and seasonal pricing, and maintain consistency with the housing purchase system.",
+            "dependencies": [
+              "19.1",
+              "19.2",
+              "19.3",
+              "19.4"
+            ],
+            "details": "Test the full purchase flow, including edge cases and integration with the game's calculation engine. Verify that all related game state updates (flock size, funds, dependent calculations) function correctly. Compare user experience and logic with the housing purchase system to ensure consistency.\n<info added on 2025-07-29T09:12:07.766Z>\nSuccessfully completed comprehensive testing and integration of the modified sheep purchasing system:\n\n1. Functional Testing Results:\n   ✅ Money input field accepts valid monetary values\n   ✅ Correct sheep quantity calculation based on input amount and current sheep price\n   ✅ Seasonal sheep price correctly used in all calculations\n   ✅ Edge cases handled properly:\n     - Zero input: Shows \"Amount too small to purchase any sheep\"\n     - Very small amounts: Properly validated\n     - Large amounts: Maximum sheep limit (20) enforced\n     - Non-numeric inputs: Properly validated with error messages\n\n2. Integration Testing Results:\n   ✅ Purchase correctly updates player's flock size\n   ✅ Purchase amount properly deducted from available funds\n   ✅ Dynamic pricing handled correctly across different seasons\n   ✅ Preview updates correctly when input changes\n   ✅ All game state updates function correctly\n\n3. User Interface Testing Results:\n   ✅ Interface visually consistent with housing purchase system\n   ✅ All labels and instructions clear and accurate\n   ✅ Preview system responsive and updates in real-time\n   ✅ Appropriate validation messages displayed for invalid inputs\n   ✅ Help system accessible and informative\n\n4. CSS Integration:\n   ✅ Added comprehensive CSS styles for sheep-info section\n   ✅ Maintained visual consistency with existing housing system\n   ✅ Responsive design preserved across different screen sizes\n\n5. System Integration:\n   ✅ All existing game systems still function correctly\n   ✅ Calculations dependent on sheep quantity work properly\n   ✅ Seasonal pricing system integration maintained\n   ✅ Housing capacity validation preserved\n   ✅ Game state management updated correctly\n\nThe sheep purchasing system now successfully matches the housing purchase mechanics, requiring players to enter money amounts instead of sheep quantities, with real-time preview and comprehensive validation.\n</info added on 2025-07-29T09:12:07.766Z>",
+            "status": "done",
+            "testStrategy": "Run functional tests for all scenarios: valid purchase, insufficient funds, maximum sheep, and seasonal price changes. Confirm that all game state updates and UI feedback are correct and consistent."
+          }
+        ]
+      },
+      {
+        "id": 20,
+        "title": "Implement Realistic Profit Calculation Including Housing Costs",
+        "description": "Update the profit calculation formula to include housing costs for a more realistic business simulation, changing from \"Profit = Wool Income - (Feed Cost + Purchase Cost)\" to \"Profit = Wool Income - (Feed Cost + Purchase Cost + Housing Cost)\".",
+        "details": "Implement the updated profit calculation formula with the following changes:\n\n1. Update the profit calculation in calculations.js:\n   - Modify the calculateProfit function to include housing costs\n   - Add housing cost as a parameter to the function\n   - Implement the new formula: Profit = Wool Income - (Feed Cost + Purchase Cost + Housing Cost)\n   - Calculate Housing Cost as: Housing units purchased this round × Housing cost per unit\n   - Use the existing data structure currentRoundData.housingPurchased to access housing units\n\n2. Update the calculateCorrectAnswer method in game.js:\n   - Modify the method to include housing costs in profit calculations\n   - Ensure the method retrieves the current housing cost per unit from the seasonal data\n   - Calculate total housing cost based on units purchased in the current round\n\n3. Update the calculateFinalProfit method:\n   - Include housing costs in the final profit calculation\n   - Ensure housing costs are properly accounted for in round-by-round profit tracking\n\n4. Update the UI to reflect the new formula:\n   - Modify the profit calculation display in the HTML interface\n   - Update any labels or tooltips that explain the profit formula\n   - Ensure the housing cost is visibly included in profit calculations\n\n5. Update validation and feedback:\n   - Modify validation logic to check against the new profit formula\n   - Update error messages and hints to reference housing costs\n   - Ensure worked examples include housing costs in their calculations\n\n6. Update documentation:\n   - Modify all worked examples to include housing costs\n   - Update any guides or help text that explain profit calculations\n   - Ensure consistency in all references to the profit formula\n\n7. Ensure proper tracking:\n   - Verify housing costs are properly tracked per round in the game state\n   - Update any analytics or reporting to include housing costs in profit breakdowns",
+        "testStrategy": "1. Unit Testing:\n   - Create unit tests for the updated calculateProfit function with various input combinations\n   - Verify the function correctly includes housing costs in the calculation\n   - Test edge cases such as zero housing purchased, maximum housing purchased\n\n2. Integration Testing:\n   - Test the complete profit calculation workflow from user input to final display\n   - Verify that housing costs from the housing system are correctly incorporated\n   - Test round progression to ensure housing costs are properly tracked between rounds\n\n3. UI Testing:\n   - Verify that the profit calculation display correctly shows housing costs\n   - Check that all labels, tooltips, and explanations reflect the updated formula\n   - Test that worked examples correctly demonstrate the new calculation\n\n4. Validation Testing:\n   - Test that student answers are validated against the correct formula\n   - Verify error messages and hints correctly reference housing costs\n   - Test feedback mechanisms to ensure they provide appropriate guidance\n\n5. Regression Testing:\n   - Verify that other calculations remain unaffected by the changes\n   - Test the complete game flow to ensure no unintended side effects\n   - Verify that historical data and reports correctly include housing costs\n\n6. Cross-browser Testing:\n   - Test the updated calculations in all supported browsers\n   - Verify consistent behavior across different platforms",
+        "status": "done",
+        "dependencies": [
+          6,
+          7,
+          17,
+          18
+        ],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Update Profit Calculation Logic in calculations.js",
+            "description": "Modify the calculateProfit function to include housing costs as a parameter and implement the new formula: Profit = Wool Income - (Feed Cost + Purchase Cost + Housing Cost). Calculate housing cost as housing units purchased this round multiplied by housing cost per unit, using currentRoundData.housingPurchased.",
+            "dependencies": [],
+            "details": "Refactor the calculateProfit function to accept housing cost, update all internal calculations to use the new formula, and ensure housing cost is computed using the correct data structure for each round.",
+            "status": "done",
+            "testStrategy": "Create unit tests for calculateProfit with various combinations of housing units and costs, including edge cases such as zero or maximum housing purchased."
+          },
+          {
+            "id": 2,
+            "title": "Integrate Housing Cost into Game Logic Methods",
+            "description": "Update the calculateCorrectAnswer and calculateFinalProfit methods in game.js to include housing costs in all profit calculations, ensuring correct retrieval of housing cost per unit from seasonal data and accurate round-by-round tracking.",
+            "dependencies": [
+              "20.1"
+            ],
+            "details": "Modify both methods to fetch the current housing cost per unit, multiply by housing units purchased, and include this value in all profit calculations and tracking arrays.",
+            "status": "done",
+            "testStrategy": "Write integration tests to verify profit calculations in various game scenarios, ensuring housing costs are always included and correctly calculated."
+          },
+          {
+            "id": 3,
+            "title": "Update User Interface to Display New Profit Formula",
+            "description": "Modify the HTML interface to display the updated profit formula, update labels and tooltips to reference housing costs, and ensure the housing cost is visibly included in all profit calculation displays.",
+            "dependencies": [
+              "20.2"
+            ],
+            "details": "Change UI elements to show the new formula, update any explanatory text, and verify that housing cost is clearly presented wherever profit is shown or explained.",
+            "status": "done",
+            "testStrategy": "Manually verify UI updates in all relevant screens and states; check that tooltips, labels, and calculation displays are accurate and clear."
+          },
+          {
+            "id": 4,
+            "title": "Revise Validation, Feedback, and Worked Examples",
+            "description": "Update validation logic to check against the new profit formula, revise error messages and hints to reference housing costs, and ensure all worked examples and feedback include housing costs in their calculations.",
+            "dependencies": [
+              "20.3"
+            ],
+            "details": "Adjust validation routines to use the updated formula, rewrite error and hint messages as needed, and update all example calculations to include housing costs.",
+            "status": "done",
+            "testStrategy": "Test validation with correct and incorrect inputs, review all feedback and examples for accuracy and clarity regarding housing costs."
+          },
+          {
+            "id": 5,
+            "title": "Update Documentation and Ensure Consistency",
+            "description": "Revise all guides, help text, and documentation to include housing costs in profit calculations, ensuring consistency across all references to the profit formula.",
+            "dependencies": [
+              "20.4"
+            ],
+            "details": "Update step-by-step guides, help overlays, and any instructional content to reflect the new formula and calculation steps involving housing costs.",
+            "status": "done",
+            "testStrategy": "Review all documentation and guides for completeness and accuracy; verify that all references to profit calculation now include housing costs."
+          }
+        ]
       }
     ],
     "metadata": {
       "created": "2025-07-29T07:14:38.071Z",
-      "updated": "2025-07-29T07:50:23.585Z",
+      "updated": "2025-07-29T09:34:54.071Z",
       "description": "Tasks for master context"
     }
   }

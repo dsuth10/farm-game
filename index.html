@@ -25,11 +25,47 @@
     <main class="game-container">
         <!-- Purchase Section -->
         <section class="purchase-section">
-            <h2>Purchase Sheep</h2>
+            <div class="section-header">
+                <h2>Purchase Sheep</h2>
+                <button class="help-icon" title="Sheep Purchase System Help" onclick="window.sheepGame.showSheepPurchaseHelp()">❓</button>
+            </div>
             <div class="purchase-controls">
-                <label for="sheepQuantity">Number of sheep to purchase (0-20):</label>
-                <input type="number" id="sheepQuantity" min="0" max="20" value="0">
-                <button id="purchaseBtn" class="btn btn-primary">Purchase Sheep</button>
+                <label for="sheepMoneyInput" title="Enter the amount of money you want to spend on sheep. The number of sheep will be calculated based on current seasonal prices.">Amount to spend on sheep ($):</label>
+                <input type="number" id="sheepMoneyInput" min="0" step="1" value="0" placeholder="Enter amount" title="Enter the amount of money you want to spend on sheep">
+                <button id="purchaseBtn" class="btn btn-primary" title="Purchase sheep with the entered amount">Purchase Sheep</button>
+            </div>
+            <div class="sheep-info">
+                <div class="sheep-cost-info">
+                    <span class="sheep-cost-label">Cost per sheep:</span>
+                    <span class="sheep-cost-value" id="sheepCostPerUnit">$45</span>
+                </div>
+                <div class="sheep-units-preview">
+                    <span class="sheep-units-label">Sheep to purchase:</span>
+                    <span class="sheep-units-value" id="sheepUnitsPreview">0</span>
+                </div>
+            </div>
+            
+            <!-- Housing Purchase Section -->
+            <div class="housing-purchase-section">
+                <div class="section-header">
+                    <h3>Purchase Housing</h3>
+                    <button class="help-icon" title="Housing System Help" onclick="window.sheepGame.showHousingHelp()">❓</button>
+                </div>
+                <div class="housing-controls">
+                    <label for="housingAmount" title="Enter the amount of money you want to spend on housing. The number of housing units will be calculated based on current seasonal prices.">Amount to spend on housing ($):</label>
+                    <input type="number" id="housingAmount" min="0" step="1" value="0" placeholder="Enter amount" title="Enter the amount of money you want to spend on housing">
+                    <button id="purchaseHousingBtn" class="btn btn-secondary" title="Purchase housing units with the entered amount">Purchase Housing</button>
+                </div>
+                <div class="housing-info">
+                    <div class="housing-cost-info">
+                        <span class="housing-cost-label">Cost per housing unit:</span>
+                        <span class="housing-cost-value" id="housingCostPerUnit">$8</span>
+                    </div>
+                    <div class="housing-units-preview">
+                        <span class="housing-units-label">Housing units to purchase:</span>
+                        <span class="housing-units-value" id="housingUnitsPreview">0</span>
+                    </div>
+                </div>
             </div>
             
             <div class="price-display">
@@ -59,6 +95,7 @@
             </div>
 
             <button id="marketTrendsBtn" class="btn btn-secondary">Market Trends</button>
+            <button id="roundHistoryBtn" class="btn btn-secondary" onclick="window.sheepGame.showRoundHistory()">Round History</button>
         </section>
 
         <!-- Financial Ledger Section -->
@@ -73,35 +110,22 @@
                 <span class="flock-label">Flock Size:</span>
                 <span class="flock-count" id="flockSize">0</span>
             </div>
+            
+            <div class="housing-info-display">
+                <span class="housing-label">Housing Capacity:</span>
+                <span class="housing-capacity" id="housingCapacity">0</span>
+                <span class="housing-status" id="housingStatus"></span>
+            </div>
+            
+            <div class="housing-expenses-display">
+                <span class="expenses-label">Housing Expenses:</span>
+                <span class="expenses-amount" id="housingExpenses">$0</span>
+                <span class="expenses-detail" id="housingExpensesDetail">(0 units purchased)</span>
+            </div>
 
             <div class="calculations-section">
                 <h3>Your Calculations</h3>
                 
-                <!-- Housing Cost Calculation with Guide -->
-                <div class="calculation-item">
-                    <div class="calculation-guide" id="housingGuide">
-                        <button class="guide-toggle" aria-expanded="false" aria-controls="housingGuideContent">
-                            <span class="guide-icon">📖</span>
-                            <span class="guide-text">Show Help: How to calculate Housing Cost</span>
-                        </button>
-                        <div class="guide-content" id="housingGuideContent" aria-hidden="true">
-                            <div class="guide-steps">
-                                <h4>Housing Cost Calculation Guide</h4>
-                                <p><strong>Formula:</strong> Housing Cost = Number of Sheep × Housing Cost per Sheep</p>
-                                <div class="guide-example">
-                                    <p><strong>Step 1:</strong> Count your sheep: <span class="guide-value" id="housingSheepCount">0</span> sheep</p>
-                                    <p><strong>Step 2:</strong> Find housing cost per sheep: $<span class="guide-value" id="housingCostPerSheep">8</span></p>
-                                    <p><strong>Step 3:</strong> Multiply: <span class="guide-value" id="housingSheepCount2">0</span> × $<span class="guide-value" id="housingCostPerSheep2">8</span> = $<span class="guide-result" id="housingExampleResult">0</span></p>
-                                </div>
-                                <p class="guide-tip">💡 <strong>Tip:</strong> This is a multiplication problem. You're finding the total cost to house all your sheep.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <label for="housingCalculation">Housing Cost Calculation:</label>
-                    <input type="number" id="housingCalculation" placeholder="Enter your answer">
-                    <button class="btn btn-check" data-calculation="housing">Check</button>
-                </div>
-
                 <!-- Feed Cost Calculation with Guide -->
                 <div class="calculation-item">
                     <div class="calculation-guide" id="feedGuide">
@@ -162,11 +186,15 @@
                         <div class="guide-content" id="profitGuideContent" aria-hidden="true">
                             <div class="guide-steps">
                                 <h4>Profit/Loss Calculation Guide</h4>
-                                <p><strong>Formula:</strong> Profit = Wool Income - (Housing Cost + Feed Cost + Purchase Cost)</p>
+                                <p><strong>Formula:</strong> Profit = Wool Income - (Feed Cost + Purchase Cost + Housing Cost)</p>
+                                <p><em>Note: Purchase Cost and Housing Cost are only included if you bought new sheep or housing this round.</em></p>
                                 <div class="guide-example">
                                     <p><strong>Step 1:</strong> Calculate wool income: $<span class="guide-value" id="profitWoolIncome">0</span></p>
-                                    <p><strong>Step 2:</strong> Add all costs: Housing ($<span class="guide-value" id="profitHousingCost">0</span>) + Feed ($<span class="guide-value" id="profitFeedCost">0</span>) + Purchase ($<span class="guide-value" id="profitPurchaseCost">0</span>) = $<span class="guide-result" id="profitTotalCosts">0</span></p>
-                                    <p><strong>Step 3:</strong> Subtract costs from income: $<span class="guide-value" id="profitWoolIncome2">0</span> - $<span class="guide-result" id="profitTotalCosts2">0</span> = $<span class="guide-result" id="profitExampleResult">0</span></p>
+                                    <p><strong>Step 2:</strong> Calculate feed cost: $<span class="guide-value" id="profitFeedCost">0</span></p>
+                                    <p><strong>Step 3:</strong> Calculate purchase cost (if any): $<span class="guide-value" id="profitPurchaseCost">0</span></p>
+                                    <p><strong>Step 4:</strong> Calculate housing cost (if any): $<span class="guide-value" id="profitHousingCost">0</span></p>
+                                    <p><strong>Step 5:</strong> Add all costs: Feed ($<span class="guide-value" id="profitFeedCost2">0</span>) + Purchase ($<span class="guide-value" id="profitPurchaseCost2">0</span>) + Housing ($<span class="guide-value" id="profitHousingCost2">0</span>) = $<span class="guide-result" id="profitTotalCosts">0</span></p>
+                                    <p><strong>Step 6:</strong> Subtract costs from income: $<span class="guide-value" id="profitWoolIncome2">0</span> - $<span class="guide-result" id="profitTotalCosts2">0</span> = $<span class="guide-result" id="profitExampleResult">0</span></p>
                                 </div>
                                 <p class="guide-tip">💡 <strong>Tip:</strong> Positive numbers mean profit, negative numbers mean loss. This shows if you're making money!</p>
                             </div>
@@ -262,12 +290,22 @@
                 
                 <h3>How to Play</h3>
                 <ol>
-                    <li><strong>Purchase Sheep:</strong> Choose how many sheep to buy (0-20)</li>
+                    <li><strong>Purchase Sheep:</strong> Choose how many sheep to buy (0-20) in the first round</li>
+                    <li><strong>Purchase Housing:</strong> Buy housing units for your sheep (1 unit per sheep)</li>
                     <li><strong>Calculate Costs:</strong> Work out housing and feed costs</li>
                     <li><strong>Calculate Income:</strong> Determine wool income from your sheep</li>
                     <li><strong>Calculate Profit:</strong> Find your net profit or loss</li>
                     <li><strong>Advance:</strong> Move to the next round when all calculations are correct</li>
                 </ol>
+
+                <h3>Skip Purchase Feature (Rounds 2+)</h3>
+                <p>In rounds 2 and beyond, you can choose to skip purchasing new sheep and housing. This allows you to:</p>
+                <ul>
+                    <li>Use your existing flock for calculations</li>
+                    <li>Focus only on feed costs and wool income</li>
+                    <li>Save money for future rounds</li>
+                    <li>Still maintain the housing requirement if you want to expand later</li>
+                </ul>
 
                 <h3>Seasonal Changes</h3>
                 <p>Prices change each season based on market conditions. Watch for the ↑↓ indicators showing price changes.</p>

@@ -189,6 +189,235 @@ h3 { font-size: var(--font-size-xl); }
     color: var(--error-color);
 }
 
+/* Housing Purchase Section */
+.housing-purchase-section {
+    background: var(--background-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-lg);
+    margin: var(--spacing-lg) 0;
+    box-shadow: var(--shadow-sm);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.section-header h3 {
+    color: var(--primary-color);
+    margin-bottom: 0;
+    font-size: var(--font-size-xl);
+}
+
+.help-icon {
+    background: none;
+    border: none;
+    font-size: var(--font-size-large);
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: var(--spacing-xs);
+    border-radius: 50%;
+    transition: all var(--transition-fast);
+}
+
+.help-icon:hover {
+    background: var(--background-secondary);
+    color: var(--primary-color);
+}
+
+.housing-purchase-section h3 {
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-md);
+    font-size: var(--font-size-xl);
+}
+
+.housing-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.housing-controls label {
+    font-weight: 500;
+    color: var(--text-primary);
+    min-width: 200px;
+}
+
+.housing-controls input {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-base);
+    min-width: 120px;
+}
+
+.housing-controls input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.1);
+}
+
+.housing-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: var(--background-secondary);
+    border-radius: var(--border-radius-sm);
+}
+
+.housing-cost-info,
+.housing-units-preview {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.housing-cost-label,
+.housing-units-label {
+    font-size: var(--font-size-small);
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.housing-cost-value,
+.housing-units-value {
+    font-size: var(--font-size-large);
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* Sheep Info Styles */
+.sheep-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: var(--background-secondary);
+    border-radius: var(--border-radius-sm);
+}
+
+.sheep-cost-info,
+.sheep-units-preview {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.sheep-cost-label,
+.sheep-units-label {
+    font-size: var(--font-size-small);
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.sheep-cost-value,
+.sheep-units-value {
+    font-size: var(--font-size-large);
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* Housing Info Display */
+.housing-info-display {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--background-secondary);
+    border-radius: var(--border-radius-sm);
+    margin: var(--spacing-sm) 0;
+}
+
+.housing-label {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.housing-capacity {
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: var(--font-size-large);
+}
+
+.housing-status {
+    margin-left: auto;
+    font-size: var(--font-size-small);
+    font-weight: 500;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius-sm);
+    background: var(--background-primary);
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-fast);
+}
+
+/* Housing status indicators */
+.housing-info-display.warning {
+    border-left: 4px solid var(--warning-color);
+    background: rgba(243, 156, 18, 0.1);
+}
+
+.housing-info-display.danger {
+    border-left: 4px solid var(--error-color);
+    background: rgba(231, 76, 60, 0.1);
+}
+
+.housing-info-display.success {
+    border-left: 4px solid var(--success-color);
+    background: rgba(39, 174, 96, 0.1);
+}
+
+/* Housing capacity visual indicators */
+.housing-capacity.near-limit {
+    color: var(--warning-color);
+    font-weight: 700;
+}
+
+.housing-capacity.at-limit {
+    color: var(--error-color);
+    font-weight: 700;
+}
+
+.housing-capacity.available {
+    color: var(--success-color);
+    font-weight: 700;
+}
+
+/* Housing Expenses Display */
+.housing-expenses-display {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--background-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    margin: var(--spacing-sm) 0;
+    font-size: var(--font-size-small);
+}
+
+.expenses-label {
+    font-weight: 500;
+    color: var(--text-primary);
+    min-width: 120px;
+}
+
+.expenses-amount {
+    font-weight: 700;
+    color: var(--error-color);
+    margin-right: var(--spacing-xs);
+}
+
+.expenses-detail {
+    color: var(--text-secondary);
+    font-size: var(--font-size-xs);
+}
+
 /* Ledger Section */
 .ledger-section {
     background: var(--background-primary);
@@ -639,4 +868,128 @@ select:focus {
         --border-color: #000000;
         --text-secondary: #000000;
     }
+} 
+
+/* Skip Purchase Functionality */
+.skip-purchase-btn {
+    background-color: var(--accent-color);
+    color: white;
+    border: 2px solid var(--accent-color);
+    margin: var(--spacing-md) 0;
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-weight: 600;
+    transition: var(--transition-normal);
+}
+
+.skip-purchase-btn:hover:not(:disabled) {
+    background-color: #e67e22;
+    border-color: #e67e22;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.skip-purchase-btn:disabled {
+    background-color: var(--text-secondary);
+    border-color: var(--text-secondary);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.skip-purchase-info {
+    margin: var(--spacing-md) 0;
+}
+
+.info-box {
+    background: linear-gradient(135deg, #e8f4fd, #f0f8ff);
+    border: 2px solid var(--secondary-color);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    margin: var(--spacing-md) 0;
+    box-shadow: var(--shadow-sm);
+}
+
+.info-box h4 {
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-large);
+}
+
+.info-box p {
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+.info-box p:last-child {
+    margin-bottom: 0;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* Disabled state for purchase inputs */
+.purchase-controls input.disabled,
+.housing-controls input.disabled {
+    background-color: var(--background-secondary);
+    color: var(--text-secondary);
+    cursor: not-allowed;
+    border-color: var(--border-color);
+}
+
+.purchase-controls input.disabled:focus,
+.housing-controls input.disabled:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.btn.disabled {
+    background-color: var(--text-secondary);
+    border-color: var(--text-secondary);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn.disabled:hover {
+    transform: none;
+    box-shadow: none;
+} 
+
+/* Skip to Calculations Button */
+.skip-to-calculations-btn {
+    background-color: var(--accent-color);
+    color: white;
+    border: 2px solid var(--accent-color);
+    margin: var(--spacing-md) 0;
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-weight: 600;
+    transition: var(--transition-normal);
+    width: 100%;
+    max-width: 400px;
+}
+
+.skip-to-calculations-btn:hover:not(:disabled) {
+    background-color: #e67e22;
+    border-color: #e67e22;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.skip-to-calculations-btn:disabled {
+    background-color: var(--text-secondary);
+    border-color: var(--text-secondary);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Accent button style */
+.btn-accent {
+    background-color: var(--accent-color);
+    color: white;
+    border: 2px solid var(--accent-color);
+}
+
+.btn-accent:hover:not(:disabled) {
+    background-color: #e67e22;
+    border-color: #e67e22;
 } 

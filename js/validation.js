@@ -333,7 +333,6 @@ class GameValidation {
     formatFieldError(fieldName, errorMessage) {
         const fieldDisplayNames = {
             sheepQuantity: 'Number of sheep',
-            housingCalculation: 'Housing cost calculation',
             feedCalculation: 'Feed cost calculation',
             woolCalculation: 'Wool income calculation',
             profitCalculation: 'Profit calculation',
@@ -410,7 +409,6 @@ class GameValidation {
     generateAccessibleErrorMessage(errorMessage, fieldName) {
         const fieldDisplayNames = {
             sheepQuantity: 'sheep quantity',
-            housingCalculation: 'housing cost calculation',
             feedCalculation: 'feed cost calculation',
             woolCalculation: 'wool income calculation',
             profitCalculation: 'profit calculation'
