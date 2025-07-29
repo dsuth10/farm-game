@@ -1,11 +1,11 @@
 /* Sheep Business Game - Responsive Stylesheet */
 /* Handles responsive design for different screen sizes */
 
-/* Large Desktop (1200px and up) */
-@media screen and (min-width: 1200px) {
+/* Large Desktop (1400px and up) */
+@media screen and (min-width: 1400px) {
     .game-container {
-        max-width: 1400px;
-        grid-template-columns: 1fr 1fr;
+        max-width: 1600px;
+        grid-template-columns: 1fr 1fr 1fr;
         gap: var(--spacing-2xl);
     }
     
@@ -14,12 +14,26 @@
     }
 }
 
-/* Desktop (992px to 1199px) */
+/* Desktop (1200px to 1399px) */
+@media screen and (min-width: 1200px) and (max-width: 1399px) {
+    .game-container {
+        max-width: 1400px;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: var(--spacing-xl);
+    }
+}
+
+/* Medium Desktop (992px to 1199px) */
 @media screen and (max-width: 1199px) {
     .game-container {
         max-width: 1000px;
         grid-template-columns: 1fr 1fr;
         gap: var(--spacing-xl);
+    }
+    
+    .market-info-section {
+        grid-column: 1 / -1;
+        order: -1;
     }
 }
 
@@ -29,6 +43,11 @@
         grid-template-columns: 1fr 1fr;
         gap: var(--spacing-lg);
         padding: var(--spacing-md);
+    }
+    
+    .market-info-section {
+        grid-column: 1 / -1;
+        order: -1;
     }
     
     .game-header {
@@ -45,7 +64,8 @@
     }
     
     .purchase-section,
-    .ledger-section {
+    .ledger-section,
+    .market-info-section {
         padding: var(--spacing-md);
     }
     
@@ -82,6 +102,10 @@
         padding: var(--spacing-sm);
     }
     
+    .market-info-section {
+        order: -1;
+    }
+    
     .game-header {
         padding: var(--spacing-sm);
     }
@@ -103,7 +127,7 @@
     
     .purchase-section,
     .ledger-section,
-    .market-conditions {
+    .market-info-section {
         padding: var(--spacing-md);
         margin-bottom: var(--spacing-md);
     }
@@ -207,7 +231,7 @@
     
     .purchase-section,
     .ledger-section,
-    .market-conditions {
+    .market-info-section {
         padding: var(--spacing-sm);
     }
     
@@ -285,7 +309,7 @@
     
     .purchase-section,
     .ledger-section,
-    .market-conditions {
+    .market-info-section {
         padding: var(--spacing-xs);
     }
     
@@ -324,7 +348,8 @@
     }
     
     .purchase-section,
-    .ledger-section {
+    .ledger-section,
+    .market-info-section {
         padding: var(--spacing-sm);
     }
     
@@ -364,7 +389,7 @@
     
     .purchase-section,
     .ledger-section,
-    .market-conditions {
+    .market-info-section {
         break-inside: avoid;
         margin-bottom: 1rem;
         box-shadow: none;
@@ -388,7 +413,7 @@
     .game-container,
     .purchase-section,
     .ledger-section,
-    .market-conditions {
+    .market-info-section {
         transition: none;
     }
     

@@ -13,7 +13,7 @@
     <header class="game-header">
         <h1>Sheep Station Manager</h1>
         <div class="round-info">
-            <span class="round-counter">Round <span id="currentRound">1</span> of <span id="maxRounds">4</span></span>
+            <span class="round-counter">Round <span id="currentRound">1</span> of <span id="maxRounds">12</span></span>
         </div>
         <div class="season-info">
             <span class="season-name" id="currentSeason">Spring</span>
@@ -23,7 +23,61 @@
 
     <!-- Main Game Container -->
     <main class="game-container">
-        <!-- Purchase Section -->
+        <!-- Market Information Section - NEW LEFT COLUMN -->
+        <section class="market-info-section">
+            <h2>Market Information</h2>
+            
+            <!-- Price Display - MOVED FROM PURCHASE SECTION -->
+            <div class="price-display">
+                <h3>Current Prices</h3>
+                <div class="price-grid">
+                    <div class="price-item">
+                        <span class="price-label">Sheep Purchase Price:</span>
+                        <span class="price-value" id="sheepPrice">$45</span>
+                        <span class="price-change" id="sheepPriceChange"></span>
+                    </div>
+                    <div class="price-item">
+                        <span class="price-label">Housing Cost:</span>
+                        <span class="price-value" id="housingCost">$8</span>
+                        <span class="price-change" id="housingCostChange"></span>
+                    </div>
+                    <div class="price-item">
+                        <span class="price-label">Feed Cost:</span>
+                        <span class="price-value" id="feedCost">$12</span>
+                        <span class="price-change" id="feedCostChange"></span>
+                    </div>
+                    <div class="price-item">
+                        <span class="price-label">Wool Price:</span>
+                        <span class="price-value" id="woolPrice">$18</span>
+                        <span class="price-change" id="woolPriceChange"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Market Trends and History Buttons - MOVED FROM PURCHASE SECTION -->
+            <div class="market-buttons">
+                <button id="marketTrendsBtn" class="btn btn-secondary">Market Trends</button>
+                <button id="roundHistoryBtn" class="btn btn-secondary" onclick="window.sheepGame.showRoundHistory()">Round History</button>
+            </div>
+
+            <!-- Market Conditions Section - MOVED FROM BOTTOM -->
+            <div class="market-conditions">
+                <h3>Market Conditions</h3>
+                <p id="marketCondition">Growing season - Prices are favorable for expansion</p>
+                <div id="priceChanges" class="price-changes">
+                    <!-- Price change indicators will be displayed here -->
+                </div>
+            </div>
+
+            <!-- Game Controls - MOVED FROM BOTTOM -->
+            <div class="game-controls">
+                <button id="nextRoundBtn" class="btn btn-primary" disabled>Next Round</button>
+                <button id="resetBtn" class="btn btn-secondary">Reset Game</button>
+                <button id="helpBtn" class="btn btn-secondary">Help</button>
+            </div>
+        </section>
+
+        <!-- Purchase Section - MIDDLE COLUMN -->
         <section class="purchase-section">
             <!-- Housing Purchase Section - MOVED TO TOP -->
             <div class="housing-purchase-section">
@@ -87,38 +141,9 @@
             </div>
             
             <!-- Skip Purchase Button will be dynamically inserted here by JavaScript -->
-            
-            <div class="price-display">
-                <h3>Current Prices</h3>
-                <div class="price-grid">
-                    <div class="price-item">
-                        <span class="price-label">Sheep Purchase Price:</span>
-                        <span class="price-value" id="sheepPrice">$45</span>
-                        <span class="price-change" id="sheepPriceChange"></span>
-                    </div>
-                    <div class="price-item">
-                        <span class="price-label">Housing Cost:</span>
-                        <span class="price-value" id="housingCost">$8</span>
-                        <span class="price-change" id="housingCostChange"></span>
-                    </div>
-                    <div class="price-item">
-                        <span class="price-label">Feed Cost:</span>
-                        <span class="price-value" id="feedCost">$12</span>
-                        <span class="price-change" id="feedCostChange"></span>
-                    </div>
-                    <div class="price-item">
-                        <span class="price-label">Wool Price:</span>
-                        <span class="price-value" id="woolPrice">$18</span>
-                        <span class="price-change" id="woolPriceChange"></span>
-                    </div>
-                </div>
-            </div>
-
-            <button id="marketTrendsBtn" class="btn btn-secondary">Market Trends</button>
-            <button id="roundHistoryBtn" class="btn btn-secondary" onclick="window.sheepGame.showRoundHistory()">Round History</button>
         </section>
 
-        <!-- Financial Ledger Section -->
+        <!-- Financial Ledger Section - RIGHT COLUMN -->
         <section class="ledger-section">
             <h2>Financial Ledger</h2>
             <div class="balance-display">
@@ -137,11 +162,7 @@
                 <span class="housing-status" id="housingStatus"></span>
             </div>
             
-            <div class="housing-expenses-display">
-                <span class="expenses-label">Housing Expenses:</span>
-                <span class="expenses-amount" id="housingExpenses">$0</span>
-                <span class="expenses-detail" id="housingExpensesDetail">(0 units purchased)</span>
-            </div>
+
 
             <div class="calculations-section">
                 <h3>Your Calculations</h3>
@@ -234,26 +255,9 @@
             </div>
         </section>
 
-        <!-- Market Conditions Section -->
-        <section class="market-conditions">
-            <h3>Market Conditions</h3>
-            <p id="marketCondition">Growing season - Prices are favorable for expansion</p>
-            <div id="priceChanges" class="price-changes">
-                <!-- Price change indicators will be displayed here -->
-            </div>
-        </section>
-
         <!-- Feedback Banner -->
         <section class="feedback-banner" id="feedbackBanner">
             <!-- Dynamic feedback messages will appear here -->
-        </section>
-
-        <!-- Game Controls -->
-        <section class="game-controls">
-            <button id="nextRoundBtn" class="btn btn-primary" disabled>Next Round</button>
-            <button id="resetBtn" class="btn btn-secondary">Reset Game</button>
-            <button id="helpBtn" class="btn btn-secondary">Help</button>
-            <button id="teacherSettingsBtn" class="btn btn-secondary">Teacher Settings</button>
         </section>
     </main>
 
@@ -281,7 +285,7 @@
                 </div>
                 <div class="setting-item">
                     <label for="maxRoundsSetting">Maximum Rounds:</label>
-                    <input type="number" id="maxRoundsSetting" value="4" min="2" max="8">
+                    <input type="number" id="maxRoundsSetting" value="12" min="2" max="20">
                 </div>
                 <div class="setting-item">
                     <label for="marketDifficulty">Market Difficulty:</label>

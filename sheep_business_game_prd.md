@@ -151,7 +151,7 @@ Each round represents a different season with varying market conditions. Wool pr
 ```javascript
 const gameState = {
     currentRound: 1,
-    maxRounds: 4,
+    maxRounds: 12,
     balance: 200,
     flockSize: 0,
     sheep: [], // Array of sheep objects

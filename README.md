@@ -85,7 +85,7 @@ Each round represents a different season with varying market conditions. Wool pr
 - **Random Variations**: Enable ±$3 price variations
 - **Sheep Mortality**: 5% chance of sheep loss per round
 - **Starting Balance**: Adjustable from $50-$500
-- **Maximum Rounds**: Configurable from 2-8 rounds
+- **Maximum Rounds**: Configurable from 2-20 rounds (default: 12)
 - **Market Difficulty**: Easy/Medium/Hard settings
 
 ### Analytics

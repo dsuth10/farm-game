@@ -9,7 +9,7 @@ class SheepBusinessGame {
     constructor() {
         this.gameState = {
             currentRound: 1,
-            maxRounds: 4,
+            maxRounds: 12,
             balance: 200,
             flockSize: 0,
             sheep: [],
@@ -160,10 +160,7 @@ class SheepBusinessGame {
             this.showHelp();
         });
 
-        // Teacher settings button
-        document.getElementById('teacherSettingsBtn').addEventListener('click', () => {
-            this.showTeacherSettings();
-        });
+
 
         // Market trends button
         document.getElementById('marketTrendsBtn').addEventListener('click', () => {
@@ -257,7 +254,14 @@ class SheepBusinessGame {
         
         // Calculate sheep quantity to purchase
         const sheepPrice = this.gameState.marketPrices.sheepPurchasePrice;
-        const quantity = Math.floor(moneyInput / sheepPrice);
+        
+        // Check if the amount is an exact multiple of the sheep price
+        if (moneyInput % sheepPrice !== 0) {
+            this.showFeedback(`Amount must be an exact multiple of the sheep price ($${sheepPrice}). Please calculate the correct amount.`, 'error');
+            return;
+        }
+        
+        const quantity = moneyInput / sheepPrice;
         
         if (quantity === 0) {
             this.showFeedback('Amount too small to purchase any sheep.', 'error');
@@ -702,9 +706,7 @@ class SheepBusinessGame {
         document.getElementById('housingCapacity').textContent = this.gameState.housingCapacity;
         document.getElementById('housingStatus').textContent = this.getHousingStatus();
         
-        // Update housing expenses
-        document.getElementById('housingExpenses').textContent = `$${this.gameState.totalHousingExpenses}`;
-        document.getElementById('housingExpensesDetail').textContent = `(${this.gameState.housingCapacity} units purchased)`;
+
         
         // Apply visual indicators for housing status
         this.updateHousingVisualIndicators();
@@ -1175,7 +1177,7 @@ class SheepBusinessGame {
         document.getElementById('randomVariation').checked = this.gameState.settings.randomVariation;
         document.getElementById('sheepMortality').checked = this.gameState.settings.sheepMortality;
         document.getElementById('startingBalance').value = this.gameState.settings.startingBalance || 200;
-        document.getElementById('maxRoundsSetting').value = this.gameState.settings.maxRounds || 4;
+        document.getElementById('maxRoundsSetting').value = this.gameState.settings.maxRounds || 12;
         document.getElementById('marketDifficulty').value = this.gameState.settings.marketDifficulty;
         
         this.showModal('teacherSettingsModal');
@@ -1189,7 +1191,7 @@ class SheepBusinessGame {
         this.gameState.settings.randomVariation = document.getElementById('randomVariation').checked;
         this.gameState.settings.sheepMortality = document.getElementById('sheepMortality').checked;
         this.gameState.settings.startingBalance = parseInt(document.getElementById('startingBalance').value) || 200;
-        this.gameState.settings.maxRounds = parseInt(document.getElementById('maxRoundsSetting').value) || 4;
+        this.gameState.settings.maxRounds = parseInt(document.getElementById('maxRoundsSetting').value) || 12;
         this.gameState.settings.marketDifficulty = document.getElementById('marketDifficulty').value;
         
         this.closeModal(document.getElementById('teacherSettingsModal'));
@@ -1314,7 +1316,14 @@ class SheepBusinessGame {
         
         // Calculate housing units to purchase
         const housingCostPerUnit = this.gameState.marketPrices.housingCost;
-        const housingUnits = Math.floor(housingAmount / housingCostPerUnit);
+        
+        // Check if the amount is an exact multiple of the housing cost per unit
+        if (housingAmount % housingCostPerUnit !== 0) {
+            this.showFeedback(`Amount must be an exact multiple of the housing cost per unit ($${housingCostPerUnit}). Please calculate the correct amount.`, 'error');
+            return;
+        }
+        
+        const housingUnits = housingAmount / housingCostPerUnit;
         
         if (housingUnits === 0) {
             this.showFeedback('Amount too small to purchase any housing units.', 'error');
@@ -1361,9 +1370,19 @@ class SheepBusinessGame {
     updateHousingPreview() {
         const housingAmount = parseFloat(document.getElementById('housingAmount').value) || 0;
         const housingCostPerUnit = this.gameState.marketPrices.housingCost;
+        
+        // Check if amount is an exact multiple
+        const isExactMultiple = housingAmount % housingCostPerUnit === 0;
         const housingUnits = Math.floor(housingAmount / housingCostPerUnit);
         
-        document.getElementById('housingUnitsPreview').textContent = housingUnits;
+        // Show preview with validation indicator
+        if (housingAmount > 0 && !isExactMultiple) {
+            document.getElementById('housingUnitsPreview').textContent = `${housingUnits} (Invalid - not exact multiple)`;
+            document.getElementById('housingUnitsPreview').style.color = '#ff6b6b';
+        } else {
+            document.getElementById('housingUnitsPreview').textContent = housingUnits;
+            document.getElementById('housingUnitsPreview').style.color = '';
+        }
         
         // Update housing cost per unit display
         document.getElementById('housingCostPerUnit').textContent = `$${housingCostPerUnit}`;
@@ -1375,9 +1394,19 @@ class SheepBusinessGame {
     updateSheepPurchasePreview() {
         const sheepAmount = parseFloat(document.getElementById('sheepMoneyInput').value) || 0;
         const sheepCostPerUnit = this.gameState.marketPrices.sheepPurchasePrice;
+        
+        // Check if amount is an exact multiple
+        const isExactMultiple = sheepAmount % sheepCostPerUnit === 0;
         const sheepUnits = Math.floor(sheepAmount / sheepCostPerUnit);
         
-        document.getElementById('sheepUnitsPreview').textContent = sheepUnits;
+        // Show preview with validation indicator
+        if (sheepAmount > 0 && !isExactMultiple) {
+            document.getElementById('sheepUnitsPreview').textContent = `${sheepUnits} (Invalid - not exact multiple)`;
+            document.getElementById('sheepUnitsPreview').style.color = '#ff6b6b';
+        } else {
+            document.getElementById('sheepUnitsPreview').textContent = sheepUnits;
+            document.getElementById('sheepUnitsPreview').style.color = '';
+        }
         
         // Update sheep cost per unit display
         document.getElementById('sheepCostPerUnit').textContent = `$${sheepCostPerUnit}`;

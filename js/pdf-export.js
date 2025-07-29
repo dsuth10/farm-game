@@ -228,7 +228,7 @@ class PDFExporter {
                         <strong>Starting Balance:</strong> $${settings.startingBalance || 200}
                     </div>
                     <div class="setting-item">
-                        <strong>Maximum Rounds:</strong> ${settings.maxRounds || 4}
+                        <strong>Maximum Rounds:</strong> ${settings.maxRounds || 12}
                     </div>
                     <div class="setting-item">
                         <strong>Market Difficulty:</strong> ${settings.marketDifficulty || 'medium'}
