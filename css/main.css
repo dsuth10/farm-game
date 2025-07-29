@@ -323,6 +323,43 @@ h3 { font-size: var(--font-size-xl); }
     color: var(--primary-color);
 }
 
+/* Round-specific purchase displays */
+.sheep-round-purchases,
+.housing-round-purchases {
+    margin-top: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    background-color: var(--background-secondary);
+    border-radius: var(--border-radius-sm);
+    border-left: 3px solid var(--accent-color);
+}
+
+.round-purchases-label {
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: var(--font-size-small);
+    display: block;
+    margin-bottom: var(--spacing-xs);
+}
+
+.round-purchases-value {
+    font-weight: 500;
+    color: var(--text-primary);
+    font-size: var(--font-size-base);
+}
+
+/* Highlight when purchases are made */
+.sheep-round-purchases.has-purchases,
+.housing-round-purchases.has-purchases {
+    background-color: rgba(39, 174, 96, 0.1);
+    border-left-color: var(--success-color);
+}
+
+.sheep-round-purchases.has-purchases .round-purchases-value,
+.housing-round-purchases.has-purchases .round-purchases-value {
+    color: var(--success-color);
+    font-weight: 600;
+}
+
 /* Housing Info Display */
 .housing-info-display {
     display: flex;
@@ -546,7 +583,9 @@ h3 { font-size: var(--font-size-xl); }
     max-height: 0;
     overflow: hidden;
     transition: max-height var(--transition-normal) ease-in-out;
-    background-color: #f8f9fa;
+    background-color: var(--background-primary);
+    border: 1px solid var(--border-color);
+    border-top: none;
 }
 
 .guide-content[aria-hidden="false"] {
@@ -555,21 +594,24 @@ h3 { font-size: var(--font-size-xl); }
 
 .guide-steps {
     padding: var(--spacing-md);
+    background-color: var(--background-primary);
 }
 
 .guide-steps h4 {
     color: var(--primary-color);
     margin-bottom: var(--spacing-sm);
     font-size: var(--font-size-large);
+    font-weight: 600;
 }
 
 .guide-steps p {
     margin-bottom: var(--spacing-sm);
     line-height: 1.5;
+    color: var(--text-primary);
 }
 
 .guide-example {
-    background-color: white;
+    background-color: var(--background-secondary);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-sm);
     padding: var(--spacing-md);
@@ -578,6 +620,7 @@ h3 { font-size: var(--font-size-xl); }
 
 .guide-example p {
     margin-bottom: var(--spacing-xs);
+    color: var(--text-primary);
 }
 
 .guide-value {
@@ -603,6 +646,7 @@ h3 { font-size: var(--font-size-xl); }
     border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0;
     margin-top: var(--spacing-sm);
     font-style: italic;
+    color: var(--text-primary);
 }
 
 /* Responsive adjustments for guides */
@@ -769,10 +813,34 @@ h3 { font-size: var(--font-size-xl); }
     max-height: 80vh;
     overflow-y: auto;
     position: relative;
+    border: 1px solid var(--border-color);
+}
+
+.modal-content h2,
+.modal-content h3 {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.modal-content p {
+    color: var(--text-primary);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-sm);
+}
+
+.modal-content ul,
+.modal-content ol {
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+.modal-content li {
+    margin-bottom: var(--spacing-xs);
+    line-height: 1.5;
 }
 
 .close {
-    color: var(--text-secondary);
+    color: var(--text-primary);
     float: right;
     font-size: var(--font-size-2xl);
     font-weight: bold;
@@ -783,7 +851,7 @@ h3 { font-size: var(--font-size-xl); }
 }
 
 .close:hover {
-    color: var(--text-primary);
+    color: var(--primary-color);
 }
 
 /* Settings Grid */
@@ -845,6 +913,110 @@ h3 { font-size: var(--font-size-xl); }
     margin-bottom: var(--spacing-sm);
 }
 
+/* Enhanced contrast for help content */
+.help-content p,
+.help-content li {
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+.help-content strong {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* Enhanced styling for help modals */
+#housingHelpContent,
+#sheepPurchaseHelpContent {
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+#housingHelpContent h3,
+#sheepPurchaseHelpContent h3 {
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-md);
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+}
+
+#housingHelpContent p,
+#sheepPurchaseHelpContent p {
+    margin-bottom: var(--spacing-md);
+    color: var(--text-primary);
+}
+
+#housingHelpContent ul,
+#sheepPurchaseHelpContent ul {
+    margin-bottom: var(--spacing-md);
+    padding-left: var(--spacing-lg);
+}
+
+#housingHelpContent li,
+#sheepPurchaseHelpContent li {
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+#housingHelpContent strong,
+#sheepPurchaseHelpContent strong {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* Info Box - Improved contrast */
+.info-box {
+    background: linear-gradient(135deg, #ffffff, #f8f9fa);
+    border: 2px solid var(--primary-color);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    margin: var(--spacing-md) 0;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+}
+
+.info-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(44, 90, 160, 0.05), rgba(44, 90, 160, 0.02));
+    border-radius: var(--border-radius-lg);
+    pointer-events: none;
+}
+
+.info-box h4 {
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-large);
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+}
+
+.info-box p {
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-primary);
+    line-height: 1.5;
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+}
+
+.info-box p:last-child {
+    margin-bottom: 0;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.info-box strong {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
 /* Accessibility Improvements */
 @media (prefers-reduced-motion: reduce) {
     * {
@@ -867,6 +1039,23 @@ select:focus {
     :root {
         --border-color: #000000;
         --text-secondary: #000000;
+        --text-primary: #000000;
+        --background-primary: #ffffff;
+        --background-secondary: #f0f0f0;
+    }
+    
+    .info-box {
+        background: #ffffff;
+        border: 3px solid #000000;
+    }
+    
+    .modal-content {
+        border: 2px solid #000000;
+    }
+    
+    .guide-toggle {
+        background: #f0f0f0;
+        border: 1px solid #000000;
     }
 } 
 
@@ -900,31 +1089,16 @@ select:focus {
     margin: var(--spacing-md) 0;
 }
 
-.info-box {
-    background: linear-gradient(135deg, #e8f4fd, #f0f8ff);
-    border: 2px solid var(--secondary-color);
-    border-radius: var(--border-radius-lg);
-    padding: var(--spacing-lg);
-    margin: var(--spacing-md) 0;
-    box-shadow: var(--shadow-sm);
+.btn.disabled {
+    background-color: var(--text-secondary);
+    border-color: var(--text-secondary);
+    cursor: not-allowed;
+    opacity: 0.6;
 }
 
-.info-box h4 {
-    color: var(--primary-color);
-    margin-bottom: var(--spacing-sm);
-    font-size: var(--font-size-large);
-}
-
-.info-box p {
-    margin-bottom: var(--spacing-sm);
-    color: var(--text-primary);
-    line-height: 1.5;
-}
-
-.info-box p:last-child {
-    margin-bottom: 0;
-    font-weight: 600;
-    color: var(--primary-color);
+.btn.disabled:hover {
+    transform: none;
+    box-shadow: none;
 }
 
 /* Disabled state for purchase inputs */
@@ -939,18 +1113,6 @@ select:focus {
 .purchase-controls input.disabled:focus,
 .housing-controls input.disabled:focus {
     outline: none;
-    box-shadow: none;
-}
-
-.btn.disabled {
-    background-color: var(--text-secondary);
-    border-color: var(--text-secondary);
-    cursor: not-allowed;
-    opacity: 0.6;
-}
-
-.btn.disabled:hover {
-    transform: none;
     box-shadow: none;
 } 
 
@@ -992,4 +1154,34 @@ select:focus {
 .btn-accent:hover:not(:disabled) {
     background-color: #e67e22;
     border-color: #e67e22;
-} 
+}
+
+/* Skip Option Box Styles */
+.skip-option-box {
+    margin: var(--spacing-md) 0;
+    padding: var(--spacing-md);
+    background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+    border: 2px solid var(--accent-color);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.skip-option-box .info-box {
+    margin: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.skip-option-box .info-box h4 {
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-large);
+}
+
+.skip-option-box .info-box p {
+    color: #000000;
+    margin-bottom: 0;
+    font-size: var(--font-size-base);
+    font-weight: 500;
+}

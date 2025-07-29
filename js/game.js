@@ -17,6 +17,8 @@ class SheepBusinessGame {
             totalHousingExpenses: 0, // Total amount spent on housing
             currentSeason: 'spring',
             canSkipPurchases: false, // New property to track if purchases can be skipped
+            sheepPurchasedThisRound: 0, // Number of sheep purchased in current round only
+            housingUnitsPurchasedThisRound: 0, // Number of housing units purchased in current round only
             seasonalPrices: {
                 spring: {
                     woolPrice: 72, // Increased from 18 to achieve ~60% profit margin (sheep cost $45)
@@ -73,24 +75,6 @@ class SheepBusinessGame {
 
         this.initializeGame();
         this.setupEventListeners();
-        
-        // Add periodic validation check for debugging
-        setInterval(() => {
-            const calculations = this.gameState.currentRoundData?.calculations;
-            if (calculations) {
-                const allComplete = Object.values(calculations).every(calc => 
-                    calc.studentAnswer !== null && calc.studentAnswer === calc.correctAnswer
-                );
-                const housingSufficient = this.checkHousingCapacity();
-                const nextRoundBtn = document.getElementById('nextRoundBtn');
-                
-                if (allComplete && housingSufficient && nextRoundBtn && nextRoundBtn.disabled) {
-                    console.log('Periodic check: Enabling next round button');
-                    nextRoundBtn.disabled = false;
-                    this.showFeedback('All calculations correct and housing sufficient! You can advance to the next round.', 'success');
-                }
-            }
-        }, 2000); // Check every 2 seconds
     }
 
     /**
@@ -99,8 +83,6 @@ class SheepBusinessGame {
     initializeGame() {
         // Set whether purchases can be skipped (round 2 and beyond)
         this.gameState.canSkipPurchases = this.gameState.currentRound > 1;
-        
-        console.log('initializeGame called - currentRound:', this.gameState.currentRound, 'canSkipPurchases:', this.gameState.canSkipPurchases);
         
         this.updateDisplay();
         this.updateSeasonalPrices();
@@ -111,6 +93,9 @@ class SheepBusinessGame {
         this.updateSheepPurchasePreview();
         this.initializeRoundData();
         this.updatePurchaseSectionVisibility();
+        
+        // Ensure purchase inputs are enabled
+        this.enablePurchaseInputs();
         
         // Check if calculations should be auto-enabled for round 2+
         this.checkAutoEnableCalculations();
@@ -125,15 +110,7 @@ class SheepBusinessGame {
             this.handlePurchase();
         });
         
-        // Add manual validation button for debugging
-        const nextRoundBtnElement = document.getElementById('nextRoundBtn');
-        if (nextRoundBtnElement) {
-            nextRoundBtnElement.addEventListener('dblclick', (e) => {
-                e.preventDefault();
-                console.log('Manual validation triggered by double-click');
-                this.checkRoundCompletion();
-            });
-        }
+
 
         // Housing purchase button
         document.getElementById('purchaseHousingBtn').addEventListener('click', () => {
@@ -238,6 +215,10 @@ class SheepBusinessGame {
      * Initialize round data for a new round
      */
     initializeRoundData() {
+        // Reset round-specific purchase counters
+        this.gameState.sheepPurchasedThisRound = 0;
+        this.gameState.housingUnitsPurchasedThisRound = 0;
+        
         this.gameState.currentRoundData = {
             roundNumber: this.gameState.currentRound,
             season: this.gameState.currentSeason,
@@ -300,6 +281,9 @@ class SheepBusinessGame {
         this.gameState.balance -= actualCost;
         this.gameState.flockSize += quantity;
         
+        // Increment round-specific sheep purchase counter
+        this.gameState.sheepPurchasedThisRound += quantity;
+        
         // Add sheep to flock
         for (let i = 0; i < quantity; i++) {
             this.gameState.sheep.push({
@@ -343,12 +327,6 @@ class SheepBusinessGame {
         }
 
         this.checkRoundCompletion();
-        
-        // Force a re-check after a short delay to ensure all updates are processed
-        setTimeout(() => {
-            console.log('Forcing re-check of round completion...');
-            this.checkRoundCompletion();
-        }, 100);
     }
 
     /**
@@ -529,32 +507,6 @@ class SheepBusinessGame {
     checkRoundCompletion() {
         const calculations = this.gameState.currentRoundData.calculations;
         
-        // Debug logging to help understand the validation state
-        console.log('Checking round completion:', {
-            feedCost: calculations.feedCost,
-            woolIncome: calculations.woolIncome,
-            profit: calculations.profit
-        });
-        
-        // More detailed logging
-        console.log('Detailed calculation values:', {
-            feedCost: {
-                studentAnswer: calculations.feedCost?.studentAnswer,
-                correctAnswer: calculations.feedCost?.correctAnswer,
-                isComplete: calculations.feedCost?.studentAnswer !== null && calculations.feedCost?.studentAnswer === calculations.feedCost?.correctAnswer
-            },
-            woolIncome: {
-                studentAnswer: calculations.woolIncome?.studentAnswer,
-                correctAnswer: calculations.woolIncome?.correctAnswer,
-                isComplete: calculations.woolIncome?.studentAnswer !== null && calculations.woolIncome?.studentAnswer === calculations.woolIncome?.correctAnswer
-            },
-            profit: {
-                studentAnswer: calculations.profit?.studentAnswer,
-                correctAnswer: calculations.profit?.correctAnswer,
-                isComplete: calculations.profit?.studentAnswer !== null && calculations.profit?.studentAnswer === calculations.profit?.correctAnswer
-            }
-        });
-        
         // Check each calculation individually to ensure all are complete
         const feedComplete = calculations.feedCost.studentAnswer !== null && 
                            calculations.feedCost.studentAnswer === calculations.feedCost.correctAnswer;
@@ -580,37 +532,11 @@ class SheepBusinessGame {
         const woolCompleteAlt = woolInputValue === woolCorrectAnswer;
         const profitCompleteAlt = profitInputValue === profitCorrectAnswer;
         
-        console.log('Alternative validation:', {
-            feedInputValue,
-            feedCorrectAnswer,
-            feedCompleteAlt,
-            woolInputValue,
-            woolCorrectAnswer,
-            woolCompleteAlt,
-            profitInputValue,
-            profitCorrectAnswer,
-            profitCompleteAlt
-        });
-        
         // Use the alternative validation if the stored data is incomplete
         const allComplete = (feedComplete && woolComplete && profitComplete) || 
                            (feedCompleteAlt && woolCompleteAlt && profitCompleteAlt);
         
-        console.log('Calculation status:', {
-            feedComplete,
-            woolComplete,
-            profitComplete,
-            allComplete
-        });
-        
         const housingSufficient = this.checkHousingCapacity();
-        
-        // Debug housing capacity
-        console.log('Housing check:', {
-            flockSize: this.gameState.flockSize,
-            housingCapacity: this.gameState.housingCapacity,
-            housingSufficient
-        });
         
 
 
@@ -632,10 +558,9 @@ class SheepBusinessGame {
             // Add more specific feedback for incomplete calculations
             if (!allComplete) {
                 let missingCalculations = [];
-                if (!feedComplete) missingCalculations.push('Feed Cost');
-                if (!woolComplete) missingCalculations.push('Wool Income');
-                if (!profitComplete) missingCalculations.push('Profit/Loss');
-                console.log('Missing calculations:', missingCalculations);
+                if (!feedComplete && !feedCompleteAlt) missingCalculations.push('Feed Cost');
+                if (!woolComplete && !woolCompleteAlt) missingCalculations.push('Wool Income');
+                if (!profitComplete && !profitCompleteAlt) missingCalculations.push('Profit/Loss');
                 this.showFeedback(`Complete all calculations first. Missing: ${missingCalculations.join(', ')}`, 'error');
             }
         }
@@ -682,15 +607,7 @@ class SheepBusinessGame {
         const allComplete = (feedComplete && woolComplete && profitComplete) || 
                            (feedCompleteAlt && woolCompleteAlt && profitCompleteAlt);
         
-        console.log('Next round validation:', {
-            feedComplete,
-            woolComplete,
-            profitComplete,
-            feedCompleteAlt,
-            woolCompleteAlt,
-            profitCompleteAlt,
-            allComplete
-        });
+
         
         if (!allComplete) {
             let missingCalculations = [];
@@ -732,7 +649,7 @@ class SheepBusinessGame {
             // Set whether purchases can be skipped (round 2 and beyond)
             this.gameState.canSkipPurchases = this.gameState.currentRound > 1;
             
-            console.log('advanceRound - currentRound:', this.gameState.currentRound, 'canSkipPurchases:', this.gameState.canSkipPurchases);
+
             
             // Update prices for new season
             this.updateSeasonalPrices();
@@ -749,6 +666,9 @@ class SheepBusinessGame {
             
             // Update purchase section visibility for new round
             this.updatePurchaseSectionVisibility();
+            
+            // Re-enable purchase inputs for new round
+            this.enablePurchaseInputs();
             
             this.showFeedback(`Welcome to ${this.gameState.currentSeason}! New prices are in effect.`, 'success');
             
@@ -798,8 +718,45 @@ class SheepBusinessGame {
         // Update market condition
         document.getElementById('marketCondition').textContent = this.gameState.seasonalPrices[this.gameState.currentSeason].marketCondition;
         
-        // Update guide values if any guides are expanded
-        this.updateGuideValues();
+        // Update round-specific purchase displays
+        this.updateRoundPurchaseDisplays();
+        
+        // Guide values are no longer updated since guides show operation instructions only
+    }
+
+    /**
+     * Update round-specific purchase displays
+     */
+    updateRoundPurchaseDisplays() {
+        // Update sheep purchase display
+        const sheepRoundPurchases = document.getElementById('sheepRoundPurchases');
+        const sheepRoundValue = document.getElementById('sheepRoundPurchasesValue');
+        
+        if (this.gameState.sheepPurchasedThisRound > 0) {
+            const message = `During this round you have purchased ${this.gameState.sheepPurchasedThisRound} sheep`;
+            sheepRoundValue.textContent = message;
+            sheepRoundPurchases.classList.add('has-purchases');
+            sheepRoundPurchases.setAttribute('aria-label', message);
+        } else {
+            sheepRoundValue.textContent = 'No sheep purchased yet';
+            sheepRoundPurchases.classList.remove('has-purchases');
+            sheepRoundPurchases.setAttribute('aria-label', 'No sheep purchased in this round');
+        }
+        
+        // Update housing purchase display
+        const housingRoundPurchases = document.getElementById('housingRoundPurchases');
+        const housingRoundValue = document.getElementById('housingRoundPurchasesValue');
+        
+        if (this.gameState.housingUnitsPurchasedThisRound > 0) {
+            const message = `During this round you have purchased ${this.gameState.housingUnitsPurchasedThisRound} housing units`;
+            housingRoundValue.textContent = message;
+            housingRoundPurchases.classList.add('has-purchases');
+            housingRoundPurchases.setAttribute('aria-label', message);
+        } else {
+            housingRoundValue.textContent = 'No housing purchased yet';
+            housingRoundPurchases.classList.remove('has-purchases');
+            housingRoundPurchases.setAttribute('aria-label', 'No housing purchased in this round');
+        }
     }
 
     /**
@@ -1112,6 +1069,8 @@ class SheepBusinessGame {
                 totalHousingExpenses: 0,
                 currentSeason: 'spring',
                 canSkipPurchases: false,
+                sheepPurchasedThisRound: 0,
+                housingUnitsPurchasedThisRound: 0,
                 roundHistory: [],
                 currentRoundData: null
             };
@@ -1157,7 +1116,8 @@ class SheepBusinessGame {
      * Show housing system help
      */
     showHousingHelp() {
-        const helpMessage = `
+        const helpContent = document.getElementById('housingHelpContent');
+        helpContent.innerHTML = `
             <h3>🏠 Housing System Guide</h3>
             <p><strong>How it works:</strong></p>
             <ul>
@@ -1176,35 +1136,34 @@ class SheepBusinessGame {
             <p><strong>Strategy:</strong> Plan ahead! Housing costs change with seasons, so consider purchasing housing when prices are lower.</p>
         `;
         
-        // Create a simple alert for now (could be enhanced with a modal)
-        alert(helpMessage.replace(/<[^>]*>/g, ''));
+        this.showModal('housingHelpModal');
     }
 
     /**
      * Show sheep purchase system help
      */
     showSheepPurchaseHelp() {
-        const helpMessage = `
+        const helpContent = document.getElementById('sheepPurchaseHelpContent');
+        helpContent.innerHTML = `
             <h3>🐑 Sheep Purchase System Guide</h3>
             <p><strong>How it works:</strong></p>
             <ul>
                 <li>Enter the amount of money you want to spend on sheep</li>
                 <li>The system calculates how many sheep you can buy based on current prices</li>
-                <li>Sheep prices vary by season (Spring: $45, Summer: $55, Autumn: $50, Winter: $40)</li>
+                <li>Sheep prices vary by season</li>
                 <li>Maximum 20 sheep can be purchased per round</li>
                 <li>You must have enough housing capacity before purchasing sheep</li>
             </ul>
-            <p><strong>Examples:</strong></p>
+            <p><strong>What to do:</strong></p>
             <ul>
-                <li>$100 in Spring (sheep cost $45 each) = 2 sheep (2 × $45 = $90)</li>
-                <li>$150 in Summer (sheep cost $55 each) = 2 sheep (2 × $55 = $110)</li>
-                <li>$200 in Winter (sheep cost $40 each) = 5 sheep (5 × $40 = $200)</li>
+                <li>Look at the current sheep price (shown in the prices above)</li>
+                <li>Divide your money by the sheep price to see how many sheep you can buy</li>
+                <li>The system will show you the exact number of sheep you can purchase</li>
             </ul>
-            <p><strong>Strategy:</strong> Watch for seasonal price changes! Sheep are cheapest in Winter ($40) and most expensive in Summer ($55).</p>
+            <p><strong>Strategy:</strong> Watch for seasonal price changes! Sheep prices vary throughout the year.</p>
         `;
         
-        // Create a simple alert for now (could be enhanced with a modal)
-        alert(helpMessage.replace(/<[^>]*>/g, ''));
+        this.showModal('sheepPurchaseHelpModal');
     }
 
     /**
@@ -1311,55 +1270,18 @@ class SheepBusinessGame {
             content.setAttribute('aria-hidden', 'false');
             toggleButton.querySelector('.guide-text').textContent = toggleButton.querySelector('.guide-text').textContent.replace('Show', 'Hide');
             
-            // Update guide values when expanding
-            this.updateGuideValues();
+            // Guide values are no longer updated since guides show operation instructions only
         }
     }
 
     /**
      * Update guide values with current game state
+     * Note: This function is no longer needed since guides now show operation instructions only
+     * Keeping the function for potential future use but removing the actual value updates
      */
     updateGuideValues() {
-        const sheepCount = this.gameState.flockSize;
-        const prices = this.gameState.marketPrices;
-        const sheepPurchased = this.gameState.currentRoundData ? this.gameState.currentRoundData.sheepPurchased : 0;
-        const housingPurchased = this.gameState.currentRoundData ? this.gameState.currentRoundData.housingPurchased : 0;
-        
-
-        
-        // Update feed cost guide
-        document.getElementById('feedSheepCount').textContent = sheepCount;
-        document.getElementById('feedSheepCount2').textContent = sheepCount;
-        document.getElementById('feedCostPerSheep').textContent = prices.feedCost;
-        document.getElementById('feedCostPerSheep2').textContent = prices.feedCost;
-        document.getElementById('feedExampleResult').textContent = sheepCount * prices.feedCost;
-        
-        // Update wool income guide
-        document.getElementById('woolSheepCount').textContent = sheepCount;
-        document.getElementById('woolSheepCount2').textContent = sheepCount;
-        document.getElementById('woolPricePerSheep').textContent = prices.woolPrice;
-        document.getElementById('woolPricePerSheep2').textContent = prices.woolPrice;
-        document.getElementById('woolExampleResult').textContent = sheepCount * prices.woolPrice;
-        
-        // Update profit guide
-        const woolIncome = sheepCount * prices.woolPrice;
-        const feedCost = sheepCount * prices.feedCost;
-        const purchaseCost = sheepPurchased * prices.sheepPurchasePrice;
-        const housingCost = housingPurchased * prices.housingCost;
-        const totalCosts = feedCost + purchaseCost + housingCost;
-        const profit = woolIncome - totalCosts;
-        
-        document.getElementById('profitWoolIncome').textContent = woolIncome;
-        document.getElementById('profitWoolIncome2').textContent = woolIncome;
-        document.getElementById('profitFeedCost').textContent = feedCost;
-        document.getElementById('profitFeedCost2').textContent = feedCost;
-        document.getElementById('profitPurchaseCost').textContent = purchaseCost;
-        document.getElementById('profitPurchaseCost2').textContent = purchaseCost;
-        document.getElementById('profitHousingCost').textContent = housingCost;
-        document.getElementById('profitHousingCost2').textContent = housingCost;
-        document.getElementById('profitTotalCosts').textContent = totalCosts;
-        document.getElementById('profitTotalCosts2').textContent = totalCosts;
-        document.getElementById('profitExampleResult').textContent = profit;
+        // Guides now show operation instructions only, not actual values
+        // This function is kept for potential future use but no longer populates values
     }
 
     /**
@@ -1404,6 +1326,9 @@ class SheepBusinessGame {
         this.gameState.balance -= actualCost;
         this.gameState.housingCapacity += housingUnits;
         this.gameState.totalHousingExpenses += actualCost;
+        
+        // Increment round-specific housing purchase counter
+        this.gameState.housingUnitsPurchasedThisRound += housingUnits;
         
         // Update round data if it exists
         if (this.gameState.currentRoundData) {
@@ -1542,11 +1467,8 @@ class SheepBusinessGame {
         const skipPurchaseBtn = document.getElementById('skipPurchaseBtn');
         
         if (this.gameState.canSkipPurchases) {
-            console.log('Skip purchases enabled for round', this.gameState.currentRound);
-            
             // Show skip purchase button if it doesn't exist
             if (!skipPurchaseBtn) {
-                console.log('Creating skip purchase button');
                 const skipButton = document.createElement('button');
                 skipButton.id = 'skipPurchaseBtn';
                 skipButton.className = 'btn btn-secondary skip-purchase-btn';
@@ -1560,47 +1482,12 @@ class SheepBusinessGame {
                 const housingSection = document.querySelector('.housing-purchase-section');
                 if (housingSection) {
                     housingSection.parentNode.insertBefore(skipButton, housingSection.nextSibling);
-                    console.log('Skip button inserted after housing section');
-                } else {
-                    console.error('Housing section not found');
-                }
-            }
-            
-            // Show informational message
-            const infoMessage = document.getElementById('skipPurchaseInfo');
-            if (!infoMessage) {
-                console.log('Creating skip purchase info message');
-                const message = document.createElement('div');
-                message.id = 'skipPurchaseInfo';
-                message.className = 'skip-purchase-info';
-                message.innerHTML = `
-                    <div class="info-box">
-                        <h4>💡 Round ${this.gameState.currentRound} Option</h4>
-                        <p>You can skip purchasing new sheep and housing this round. Your existing flock of ${this.gameState.flockSize} sheep will be used for calculations.</p>
-                        <p><strong>Current flock:</strong> ${this.gameState.flockSize} sheep | <strong>Housing capacity:</strong> ${this.gameState.housingCapacity} units</p>
-                    </div>
-                `;
-                
-                // Insert the message at the top of the purchase section
-                const sectionHeader = purchaseSection.querySelector('.section-header');
-                if (sectionHeader) {
-                    sectionHeader.parentNode.insertBefore(message, sectionHeader.nextSibling);
-                    console.log('Info message inserted after section header');
-                } else {
-                    console.error('Section header not found');
                 }
             }
         } else {
-            console.log('Skip purchases disabled for round', this.gameState.currentRound);
-            // Remove skip purchase button and info if they exist
+            // Remove skip purchase button if it exists
             if (skipPurchaseBtn) {
                 skipPurchaseBtn.remove();
-                console.log('Skip button removed');
-            }
-            const infoMessage = document.getElementById('skipPurchaseInfo');
-            if (infoMessage) {
-                infoMessage.remove();
-                console.log('Info message removed');
             }
         }
     }
@@ -1609,8 +1496,6 @@ class SheepBusinessGame {
      * Handle skip purchase - use existing flock for calculations
      */
     handleSkipPurchase() {
-        console.log('Handle skip purchase called');
-        
         // Validate that player has sheep to work with
         if (this.gameState.flockSize === 0) {
             this.showFeedback('You need to have sheep to skip purchases. Please purchase some sheep first.', 'error');
@@ -1672,29 +1557,33 @@ class SheepBusinessGame {
             }
         });
     }
+
+    /**
+     * Re-enable purchase inputs for new round
+     */
+    enablePurchaseInputs() {
+        const sheepInput = document.getElementById('sheepMoneyInput');
+        const housingInput = document.getElementById('housingAmount');
+        const purchaseBtn = document.getElementById('purchaseBtn');
+        const housingBtn = document.getElementById('purchaseHousingBtn');
+        const skipBtn = document.getElementById('skipPurchaseBtn');
+        
+        if (sheepInput) sheepInput.disabled = false;
+        if (housingInput) housingInput.disabled = false;
+        if (purchaseBtn) purchaseBtn.disabled = false;
+        if (housingBtn) housingBtn.disabled = false;
+        if (skipBtn) skipBtn.disabled = false;
+        
+        // Remove visual indication that purchases are disabled
+        [sheepInput, housingInput, purchaseBtn, housingBtn, skipBtn].forEach(element => {
+            if (element) {
+                element.classList.remove('disabled');
+            }
+        });
+    }
 }
 
 // Initialize the game when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     window.sheepGame = new SheepBusinessGame();
-    
-    // Add global debug function
-    window.debugValidation = () => {
-        console.log('=== DEBUG VALIDATION ===');
-        console.log('Game state:', window.sheepGame.gameState);
-        console.log('Current round data:', window.sheepGame.gameState.currentRoundData);
-        console.log('Calculations:', window.sheepGame.gameState.currentRoundData.calculations);
-        window.sheepGame.checkRoundCompletion();
-    };
-    
-    // Add manual fix function
-    window.forceEnableNextRound = () => {
-        console.log('=== FORCE ENABLE NEXT ROUND ===');
-        const nextRoundBtn = document.getElementById('nextRoundBtn');
-        if (nextRoundBtn) {
-            nextRoundBtn.disabled = false;
-            console.log('Next round button enabled manually');
-            window.sheepGame.showFeedback('Next round button enabled manually for testing', 'success');
-        }
-    };
 }); 

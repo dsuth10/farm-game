@@ -603,11 +603,82 @@
             "testStrategy": "Review all documentation and guides for completeness and accuracy; verify that all references to profit calculation now include housing costs."
           }
         ]
+      },
+      {
+        "id": 21,
+        "title": "Implement Round-Specific Purchase Tracking for Sheep and Housing Units",
+        "description": "Add functionality to track, display, and reset the number of sheep and housing units purchased during the current round, providing clear user feedback and maintaining separation from persistent game data.",
+        "details": "1. **Extend Game State:**\n   - Add properties to the game state object for `sheepPurchasedThisRound` and `housingUnitsPurchasedThisRound`, initialized to zero at the start of each round.\n   \n2. **Update Purchase Handlers:**\n   - In the sheep and housing purchase functions, increment the respective round-specific counters each time a purchase is made.\n   - Ensure these counters are updated only for purchases within the current round and do not affect the persistent flock size or total housing capacity.\n   \n3. **Display Round-Specific Counts:**\n   - In the purchase sections of the UI, add elements to display the current round's sheep and housing unit purchases.\n   - Use clear, user-friendly messages such as \"During this round you have purchased X sheep\" and \"During this round you have purchased Y housing units\".\n   - Ensure these messages update reactively as purchases are made.\n   \n4. **Reset on Round Advance:**\n   - When advancing to the next round (in the round transition logic), reset both `sheepPurchasedThisRound` and `housingUnitsPurchasedThisRound` to zero.\n   - Confirm that persistent flock size and housing capacity remain unaffected by this reset.\n   \n5. **Maintain Accessibility and Consistency:**\n   - Ensure new UI elements are accessible (e.g., ARIA labels, screen reader support) and visually consistent with existing design patterns.\n   - Follow best practices for state management (e.g., using a centralized state store or context if applicable) to avoid data leakage between rounds.\n   \n6. **Code Example (Pseudo-JS):**\n   ```javascript\n   // On purchase\n   gameState.sheepPurchasedThisRound += quantity;\n   // On round advance\n   gameState.sheepPurchasedThisRound = 0;\n   ```\n   \n7. **Testing and Analytics:**\n   - Optionally, emit analytics events for round-specific purchases using a standard event tracking API (e.g., `analytics.track('Sheep Purchased This Round', { count: X })`)[1].",
+        "testStrategy": "1. Start a new round and verify that both round-specific counters are zero.\n2. Make one or more sheep and housing purchases; confirm that the round-specific counters increment correctly and the UI displays accurate, user-friendly messages.\n3. Advance to the next round and verify that the round-specific counters reset to zero, while persistent flock size and housing capacity remain correct.\n4. Attempt additional purchases in the new round and confirm counters and messages update as expected.\n5. Test edge cases (e.g., no purchases, maximum allowed purchases, rapid consecutive purchases).\n6. Verify accessibility of new UI elements using screen readers and keyboard navigation.\n7. If analytics are implemented, confirm that round-specific purchase events are tracked with correct properties.",
+        "status": "done",
+        "dependencies": [
+          4,
+          7,
+          17
+        ],
+        "priority": "medium",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Extend Game State with Round-Specific Purchase Counters",
+            "description": "Add properties to the game state object for tracking the number of sheep and housing units purchased during the current round, initializing both counters to zero at the start of each round.",
+            "dependencies": [],
+            "details": "Modify the central game state structure to include 'sheepPurchasedThisRound' and 'housingUnitsPurchasedThisRound', ensuring these are reset to zero whenever a new round begins.",
+            "status": "done",
+            "testStrategy": "Start a new round and verify that both counters are initialized to zero in the game state."
+          },
+          {
+            "id": 2,
+            "title": "Update Purchase Handlers to Increment Round Counters",
+            "description": "Modify sheep and housing purchase functions to increment the respective round-specific counters each time a purchase is made, ensuring these counters only reflect purchases within the current round.",
+            "dependencies": [
+              "21.1"
+            ],
+            "details": "In the purchase logic, increment 'sheepPurchasedThisRound' and 'housingUnitsPurchasedThisRound' as appropriate, without affecting persistent flock size or total housing capacity.",
+            "status": "done",
+            "testStrategy": "Make one or more sheep and housing purchases in a round; confirm that the round-specific counters increment correctly and persistent totals remain unaffected."
+          },
+          {
+            "id": 3,
+            "title": "Display Round-Specific Purchase Counts in the UI",
+            "description": "Add UI elements to display the number of sheep and housing units purchased during the current round, using clear, user-friendly messages that update reactively as purchases are made.",
+            "dependencies": [
+              "21.2"
+            ],
+            "details": "Integrate dynamic UI components in the purchase sections to show messages like 'During this round you have purchased X sheep' and 'During this round you have purchased Y housing units', updating in real time.",
+            "status": "done",
+            "testStrategy": "Verify that the UI displays accurate, up-to-date purchase counts and user-friendly messages as purchases occur."
+          },
+          {
+            "id": 4,
+            "title": "Reset Round-Specific Counters on Round Advance",
+            "description": "Implement logic to reset both 'sheepPurchasedThisRound' and 'housingUnitsPurchasedThisRound' to zero when advancing to the next round, ensuring persistent game data is unaffected.",
+            "dependencies": [
+              "21.1",
+              "21.2",
+              "21.3"
+            ],
+            "details": "In the round transition logic, reset the round-specific counters and confirm that flock size and housing capacity remain unchanged.",
+            "status": "done",
+            "testStrategy": "Advance to the next round and verify that both counters reset to zero while persistent totals are preserved."
+          },
+          {
+            "id": 5,
+            "title": "Ensure Accessibility and State Management Best Practices",
+            "description": "Review and update new UI elements for accessibility (e.g., ARIA labels, screen reader support) and ensure state management follows best practices to prevent data leakage between rounds.",
+            "dependencies": [
+              "21.3"
+            ],
+            "details": "Audit UI for accessibility compliance and confirm that state is managed centrally and cleanly, using context or a state store as appropriate.",
+            "status": "done",
+            "testStrategy": "Test new UI elements with screen readers and keyboard navigation; verify state isolation between rounds and accessibility compliance."
+          }
+        ]
       }
     ],
     "metadata": {
       "created": "2025-07-29T07:14:38.071Z",
-      "updated": "2025-07-29T09:34:54.071Z",
+      "updated": "2025-07-29T11:17:08.281Z",
       "description": "Tasks for master context"
     }
   }

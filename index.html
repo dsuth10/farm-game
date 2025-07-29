@@ -29,6 +29,15 @@
                 <h2>Purchase Sheep</h2>
                 <button class="help-icon" title="Sheep Purchase System Help" onclick="window.sheepGame.showSheepPurchaseHelp()">❓</button>
             </div>
+            
+            <!-- Persistent Skip Option Box -->
+            <div class="skip-option-box">
+                <div class="info-box">
+                    <h4>💡 Skip Purchase Option</h4>
+                    <p>You can skip purchasing new sheep and housing after round one.</p>
+                </div>
+            </div>
+            
             <div class="purchase-controls">
                 <label for="sheepMoneyInput" title="Enter the amount of money you want to spend on sheep. The number of sheep will be calculated based on current seasonal prices.">Amount to spend on sheep ($):</label>
                 <input type="number" id="sheepMoneyInput" min="0" step="1" value="0" placeholder="Enter amount" title="Enter the amount of money you want to spend on sheep">
@@ -42,6 +51,10 @@
                 <div class="sheep-units-preview">
                     <span class="sheep-units-label">Sheep to purchase:</span>
                     <span class="sheep-units-value" id="sheepUnitsPreview">0</span>
+                </div>
+                <div class="sheep-round-purchases" id="sheepRoundPurchases" role="status" aria-live="polite">
+                    <span class="round-purchases-label">This round:</span>
+                    <span class="round-purchases-value" id="sheepRoundPurchasesValue">No sheep purchased yet</span>
                 </div>
             </div>
             
@@ -64,6 +77,10 @@
                     <div class="housing-units-preview">
                         <span class="housing-units-label">Housing units to purchase:</span>
                         <span class="housing-units-value" id="housingUnitsPreview">0</span>
+                    </div>
+                    <div class="housing-round-purchases" id="housingRoundPurchases" role="status" aria-live="polite">
+                        <span class="round-purchases-label">This round:</span>
+                        <span class="round-purchases-value" id="housingRoundPurchasesValue">No housing purchased yet</span>
                     </div>
                 </div>
             </div>
@@ -136,11 +153,11 @@
                         <div class="guide-content" id="feedGuideContent" aria-hidden="true">
                             <div class="guide-steps">
                                 <h4>Feed Cost Calculation Guide</h4>
-                                <p><strong>Formula:</strong> Feed Cost = Number of Sheep × Feed Cost per Sheep</p>
+                                <p><strong>What to do:</strong> Multiply the number of sheep by the cost of each unit of food</p>
                                 <div class="guide-example">
-                                    <p><strong>Step 1:</strong> Count your sheep: <span class="guide-value" id="feedSheepCount">0</span> sheep</p>
-                                    <p><strong>Step 2:</strong> Find feed cost per sheep: $<span class="guide-value" id="feedCostPerSheep">12</span></p>
-                                    <p><strong>Step 3:</strong> Multiply: <span class="guide-value" id="feedSheepCount2">0</span> × $<span class="guide-value" id="feedCostPerSheep2">12</span> = $<span class="guide-result" id="feedExampleResult">0</span></p>
+                                    <p><strong>Step 1:</strong> Count how many sheep you have</p>
+                                    <p><strong>Step 2:</strong> Look at the current feed cost per sheep (shown in the prices above)</p>
+                                    <p><strong>Step 3:</strong> Multiply: Number of sheep × Feed cost per sheep</p>
                                 </div>
                                 <p class="guide-tip">💡 <strong>Tip:</strong> Feed costs change with seasons. Check the current prices above!</p>
                             </div>
@@ -161,11 +178,11 @@
                         <div class="guide-content" id="woolGuideContent" aria-hidden="true">
                             <div class="guide-steps">
                                 <h4>Wool Income Calculation Guide</h4>
-                                <p><strong>Formula:</strong> Wool Income = Number of Sheep × Wool Price per Sheep</p>
+                                <p><strong>What to do:</strong> Multiply the number of sheep by the income from wool per sheep</p>
                                 <div class="guide-example">
-                                    <p><strong>Step 1:</strong> Count your sheep: <span class="guide-value" id="woolSheepCount">0</span> sheep</p>
-                                    <p><strong>Step 2:</strong> Find wool price per sheep: $<span class="guide-value" id="woolPricePerSheep">18</span></p>
-                                    <p><strong>Step 3:</strong> Multiply: <span class="guide-value" id="woolSheepCount2">0</span> × $<span class="guide-value" id="woolPricePerSheep2">18</span> = $<span class="guide-result" id="woolExampleResult">0</span></p>
+                                    <p><strong>Step 1:</strong> Count how many sheep you have</p>
+                                    <p><strong>Step 2:</strong> Look at the current wool price per sheep (shown in the prices above)</p>
+                                    <p><strong>Step 3:</strong> Multiply: Number of sheep × Wool price per sheep</p>
                                 </div>
                                 <p class="guide-tip">💡 <strong>Tip:</strong> This is your income! Wool prices change with seasons, so check current prices.</p>
                             </div>
@@ -186,15 +203,15 @@
                         <div class="guide-content" id="profitGuideContent" aria-hidden="true">
                             <div class="guide-steps">
                                 <h4>Profit/Loss Calculation Guide</h4>
-                                <p><strong>Formula:</strong> Profit = Wool Income - (Feed Cost + Purchase Cost + Housing Cost)</p>
+                                <p><strong>What to do:</strong> Subtract your total costs from your wool income</p>
                                 <p><em>Note: Purchase Cost and Housing Cost are only included if you bought new sheep or housing this round.</em></p>
                                 <div class="guide-example">
-                                    <p><strong>Step 1:</strong> Calculate wool income: $<span class="guide-value" id="profitWoolIncome">0</span></p>
-                                    <p><strong>Step 2:</strong> Calculate feed cost: $<span class="guide-value" id="profitFeedCost">0</span></p>
-                                    <p><strong>Step 3:</strong> Calculate purchase cost (if any): $<span class="guide-value" id="profitPurchaseCost">0</span></p>
-                                    <p><strong>Step 4:</strong> Calculate housing cost (if any): $<span class="guide-value" id="profitHousingCost">0</span></p>
-                                    <p><strong>Step 5:</strong> Add all costs: Feed ($<span class="guide-value" id="profitFeedCost2">0</span>) + Purchase ($<span class="guide-value" id="profitPurchaseCost2">0</span>) + Housing ($<span class="guide-value" id="profitHousingCost2">0</span>) = $<span class="guide-result" id="profitTotalCosts">0</span></p>
-                                    <p><strong>Step 6:</strong> Subtract costs from income: $<span class="guide-value" id="profitWoolIncome2">0</span> - $<span class="guide-result" id="profitTotalCosts2">0</span> = $<span class="guide-result" id="profitExampleResult">0</span></p>
+                                    <p><strong>Step 1:</strong> Calculate your wool income (from the wool income calculation above)</p>
+                                    <p><strong>Step 2:</strong> Calculate your feed cost (from the feed cost calculation above)</p>
+                                    <p><strong>Step 3:</strong> Add any purchase costs (if you bought new sheep this round)</p>
+                                    <p><strong>Step 4:</strong> Add any housing costs (if you bought new housing this round)</p>
+                                    <p><strong>Step 5:</strong> Add all your costs together</p>
+                                    <p><strong>Step 6:</strong> Subtract your total costs from your wool income</p>
                                 </div>
                                 <p class="guide-tip">💡 <strong>Tip:</strong> Positive numbers mean profit, negative numbers mean loss. This shows if you're making money!</p>
                             </div>
@@ -334,6 +351,26 @@
             <h2>Worked Example</h2>
             <div id="workedExampleContent">
                 <!-- Worked examples will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Housing Help Modal -->
+    <div id="housingHelpModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="housingHelpContent">
+                <!-- Housing help content will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Sheep Purchase Help Modal -->
+    <div id="sheepPurchaseHelpModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="sheepPurchaseHelpContent">
+                <!-- Sheep purchase help content will be displayed here -->
             </div>
         </div>
     </div>

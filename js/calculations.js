@@ -239,13 +239,11 @@ class GameCalculations {
      * @returns {string} Hint message
      */
     generateHint(calculationType, gameData) {
-        const { sheepCount, prices } = gameData;
-        
         switch (calculationType) {
             case 'feed':
-                return `Remember: Feed cost = ${sheepCount} sheep × $${prices.feedCost} per sheep`;
+                return `Remember: Feed cost = Number of sheep × Feed cost per sheep`;
             case 'wool':
-                return `Remember: Wool income = ${sheepCount} sheep × $${prices.woolPrice} per sheep`;
+                return `Remember: Wool income = Number of sheep × Wool price per sheep`;
             case 'profit':
                 return `Remember: Profit = Wool income - (Feed cost + Purchase cost + Housing cost)`;
             default:
