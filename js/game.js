@@ -1478,10 +1478,10 @@ class SheepBusinessGame {
                     this.handleSkipPurchase();
                 });
                 
-                // Insert the skip button after the housing purchase section
-                const housingSection = document.querySelector('.housing-purchase-section');
-                if (housingSection) {
-                    housingSection.parentNode.insertBefore(skipButton, housingSection.nextSibling);
+                // Insert the skip button after the skip option box
+                const skipOptionBox = document.querySelector('.skip-option-box');
+                if (skipOptionBox) {
+                    skipOptionBox.parentNode.insertBefore(skipButton, skipOptionBox.nextSibling);
                 }
             }
         } else {

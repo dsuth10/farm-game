@@ -25,40 +25,7 @@
     <main class="game-container">
         <!-- Purchase Section -->
         <section class="purchase-section">
-            <div class="section-header">
-                <h2>Purchase Sheep</h2>
-                <button class="help-icon" title="Sheep Purchase System Help" onclick="window.sheepGame.showSheepPurchaseHelp()">❓</button>
-            </div>
-            
-            <!-- Persistent Skip Option Box -->
-            <div class="skip-option-box">
-                <div class="info-box">
-                    <h4>💡 Skip Purchase Option</h4>
-                    <p>You can skip purchasing new sheep and housing after round one.</p>
-                </div>
-            </div>
-            
-            <div class="purchase-controls">
-                <label for="sheepMoneyInput" title="Enter the amount of money you want to spend on sheep. The number of sheep will be calculated based on current seasonal prices.">Amount to spend on sheep ($):</label>
-                <input type="number" id="sheepMoneyInput" min="0" step="1" value="0" placeholder="Enter amount" title="Enter the amount of money you want to spend on sheep">
-                <button id="purchaseBtn" class="btn btn-primary" title="Purchase sheep with the entered amount">Purchase Sheep</button>
-            </div>
-            <div class="sheep-info">
-                <div class="sheep-cost-info">
-                    <span class="sheep-cost-label">Cost per sheep:</span>
-                    <span class="sheep-cost-value" id="sheepCostPerUnit">$45</span>
-                </div>
-                <div class="sheep-units-preview">
-                    <span class="sheep-units-label">Sheep to purchase:</span>
-                    <span class="sheep-units-value" id="sheepUnitsPreview">0</span>
-                </div>
-                <div class="sheep-round-purchases" id="sheepRoundPurchases" role="status" aria-live="polite">
-                    <span class="round-purchases-label">This round:</span>
-                    <span class="round-purchases-value" id="sheepRoundPurchasesValue">No sheep purchased yet</span>
-                </div>
-            </div>
-            
-            <!-- Housing Purchase Section -->
+            <!-- Housing Purchase Section - MOVED TO TOP -->
             <div class="housing-purchase-section">
                 <div class="section-header">
                     <h3>Purchase Housing</h3>
@@ -84,6 +51,42 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Sheep Purchase Section - MOVED BELOW HOUSING -->
+            <div class="section-header">
+                <h2>Purchase Sheep</h2>
+                <button class="help-icon" title="Sheep Purchase System Help" onclick="window.sheepGame.showSheepPurchaseHelp()">❓</button>
+            </div>
+            
+            <div class="purchase-controls">
+                <label for="sheepMoneyInput" title="Enter the amount of money you want to spend on sheep. The number of sheep will be calculated based on current seasonal prices.">Amount to spend on sheep ($):</label>
+                <input type="number" id="sheepMoneyInput" min="0" step="1" value="0" placeholder="Enter amount" title="Enter the amount of money you want to spend on sheep">
+                <button id="purchaseBtn" class="btn btn-primary" title="Purchase sheep with the entered amount">Purchase Sheep</button>
+            </div>
+            <div class="sheep-info">
+                <div class="sheep-cost-info">
+                    <span class="sheep-cost-label">Cost per sheep:</span>
+                    <span class="sheep-cost-value" id="sheepCostPerUnit">$45</span>
+                </div>
+                <div class="sheep-units-preview">
+                    <span class="sheep-units-label">Sheep to purchase:</span>
+                    <span class="sheep-units-value" id="sheepUnitsPreview">0</span>
+                </div>
+                <div class="sheep-round-purchases" id="sheepRoundPurchases" role="status" aria-live="polite">
+                    <span class="round-purchases-label">This round:</span>
+                    <span class="round-purchases-value" id="sheepRoundPurchasesValue">No sheep purchased yet</span>
+                </div>
+            </div>
+            
+            <!-- Skip Option Box - MOVED BELOW SHEEP SECTION -->
+            <div class="skip-option-box">
+                <div class="info-box">
+                    <h4>💡 Skip Purchase Option</h4>
+                    <p>You can skip purchasing new sheep and housing after round one.</p>
+                </div>
+            </div>
+            
+            <!-- Skip Purchase Button will be dynamically inserted here by JavaScript -->
             
             <div class="price-display">
                 <h3>Current Prices</h3>
