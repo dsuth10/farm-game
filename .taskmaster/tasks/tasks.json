@@ -1,0 +1,221 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Project Setup and File Structure",
+        "description": "Initialize the project with the required file structure and basic HTML template according to the PRD specifications.",
+        "details": "Create the following file structure:\n- index.html (main entry point)\n- css/main.css (core styling)\n- css/responsive.css (responsive design rules)\n- js/game.js (main game logic)\n- js/calculations.js (mathematical operations)\n- js/validation.js (input validation)\n- js/pdf-export.js (PDF report generation)\n- assets/ (for images and icons)\n\nThe HTML file should include the basic structure with proper semantic HTML5 elements:\n- Header section with game title\n- Main game area with sections for purchase, financial ledger\n- Controls section\n- Proper meta tags for responsive design\n- CSS and JavaScript file references\n\nImplement basic accessibility features including proper ARIA attributes and ensure the HTML structure follows best practices for screen readers.",
+        "testStrategy": "Validate HTML using W3C Validator. Test initial page load in Chrome 80+, Firefox 75+, Safari 13+, and Edge 80+. Verify file structure matches PRD Appendix C. Check that all files are properly linked and accessible.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 2,
+        "title": "Core Game State Management",
+        "description": "Implement the game state object and data structures to track game progress, seasonal data, and player actions.",
+        "details": "Create the core game state management system using the data model specified in the PRD:\n\n1. Implement the gameState object with all required properties:\n   - currentRound, maxRounds, balance, flockSize\n   - seasonalPrices for all four seasons\n   - settings object for teacher controls\n   - roundHistory array for tracking progress\n\n2. Implement the roundData structure to track per-round information:\n   - Round number and season\n   - Sheep purchased and prices\n   - Calculation tracking (student answers, correct answers, attempts)\n   - Financial results\n\n3. Create functions for:\n   - Initializing a new game with default values\n   - Updating game state when moving between rounds\n   - Saving round data to history\n   - Resetting the game state\n\nUse ES6+ features like const/let, object destructuring, and arrow functions. Ensure all state changes are properly tracked and can be accessed by UI components.",
+        "testStrategy": "Write unit tests to verify game state initialization with correct starting values (balance $200, sheep count 0, etc.). Test round progression logic to ensure state updates correctly. Verify that seasonal data changes appropriately between rounds. Test game reset functionality.",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 3,
+        "title": "User Interface Layout and Styling",
+        "description": "Implement the responsive UI layout and styling according to the PRD specifications, ensuring compatibility across device sizes.",
+        "details": "Develop the UI layout using modern CSS (Flexbox/Grid) without external dependencies:\n\n1. Implement the layout structure as specified in PRD section 3.1\n2. Create responsive designs for:\n   - Mobile (320px+): Single column stacked layout\n   - Tablet (768px+): Two-column structure\n   - Desktop: Full layout with optimal spacing\n\n3. Style components including:\n   - Header with round indicator\n   - Season display with icon\n   - Purchase section with input fields\n   - Financial ledger with tabular data\n   - Market conditions section\n   - Feedback banner\n   - Control buttons\n\n4. Implement accessibility requirements:\n   - Ensure 4.5:1 minimum contrast ratio\n   - Create color-blind friendly design with supplementary icons\n   - Set up proper tab navigation order\n\nUse CSS custom properties (variables) for consistent theming. Implement media queries for responsive breakpoints. Avoid absolute positioning where possible to maintain layout flexibility.",
+        "testStrategy": "Test responsive layout on various screen sizes from 320px to 1920px width. Verify layout adapts correctly at breakpoints. Run accessibility tests using axe or similar tools to verify contrast ratios and keyboard navigation. Test with screen readers to ensure proper ARIA implementation. Verify color-blind friendly design using simulators.",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 4,
+        "title": "Game Initialization and Round Structure",
+        "description": "Implement the game initialization process and round structure flow as specified in the PRD.",
+        "details": "Create the game initialization and round structure logic:\n\n1. Game Initialization:\n   - Set starting balance to $200\n   - Set initial sheep count to 0\n   - Display round indicator (1 of 4)\n   - Clear and enable all input fields\n   - Set initial season (Spring)\n\n2. Round Structure Implementation:\n   - Create functions for each phase of the round:\n     * Purchase Phase: Allow sheep quantity selection (0-20)\n     * Cost Calculation: Housing costs calculation\n     * Feed Calculation: Feed costs calculation\n     * Income Calculation: Wool income calculation\n     * Profit Calculation: Net profit/loss computation\n     * Validation: Feedback on calculations\n     * Advancement: Progress to next round\n\n3. Implement round transition logic:\n   - Save current round data\n   - Update season and prices\n   - Reset input fields\n   - Update UI elements\n\nEnsure proper event handling for user interactions and implement validation for user inputs (e.g., sheep quantity must be 0-20).",
+        "testStrategy": "Test game initialization to verify correct starting values. Verify each phase of the round structure works as expected. Test round transitions to ensure proper state updates and UI refreshes. Validate input constraints are enforced. Test the complete game flow from start to finish through all 4 rounds.",
+        "priority": "high",
+        "dependencies": [
+          2,
+          3
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 5,
+        "title": "Seasonal Price Management",
+        "description": "Implement the seasonal price management system with dynamic updates and visual indicators for price changes.",
+        "details": "Create the seasonal price management system:\n\n1. Implement the seasonal price data structure as defined in the PRD:\n   - Spring, Summer, Autumn, Winter price sets\n   - Wool price, feed cost, housing cost, sheep purchase price\n   - Market condition descriptions\n\n2. Create functions to:\n   - Update prices when seasons change\n   - Calculate and display price changes (↑↓)\n   - Apply teacher settings for price fluctuations\n   - Implement random price variations (±$3) when enabled\n   - Apply market difficulty modifiers (Easy/Medium/Hard)\n\n3. Develop UI components for price display:\n   - Current season indicator with icon\n   - Price change indicators\n   - Market condition tooltips\n   - Market trends button and historical data view\n\nUse the seasonal market patterns from Appendix D to inform the implementation. Ensure price changes are visually highlighted to draw student attention to market fluctuations.",
+        "testStrategy": "Test seasonal price updates between rounds. Verify price change indicators display correctly. Test random price variations when enabled. Verify market difficulty settings affect price ranges appropriately. Test the market trends display for historical data accuracy. Validate that all price-related UI elements update correctly when seasons change.",
+        "priority": "medium",
+        "dependencies": [
+          2,
+          3
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 6,
+        "title": "Calculation Engine Implementation",
+        "description": "Develop the core calculation engine to handle all mathematical operations and validations for the game.",
+        "details": "Implement the calculation engine that powers the game's mathematical operations:\n\n1. Create functions for all required calculations:\n   - Purchase cost: quantity × sheep price\n   - Housing cost: quantity × housing cost\n   - Feed cost: quantity × feed cost\n   - Wool income: quantity × wool price\n   - Profit calculation: income - (housing + feed + purchase)\n\n2. Implement validation logic:\n   - Compare student answers with correct calculations\n   - Track attempt counts for each calculation\n   - Generate appropriate feedback messages\n   - Create worked examples after 2 incorrect attempts\n   - Implement auto-fill with $10 penalty after 5 attempts\n\n3. Develop helper functions for:\n   - Formatting currency values\n   - Calculating running totals\n   - Tracking calculation history\n\nEnsure all calculations handle edge cases (zero sheep, maximum sheep) correctly. Use precise decimal arithmetic to avoid floating-point errors in financial calculations.",
+        "testStrategy": "Create unit tests for each calculation function using test cases from Appendix A. Verify validation logic correctly identifies correct/incorrect answers. Test the worked example generation. Verify penalty application after 5 attempts. Test edge cases including zero sheep and maximum sheep quantities. Ensure currency formatting is consistent.",
+        "priority": "high",
+        "dependencies": [
+          2
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 7,
+        "title": "User Input and Validation System",
+        "description": "Implement the user input system with real-time validation and feedback mechanisms.",
+        "details": "Create the user input and validation system:\n\n1. Implement input fields for:\n   - Sheep quantity selection (0-20)\n   - Housing cost calculation\n   - Feed cost calculation\n   - Wool income calculation\n   - Profit calculation\n\n2. Develop validation logic:\n   - Real-time validation on submission\n   - Green visual feedback for correct answers\n   - Red visual feedback with guidance for incorrect answers\n   - Worked example display after 2 incorrect attempts\n   - Auto-fill with penalty after 5 incorrect attempts\n\n3. Create feedback components:\n   - Dynamic feedback banner\n   - Validation indicators next to each input\n   - Worked example modal/popup\n   - Error message display\n\nImplement proper input constraints (numeric only, appropriate ranges). Use event listeners to capture user input and trigger validation. Ensure keyboard accessibility for all input operations.",
+        "testStrategy": "Test input validation with correct and incorrect values. Verify appropriate feedback is displayed. Test the worked example display after 2 incorrect attempts. Verify auto-fill functionality after 5 attempts. Test keyboard navigation through input fields. Verify input constraints are enforced correctly.",
+        "priority": "high",
+        "dependencies": [
+          3,
+          6
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 8,
+        "title": "Financial Ledger and Progress Tracking",
+        "description": "Implement the financial ledger to track and display income, expenses, and profit throughout the game.",
+        "details": "Develop the financial ledger and progress tracking system:\n\n1. Create the financial ledger UI component:\n   - Tabular display of income and expenses\n   - Running totals for each category\n   - Current balance display\n   - Profit/loss indicators\n\n2. Implement data tracking for:\n   - Purchase costs per round\n   - Housing costs per round\n   - Feed costs per round\n   - Wool income per round\n   - Net profit/loss per round\n   - Cumulative balance\n\n3. Develop the profit chart visualization:\n   - Round-by-round profit/loss display\n   - Visual trend indicators\n   - Seasonal markers\n\nUse a simple chart implementation without external libraries. Update the ledger dynamically as calculations are completed. Ensure all financial data is properly formatted as currency.",
+        "testStrategy": "Test ledger updates after each calculation. Verify running totals are calculated correctly. Test the profit chart visualization with various game scenarios. Verify currency formatting is consistent. Test edge cases like negative profits and balance changes.",
+        "priority": "medium",
+        "dependencies": [
+          4,
+          6
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 9,
+        "title": "Teacher Settings Panel",
+        "description": "Implement the teacher settings panel with configuration options for game parameters and difficulty.",
+        "details": "Create the teacher settings panel with all required controls:\n\n1. Implement toggle switches for:\n   - Seasonal price fluctuations (enabled by default)\n   - Random price variations (±$3 per season)\n   - Sheep mortality events (5% chance per round)\n\n2. Create input controls for:\n   - Adjustable starting balance (default $200)\n   - Adjustable maximum rounds (default 4)\n\n3. Implement selector controls for:\n   - Market difficulty (Easy/Medium/Hard)\n   - Seasonal cycle speed (1-4 rounds per season)\n\n4. Develop the settings persistence:\n   - Apply settings to new game instances\n   - Reset to defaults option\n\nImplement a modal/panel design that can be toggled open/closed. Add appropriate labels and help text for each setting. Ensure settings are applied correctly when a new game is started.",
+        "testStrategy": "Test each setting to verify it affects gameplay as expected. Verify toggles for seasonal fluctuations, random variations, and mortality events work correctly. Test input validation for starting balance and maximum rounds. Verify market difficulty settings affect price ranges. Test that settings persist when applied and reset correctly when defaults are restored.",
+        "priority": "medium",
+        "dependencies": [
+          2,
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 10,
+        "title": "Analytics and PDF Report Generation",
+        "description": "Implement the analytics tracking system and PDF report generation functionality.",
+        "details": "Develop the analytics and reporting system:\n\n1. Implement analytics tracking for:\n   - Calculation attempts (correct/incorrect)\n   - Round-by-round profit/loss data\n   - Game completion statistics\n\n2. Create the PDF report generation functionality:\n   - Generate summary at game completion\n   - Include round-by-round data\n   - Format financial results\n   - Display calculation accuracy statistics\n\n3. Develop data visualization for the report:\n   - Profit/loss chart\n   - Calculation accuracy metrics\n   - Game performance summary\n\nUse the jsPDF library (or similar lightweight alternative) for PDF generation. Ensure the report is formatted for easy printing. Include teacher-focused insights in the report.",
+        "testStrategy": "Test analytics tracking to verify data collection. Generate test PDF reports and verify content accuracy. Test PDF generation across supported browsers. Verify report formatting is consistent and printable. Test with various game scenarios to ensure all data is captured correctly.",
+        "priority": "low",
+        "dependencies": [
+          6,
+          8
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 11,
+        "title": "Market Trends and Historical Data Display",
+        "description": "Implement the market trends feature to display historical price data and seasonal patterns.",
+        "details": "Create the market trends and historical data display:\n\n1. Implement the market trends button and panel:\n   - Historical price data table\n   - Season-by-season comparison\n   - Price change visualization\n\n2. Develop data tracking for:\n   - Historical prices across all seasons\n   - Price change percentages\n   - Market condition descriptions\n\n3. Create visual components for:\n   - Price trend charts\n   - Seasonal comparison view\n   - Market condition explanations\n\nDesign the trends display as a modal/panel that can be opened on demand. Include helpful explanations of market patterns to guide student decision-making. Use the seasonal market patterns from Appendix D to inform the implementation.",
+        "testStrategy": "Test the market trends button and panel display. Verify historical price data is accurate. Test the trends display with various game scenarios and settings. Verify seasonal comparisons are displayed correctly. Test the modal/panel open/close functionality.",
+        "priority": "medium",
+        "dependencies": [
+          5,
+          8
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 12,
+        "title": "Game Completion and Summary Screen",
+        "description": "Implement the game completion logic and summary screen to display final results.",
+        "details": "Develop the game completion and summary functionality:\n\n1. Implement game completion logic:\n   - Detect when maximum rounds are reached\n   - Calculate final balance and profit/loss\n   - Generate game performance metrics\n\n2. Create the summary screen with:\n   - Final balance display\n   - Round-by-round profit/loss summary\n   - Calculation accuracy statistics\n   - Performance feedback messages\n\n3. Implement action buttons for:\n   - Play again (reset game)\n   - View detailed report\n   - Generate PDF report\n\nDesign an engaging summary screen that celebrates student achievement. Include educational feedback based on performance. Ensure the summary provides clear insights into the student's mathematical performance.",
+        "testStrategy": "Test game completion detection after final round. Verify summary screen displays with accurate data. Test the play again functionality. Verify detailed report and PDF generation options work correctly. Test with various game scenarios to ensure all summary data is accurate.",
+        "priority": "medium",
+        "dependencies": [
+          4,
+          8,
+          10
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 13,
+        "title": "Accessibility Implementation",
+        "description": "Implement comprehensive accessibility features to ensure the game is usable by all students.",
+        "details": "Enhance the application with comprehensive accessibility features:\n\n1. Implement keyboard navigation:\n   - Logical tab order for all interactive elements\n   - Keyboard shortcuts for common actions\n   - Focus indicators for active elements\n\n2. Add screen reader support:\n   - ARIA labels for all inputs and controls\n   - Descriptive alt text for images\n   - Semantic HTML structure\n   - Status announcements for game events\n\n3. Enhance visual accessibility:\n   - High contrast mode option\n   - Color-blind friendly design (supplement red/green with icons/text)\n   - Adjustable text size option\n   - Minimum contrast ratio of 4.5:1 for all text\n\nTest with screen readers (NVDA, VoiceOver) to ensure proper navigation. Implement WCAG 2.1 AA compliance standards throughout the application.",
+        "testStrategy": "Test keyboard navigation through all interactive elements. Verify screen reader compatibility using NVDA and VoiceOver. Test color contrast using accessibility tools. Verify color-blind friendly design using simulators. Test with various accessibility settings enabled. Validate against WCAG 2.1 AA standards.",
+        "priority": "high",
+        "dependencies": [
+          3,
+          7
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 14,
+        "title": "Performance Optimization",
+        "description": "Optimize the application for performance to meet the technical requirements specified in the PRD.",
+        "details": "Implement performance optimizations to meet technical requirements:\n\n1. Optimize load time:\n   - Minify CSS and JavaScript\n   - Optimize image assets\n   - Implement efficient DOM operations\n   - Reduce initial payload size\n\n2. Optimize runtime performance:\n   - Use efficient event delegation\n   - Minimize DOM reflows and repaints\n   - Implement debouncing for input validation\n   - Optimize calculation operations\n\n3. Reduce memory usage:\n   - Implement proper garbage collection practices\n   - Optimize data structures\n   - Limit DOM node creation/destruction\n\nTarget performance metrics:\n- Load time: <2 seconds on average school WiFi\n- Bundle size: <500KB total (HTML+CSS+JS)\n- Memory usage: <50MB during gameplay",
+        "testStrategy": "Measure load time on various devices and network conditions. Verify bundle size is under 500KB. Monitor memory usage during extended gameplay. Test performance on minimum supported browser versions. Conduct performance profiling using browser developer tools. Verify smooth operation on school-grade hardware.",
+        "priority": "medium",
+        "dependencies": [
+          1,
+          3,
+          6
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 15,
+        "title": "Cross-Browser Testing and Bug Fixing",
+        "description": "Conduct comprehensive cross-browser testing and fix any identified issues to ensure compatibility.",
+        "details": "Perform cross-browser testing and bug fixing:\n\n1. Test on all required browsers:\n   - Chrome 80+\n   - Firefox 75+\n   - Safari 13+\n   - Edge 80+\n\n2. Test on various devices:\n   - Desktop computers\n   - Tablets\n   - Mobile devices (landscape and portrait)\n\n3. Verify functionality:\n   - Game initialization\n   - Calculation validation\n   - Seasonal transitions\n   - Teacher settings\n   - PDF generation\n   - Accessibility features\n\n4. Document and fix identified issues:\n   - Create bug tracking system\n   - Prioritize fixes based on impact\n   - Implement fixes with regression testing\n\nCreate a browser compatibility matrix documenting test results. Address any browser-specific issues with appropriate polyfills or alternative implementations.",
+        "testStrategy": "Create a test matrix covering all required browsers and features. Conduct manual testing of all functionality on each browser. Use BrowserStack or similar tools for device testing. Document and track all identified issues. Verify fixes with regression testing. Conduct final validation across all supported platforms.",
+        "priority": "high",
+        "dependencies": [
+          4,
+          7,
+          9,
+          12,
+          13,
+          14
+        ],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-07-29T07:14:38.071Z",
+      "updated": "2025-07-29T07:24:53.757Z",
+      "description": "Tasks for master context"
+    }
+  }
+}

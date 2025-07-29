@@ -1,0 +1,466 @@
+/* Sheep Business Game - Responsive Stylesheet */
+/* Handles responsive design for different screen sizes */
+
+/* Large Desktop (1200px and up) */
+@media screen and (min-width: 1200px) {
+    .game-container {
+        max-width: 1400px;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-2xl);
+    }
+    
+    .modal-content {
+        max-width: 800px;
+    }
+}
+
+/* Desktop (992px to 1199px) */
+@media screen and (max-width: 1199px) {
+    .game-container {
+        max-width: 1000px;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-xl);
+    }
+}
+
+/* Tablet (768px to 991px) */
+@media screen and (max-width: 991px) {
+    .game-container {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-lg);
+        padding: var(--spacing-md);
+    }
+    
+    .game-header {
+        padding: var(--spacing-md);
+    }
+    
+    .game-header h1 {
+        font-size: var(--font-size-2xl);
+    }
+    
+    .round-info, .season-info {
+        font-size: var(--font-size-base);
+        margin: 0 var(--spacing-sm);
+    }
+    
+    .purchase-section,
+    .ledger-section {
+        padding: var(--spacing-md);
+    }
+    
+    .calculation-item {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
+    }
+    
+    .calculation-item label {
+        margin-bottom: var(--spacing-xs);
+    }
+    
+    .btn {
+        min-width: 80px;
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+    
+    .game-controls {
+        gap: var(--spacing-sm);
+    }
+    
+    .modal-content {
+        margin: 10% auto;
+        padding: var(--spacing-lg);
+        width: 95%;
+    }
+}
+
+/* Mobile Large (576px to 767px) */
+@media screen and (max-width: 767px) {
+    .game-container {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+        padding: var(--spacing-sm);
+    }
+    
+    .game-header {
+        padding: var(--spacing-sm);
+    }
+    
+    .game-header h1 {
+        font-size: var(--font-size-xl);
+        margin-bottom: var(--spacing-xs);
+    }
+    
+    .round-info, .season-info {
+        display: block;
+        margin: var(--spacing-xs) 0;
+        font-size: var(--font-size-small);
+    }
+    
+    .season-icon {
+        font-size: var(--font-size-xl);
+    }
+    
+    .purchase-section,
+    .ledger-section,
+    .market-conditions {
+        padding: var(--spacing-md);
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .price-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-xs);
+    }
+    
+    .price-change {
+        align-self: flex-end;
+    }
+    
+    .balance-display,
+    .flock-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-xs);
+    }
+    
+    .calculation-item {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
+    }
+    
+    .calculation-item input {
+        width: 100%;
+    }
+    
+    .btn-check {
+        width: 100%;
+        margin-top: var(--spacing-xs);
+    }
+    
+    .game-controls {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+    
+    .btn {
+        width: 100%;
+        min-width: auto;
+    }
+    
+    .modal-content {
+        margin: 5% auto;
+        padding: var(--spacing-md);
+        width: 95%;
+        max-height: 90vh;
+    }
+    
+    .settings-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .setting-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
+    
+    .setting-item input[type="number"],
+    .setting-item select {
+        width: 100%;
+    }
+    
+    .modal-actions {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+    
+    .modal-actions .btn {
+        width: 100%;
+    }
+    
+    .price-changes {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+}
+
+/* Mobile Small (320px to 575px) */
+@media screen and (max-width: 575px) {
+    .game-container {
+        padding: var(--spacing-xs);
+        gap: var(--spacing-md);
+    }
+    
+    .game-header {
+        padding: var(--spacing-xs);
+    }
+    
+    .game-header h1 {
+        font-size: var(--font-size-large);
+    }
+    
+    .round-info, .season-info {
+        font-size: var(--font-size-small);
+    }
+    
+    .purchase-section,
+    .ledger-section,
+    .market-conditions {
+        padding: var(--spacing-sm);
+    }
+    
+    .price-display h3,
+    .calculations-section h3,
+    .profit-chart h3 {
+        font-size: var(--font-size-base);
+    }
+    
+    .price-item {
+        padding: var(--spacing-xs);
+    }
+    
+    .price-label {
+        font-size: var(--font-size-small);
+    }
+    
+    .price-value {
+        font-size: var(--font-size-base);
+    }
+    
+    .balance-amount,
+    .flock-count {
+        font-size: var(--font-size-large);
+    }
+    
+    .calculation-item {
+        padding: var(--spacing-sm);
+    }
+    
+    .calculation-item label {
+        font-size: var(--font-size-small);
+    }
+    
+    .calculation-item input {
+        padding: var(--spacing-xs);
+        font-size: var(--font-size-small);
+    }
+    
+    .btn {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: var(--font-size-small);
+    }
+    
+    .modal-content {
+        margin: 2% auto;
+        padding: var(--spacing-sm);
+        width: 98%;
+    }
+    
+    .modal-content h2 {
+        font-size: var(--font-size-large);
+    }
+    
+    .close {
+        top: var(--spacing-xs);
+        right: var(--spacing-sm);
+        font-size: var(--font-size-xl);
+    }
+    
+    .chart-container {
+        height: 150px;
+    }
+}
+
+/* Extra Small Mobile (320px and below) */
+@media screen and (max-width: 320px) {
+    .game-header h1 {
+        font-size: var(--font-size-base);
+    }
+    
+    .round-info, .season-info {
+        font-size: 0.75rem;
+    }
+    
+    .purchase-section,
+    .ledger-section,
+    .market-conditions {
+        padding: var(--spacing-xs);
+    }
+    
+    .price-item {
+        padding: 0.25rem;
+    }
+    
+    .calculation-item {
+        padding: var(--spacing-xs);
+    }
+    
+    .btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    .modal-content {
+        padding: 0.5rem;
+    }
+}
+
+/* Landscape Orientation Adjustments */
+@media screen and (max-height: 600px) and (orientation: landscape) {
+    .game-header {
+        padding: var(--spacing-xs);
+    }
+    
+    .game-header h1 {
+        font-size: var(--font-size-large);
+        margin-bottom: var(--spacing-xs);
+    }
+    
+    .game-container {
+        padding: var(--spacing-xs);
+        gap: var(--spacing-sm);
+    }
+    
+    .purchase-section,
+    .ledger-section {
+        padding: var(--spacing-sm);
+    }
+    
+    .modal-content {
+        margin: 2% auto;
+        max-height: 95vh;
+    }
+    
+    .chart-container {
+        height: 120px;
+    }
+}
+
+/* High DPI Displays */
+@media screen and (-webkit-min-device-pixel-ratio: 2),
+       screen and (min-resolution: 192dpi) {
+    .btn,
+    .calculation-item input,
+    .purchase-controls input {
+        border-width: 0.5px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .game-header {
+        background: white !important;
+        color: black !important;
+        box-shadow: none !important;
+    }
+    
+    .game-container {
+        display: block;
+        max-width: none;
+        padding: 0;
+    }
+    
+    .purchase-section,
+    .ledger-section,
+    .market-conditions {
+        break-inside: avoid;
+        margin-bottom: 1rem;
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+    
+    .btn,
+    .modal,
+    .feedback-banner {
+        display: none !important;
+    }
+    
+    .calculation-item input {
+        border: 1px solid #ccc;
+        background: white;
+    }
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .game-container,
+    .purchase-section,
+    .ledger-section,
+    .market-conditions {
+        transition: none;
+    }
+    
+    .btn:hover {
+        transform: none;
+    }
+}
+
+/* Accessibility: High Contrast */
+@media (prefers-contrast: high) {
+    .price-item {
+        border-left-width: 6px;
+    }
+    
+    .calculation-item.correct {
+        border-width: 3px;
+    }
+    
+    .calculation-item.incorrect {
+        border-width: 3px;
+    }
+    
+    .btn {
+        border: 2px solid currentColor;
+    }
+}
+
+/* Accessibility: Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text-primary: #ffffff;
+        --text-secondary: #b0b0b0;
+        --background-primary: #1a1a1a;
+        --background-secondary: #2d2d2d;
+        --border-color: #404040;
+    }
+    
+    .price-item {
+        background: var(--background-primary);
+    }
+    
+    .calculation-item input {
+        background: var(--background-primary);
+        color: var(--text-primary);
+    }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .btn {
+        min-height: 44px;
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+    
+    .calculation-item input {
+        min-height: 44px;
+        padding: var(--spacing-md);
+    }
+    
+    .purchase-controls input {
+        min-height: 44px;
+        padding: var(--spacing-md);
+    }
+    
+    .setting-item input[type="checkbox"] {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .setting-item input[type="number"],
+    .setting-item select {
+        min-height: 44px;
+        padding: var(--spacing-md);
+    }
+} 

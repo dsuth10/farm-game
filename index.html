@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sheep Station Manager - Educational Math Game</title>
+    <meta name="description" content="An educational web application for Year 5 students to practice multiplication, unit rates, and profit-loss analysis through sheep farming simulation.">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="game-header">
+        <h1>Sheep Station Manager</h1>
+        <div class="round-info">
+            <span class="round-counter">Round <span id="currentRound">1</span> of <span id="maxRounds">4</span></span>
+        </div>
+        <div class="season-info">
+            <span class="season-name" id="currentSeason">Spring</span>
+            <span class="season-icon" id="seasonIcon">🌸</span>
+        </div>
+    </header>
+
+    <!-- Main Game Container -->
+    <main class="game-container">
+        <!-- Purchase Section -->
+        <section class="purchase-section">
+            <h2>Purchase Sheep</h2>
+            <div class="purchase-controls">
+                <label for="sheepQuantity">Number of sheep to purchase (0-20):</label>
+                <input type="number" id="sheepQuantity" min="0" max="20" value="0">
+                <button id="purchaseBtn" class="btn btn-primary">Purchase Sheep</button>
+            </div>
+            
+            <div class="price-display">
+                <h3>Current Prices</h3>
+                <div class="price-grid">
+                    <div class="price-item">
+                        <span class="price-label">Sheep Purchase Price:</span>
+                        <span class="price-value" id="sheepPrice">$45</span>
+                        <span class="price-change" id="sheepPriceChange"></span>
+                    </div>
+                    <div class="price-item">
+                        <span class="price-label">Housing Cost:</span>
+                        <span class="price-value" id="housingCost">$8</span>
+                        <span class="price-change" id="housingCostChange"></span>
+                    </div>
+                    <div class="price-item">
+                        <span class="price-label">Feed Cost:</span>
+                        <span class="price-value" id="feedCost">$12</span>
+                        <span class="price-change" id="feedCostChange"></span>
+                    </div>
+                    <div class="price-item">
+                        <span class="price-label">Wool Price:</span>
+                        <span class="price-value" id="woolPrice">$18</span>
+                        <span class="price-change" id="woolPriceChange"></span>
+                    </div>
+                </div>
+            </div>
+
+            <button id="marketTrendsBtn" class="btn btn-secondary">Market Trends</button>
+        </section>
+
+        <!-- Financial Ledger Section -->
+        <section class="ledger-section">
+            <h2>Financial Ledger</h2>
+            <div class="balance-display">
+                <span class="balance-label">Current Balance:</span>
+                <span class="balance-amount" id="currentBalance">$200</span>
+            </div>
+            
+            <div class="flock-info">
+                <span class="flock-label">Flock Size:</span>
+                <span class="flock-count" id="flockSize">0</span>
+            </div>
+
+            <div class="calculations-section">
+                <h3>Your Calculations</h3>
+                <div class="calculation-item">
+                    <label for="housingCalculation">Housing Cost Calculation:</label>
+                    <input type="number" id="housingCalculation" placeholder="Enter your answer">
+                    <button class="btn btn-check" data-calculation="housing">Check</button>
+                </div>
+                <div class="calculation-item">
+                    <label for="feedCalculation">Feed Cost Calculation:</label>
+                    <input type="number" id="feedCalculation" placeholder="Enter your answer">
+                    <button class="btn btn-check" data-calculation="feed">Check</button>
+                </div>
+                <div class="calculation-item">
+                    <label for="woolCalculation">Wool Income Calculation:</label>
+                    <input type="number" id="woolCalculation" placeholder="Enter your answer">
+                    <button class="btn btn-check" data-calculation="wool">Check</button>
+                </div>
+                <div class="calculation-item">
+                    <label for="profitCalculation">Profit/Loss Calculation:</label>
+                    <input type="number" id="profitCalculation" placeholder="Enter your answer">
+                    <button class="btn btn-check" data-calculation="profit">Check</button>
+                </div>
+            </div>
+
+            <div class="profit-chart">
+                <h3>Profit Trend</h3>
+                <div id="profitChart" class="chart-container">
+                    <!-- Chart will be rendered here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Market Conditions Section -->
+        <section class="market-conditions">
+            <h3>Market Conditions</h3>
+            <p id="marketCondition">Growing season - Prices are favorable for expansion</p>
+            <div id="priceChanges" class="price-changes">
+                <!-- Price change indicators will be displayed here -->
+            </div>
+        </section>
+
+        <!-- Feedback Banner -->
+        <section class="feedback-banner" id="feedbackBanner">
+            <!-- Dynamic feedback messages will appear here -->
+        </section>
+
+        <!-- Game Controls -->
+        <section class="game-controls">
+            <button id="nextRoundBtn" class="btn btn-primary" disabled>Next Round</button>
+            <button id="resetBtn" class="btn btn-secondary">Reset Game</button>
+            <button id="helpBtn" class="btn btn-secondary">Help</button>
+            <button id="teacherSettingsBtn" class="btn btn-secondary">Teacher Settings</button>
+        </section>
+    </main>
+
+    <!-- Teacher Settings Modal -->
+    <div id="teacherSettingsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Teacher Settings</h2>
+            <div class="settings-grid">
+                <div class="setting-item">
+                    <label for="seasonalFluctuation">Seasonal Price Fluctuations:</label>
+                    <input type="checkbox" id="seasonalFluctuation" checked>
+                </div>
+                <div class="setting-item">
+                    <label for="randomVariation">Random Price Variations (±$3):</label>
+                    <input type="checkbox" id="randomVariation">
+                </div>
+                <div class="setting-item">
+                    <label for="sheepMortality">Sheep Mortality Events (5% chance):</label>
+                    <input type="checkbox" id="sheepMortality">
+                </div>
+                <div class="setting-item">
+                    <label for="startingBalance">Starting Balance:</label>
+                    <input type="number" id="startingBalance" value="200" min="50" max="500">
+                </div>
+                <div class="setting-item">
+                    <label for="maxRoundsSetting">Maximum Rounds:</label>
+                    <input type="number" id="maxRoundsSetting" value="4" min="2" max="8">
+                </div>
+                <div class="setting-item">
+                    <label for="marketDifficulty">Market Difficulty:</label>
+                    <select id="marketDifficulty">
+                        <option value="easy">Easy</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button id="saveSettings" class="btn btn-primary">Save Settings</button>
+                <button id="cancelSettings" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>How to Play</h2>
+            <div class="help-content">
+                <h3>Game Overview</h3>
+                <p>Welcome to Sheep Station Manager! You're a sheep farmer managing your flock through four seasons.</p>
+                
+                <h3>How to Play</h3>
+                <ol>
+                    <li><strong>Purchase Sheep:</strong> Choose how many sheep to buy (0-20)</li>
+                    <li><strong>Calculate Costs:</strong> Work out housing and feed costs</li>
+                    <li><strong>Calculate Income:</strong> Determine wool income from your sheep</li>
+                    <li><strong>Calculate Profit:</strong> Find your net profit or loss</li>
+                    <li><strong>Advance:</strong> Move to the next round when all calculations are correct</li>
+                </ol>
+
+                <h3>Seasonal Changes</h3>
+                <p>Prices change each season based on market conditions. Watch for the ↑↓ indicators showing price changes.</p>
+
+                <h3>Getting Help</h3>
+                <p>If you get stuck, the game will provide hints and worked examples to help you learn.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Market Trends Modal -->
+    <div id="marketTrendsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Market Trends</h2>
+            <div id="marketTrendsContent">
+                <!-- Market trends data will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Worked Example Modal -->
+    <div id="workedExampleModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Worked Example</h2>
+            <div id="workedExampleContent">
+                <!-- Worked examples will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Summary Modal -->
+    <div id="gameSummaryModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Game Summary</h2>
+            <div id="gameSummaryContent">
+                <!-- Game summary will be displayed here -->
+            </div>
+            <div class="modal-actions">
+                <button id="downloadReport" class="btn btn-primary">Download Report</button>
+                <button id="newGame" class="btn btn-secondary">New Game</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="js/game.js"></script>
+    <script src="js/calculations.js"></script>
+    <script src="js/validation.js"></script>
+    <script src="js/pdf-export.js"></script>
+</body>
+</html> 
