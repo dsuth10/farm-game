@@ -22,8 +22,64 @@
         "dependencies": [
           1
         ],
-        "status": "pending",
-        "subtasks": []
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design and Implement Core gameState Object",
+            "description": "Define and implement the main gameState object with all required properties, including currentRound, maxRounds, balance, flockSize, seasonalPrices, settings, and roundHistory, ensuring the structure matches the PRD specification.",
+            "dependencies": [],
+            "details": "Use ES6+ features such as const/let, object destructuring, and arrow functions. Ensure the gameState object is extensible and accessible by other modules and UI components.",
+            "status": "done",
+            "testStrategy": "Write unit tests to verify correct initialization of all properties with default values (e.g., balance $200, sheep count 0)."
+          },
+          {
+            "id": 2,
+            "title": "Implement roundData Structure for Per-Round Tracking",
+            "description": "Create the roundData structure to capture all per-round information, including round number, season, sheep purchased, prices, calculation tracking (student answers, correct answers, attempts), and financial results.",
+            "dependencies": [
+              "2.1"
+            ],
+            "details": "Ensure roundData objects are correctly structured and integrated into the roundHistory array within gameState.",
+            "status": "done",
+            "testStrategy": "Test creation and storage of roundData for multiple rounds. Verify all required fields are present and accurately recorded."
+          },
+          {
+            "id": 3,
+            "title": "Develop Game Initialization and Reset Functions",
+            "description": "Implement functions to initialize a new game with default values and to reset the game state, ensuring all properties and history are correctly cleared or set.",
+            "dependencies": [
+              "2.1"
+            ],
+            "details": "Initialization should set up gameState and roundHistory for a new session. Reset should restore all values to their initial state.",
+            "status": "done",
+            "testStrategy": "Test that initialization and reset functions correctly set all values and clear history. Verify UI reflects the reset state."
+          },
+          {
+            "id": 4,
+            "title": "Implement State Update and Round Progression Logic",
+            "description": "Create functions to update the game state when moving between rounds, including incrementing currentRound, updating seasonal data, and applying player actions.",
+            "dependencies": [
+              "2.1",
+              "2.2"
+            ],
+            "details": "Ensure all state changes are tracked and that seasonalPrices and other round-dependent data update appropriately.",
+            "status": "done",
+            "testStrategy": "Test round progression logic to ensure state updates correctly, including seasonal data changes and player action effects."
+          },
+          {
+            "id": 5,
+            "title": "Integrate Round Data Persistence and History Management",
+            "description": "Implement logic to save roundData to the roundHistory array after each round and provide access methods for UI components to retrieve historical data.",
+            "dependencies": [
+              "2.2",
+              "2.4"
+            ],
+            "details": "Ensure roundHistory accurately reflects all completed rounds and supports retrieval for analytics and reporting.",
+            "status": "done",
+            "testStrategy": "Test that round data is correctly appended to history after each round and that retrieval functions return accurate data."
+          }
+        ]
       },
       {
         "id": 3,
@@ -35,7 +91,7 @@
         "dependencies": [
           1
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -49,7 +105,7 @@
           2,
           3
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -63,7 +119,7 @@
           2,
           3
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -76,7 +132,7 @@
         "dependencies": [
           2
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -90,7 +146,7 @@
           3,
           6
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -104,7 +160,7 @@
           4,
           6
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -118,7 +174,7 @@
           2,
           5
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -132,7 +188,7 @@
           6,
           8
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -146,7 +202,7 @@
           5,
           8
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -161,7 +217,7 @@
           8,
           10
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -175,7 +231,7 @@
           3,
           7
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -190,7 +246,7 @@
           3,
           6
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -208,13 +264,73 @@
           13,
           14
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
+      },
+      {
+        "id": 16,
+        "title": "Implement Educational Calculation Guides",
+        "description": "Add step-by-step calculation guides above each required calculation field to help students understand the mathematical concepts and procedures for housing cost, feed cost, wool income, and profit calculations.",
+        "details": "Implement educational calculation guides that appear above each calculation input field:\n\n1. Create a collapsible guide component for each calculation type:\n   - Housing cost guide: quantity × housing cost per sheep\n   - Feed cost guide: quantity × feed cost per sheep\n   - Wool income guide: quantity × wool price per unit\n   - Profit calculation guide: wool income - (housing cost + feed cost + purchase cost)\n\n2. For each guide, implement:\n   - Clear step-by-step instructions with mathematical notation\n   - Visual indicators showing which numbers to use from the game state\n   - Example calculations with sample numbers\n   - Explanations of the mathematical concepts (multiplication, subtraction)\n\n3. Design considerations:\n   - Guides should be initially collapsed with an \"Show Help\" button\n   - Use accessible, clear typography with sufficient contrast\n   - Include visual aids like arrows or highlighting to connect concepts\n   - Ensure guides are responsive and work on all device sizes\n   - Use simple language appropriate for the target age group (11-14)\n\n4. Integration with calculation engine:\n   - Pull current game values to show relevant examples\n   - Update guide examples when game values change\n   - Ensure guides reflect the current season's values\n\n5. Educational content:\n   - Housing cost: Explain per-unit multiplication concept\n   - Feed cost: Explain seasonal variations and multiplication\n   - Wool income: Explain revenue generation concepts\n   - Profit: Explain income minus expenses and the concept of profit/loss\n\n6. Implement appropriate animations for guide expansion/collapse to draw student attention without being distracting.",
+        "testStrategy": "1. Verify guides appear correctly for each calculation type:\n   - Test that each guide contains accurate step-by-step instructions\n   - Confirm that mathematical notation is correctly displayed\n   - Verify that examples use current game values\n\n2. Test the collapsible functionality:\n   - Verify guides expand/collapse properly on all supported browsers\n   - Test keyboard accessibility for expanding/collapsing guides\n   - Confirm that screen readers announce guide content appropriately\n\n3. Test educational content accuracy:\n   - Review all mathematical explanations for correctness\n   - Verify that sample calculations produce the correct results\n   - Confirm that explanations are age-appropriate and clear\n\n4. Cross-browser and device testing:\n   - Test guide display on all required browsers (Chrome 80+, Firefox 75+, Safari 13+, Edge 80+)\n   - Verify responsive behavior on desktop, tablet, and mobile devices\n   - Test with various screen sizes to ensure content remains readable\n\n5. Accessibility testing:\n   - Verify color contrast meets WCAG standards\n   - Test screen reader compatibility for all guide content\n   - Confirm keyboard navigation works for accessing guides\n\n6. User testing:\n   - Conduct testing with sample users from the target age group\n   - Gather feedback on clarity and helpfulness of guides\n   - Make adjustments based on user feedback",
+        "status": "done",
+        "dependencies": [
+          6,
+          13
+        ],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design Collapsible Guide Components for Each Calculation Type",
+            "description": "Develop a collapsible guide component for each calculation field (housing cost, feed cost, wool income, profit), ensuring each is initially collapsed and can be expanded with a 'Show Help' button.",
+            "dependencies": [],
+            "details": "Each calculation input field should have an associated collapsible guide component. The guides must be accessible, visually distinct, and follow consistent UI patterns. Ensure the guides are responsive and compatible with all device sizes.",
+            "status": "done",
+            "testStrategy": "Verify that each calculation field displays a collapsed guide by default. Test the expand/collapse functionality and ensure accessibility compliance (keyboard navigation, screen reader support)."
+          },
+          {
+            "id": 2,
+            "title": "Develop Step-by-Step Educational Content for Each Guide",
+            "description": "Create clear, age-appropriate step-by-step instructions for each calculation type, including mathematical notation, example calculations, and explanations of underlying concepts (multiplication, subtraction, profit/loss).",
+            "dependencies": [],
+            "details": "Content must use simple language suitable for ages 11-14, include visual indicators (arrows, highlights) to connect game state values to calculation steps, and provide sample calculations using realistic numbers.",
+            "status": "done",
+            "testStrategy": "Review each guide to ensure instructions are clear, accurate, and use correct mathematical notation. Validate that examples are relevant and explanations are age-appropriate."
+          },
+          {
+            "id": 3,
+            "title": "Integrate Real-Time Game State Values into Guides",
+            "description": "Connect the guides to the game state so that example calculations dynamically update to reflect current values (e.g., sheep quantity, prices, season).",
+            "dependencies": [],
+            "details": "Implement logic to pull current values from the game state and update guide examples in real time. Ensure guides always display accurate, context-sensitive information for the current round and season.",
+            "status": "done",
+            "testStrategy": "Change game values and verify that guide examples update immediately. Test across all calculation types and seasons to ensure accuracy and responsiveness."
+          },
+          {
+            "id": 4,
+            "title": "Implement Visual and Accessibility Enhancements",
+            "description": "Apply accessible, high-contrast typography and visual aids (arrows, highlights) to the guides, ensuring compliance with accessibility standards and usability for all students.",
+            "dependencies": [],
+            "details": "Use accessible fonts, sufficient color contrast, and ARIA labels. Visual aids should clearly connect guide steps to relevant UI elements. Ensure guides are usable with screen readers and keyboard navigation.",
+            "status": "done",
+            "testStrategy": "Test guides with accessibility tools (screen readers, contrast checkers). Verify that all visual aids are clear and that guides are fully navigable via keyboard."
+          },
+          {
+            "id": 5,
+            "title": "Add Animated Transitions for Guide Expansion and Collapse",
+            "description": "Implement smooth, non-distracting animations for expanding and collapsing the guides to draw student attention and enhance engagement.",
+            "dependencies": [],
+            "details": "Animations should be subtle, quick, and not interfere with usability or accessibility. Ensure animation performance is consistent across devices and does not cause motion sensitivity issues.",
+            "status": "done",
+            "testStrategy": "Expand and collapse guides repeatedly to verify animation smoothness and performance. Confirm that animations do not hinder accessibility or cause discomfort for sensitive users."
+          }
+        ]
       }
     ],
     "metadata": {
       "created": "2025-07-29T07:14:38.071Z",
-      "updated": "2025-07-29T07:24:53.757Z",
+      "updated": "2025-07-29T07:50:23.585Z",
       "description": "Tasks for master context"
     }
   }

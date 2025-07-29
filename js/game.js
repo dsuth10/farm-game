@@ -92,6 +92,13 @@ class SheepBusinessGame {
             this.handlePurchase();
         });
 
+        // Guide toggle buttons
+        document.querySelectorAll('.guide-toggle').forEach(button => {
+            button.addEventListener('click', (e) => {
+                this.toggleGuide(e.target.closest('.guide-toggle'));
+            });
+        });
+
         // Calculation check buttons
         document.querySelectorAll('.btn-check').forEach(button => {
             button.addEventListener('click', (e) => {
@@ -437,6 +444,9 @@ class SheepBusinessGame {
         
         // Update market condition
         document.getElementById('marketCondition').textContent = this.gameState.seasonalPrices[this.gameState.currentSeason].marketCondition;
+        
+        // Update guide values if any guides are expanded
+        this.updateGuideValues();
     }
 
     /**
@@ -739,6 +749,76 @@ class SheepBusinessGame {
         
         summaryContent.innerHTML = summaryHTML;
         this.showModal('gameSummaryModal');
+    }
+
+    /**
+     * Toggle calculation guide visibility
+     */
+    toggleGuide(toggleButton) {
+        const isExpanded = toggleButton.getAttribute('aria-expanded') === 'true';
+        const contentId = toggleButton.getAttribute('aria-controls');
+        const content = document.getElementById(contentId);
+        
+        if (isExpanded) {
+            // Collapse guide
+            toggleButton.setAttribute('aria-expanded', 'false');
+            content.setAttribute('aria-hidden', 'true');
+            toggleButton.querySelector('.guide-text').textContent = toggleButton.querySelector('.guide-text').textContent.replace('Hide', 'Show');
+        } else {
+            // Expand guide
+            toggleButton.setAttribute('aria-expanded', 'true');
+            content.setAttribute('aria-hidden', 'false');
+            toggleButton.querySelector('.guide-text').textContent = toggleButton.querySelector('.guide-text').textContent.replace('Show', 'Hide');
+            
+            // Update guide values when expanding
+            this.updateGuideValues();
+        }
+    }
+
+    /**
+     * Update guide values with current game state
+     */
+    updateGuideValues() {
+        const sheepCount = this.gameState.flockSize;
+        const prices = this.gameState.marketPrices;
+        
+        // Update housing cost guide
+        document.getElementById('housingSheepCount').textContent = sheepCount;
+        document.getElementById('housingSheepCount2').textContent = sheepCount;
+        document.getElementById('housingCostPerSheep').textContent = prices.housingCost;
+        document.getElementById('housingCostPerSheep2').textContent = prices.housingCost;
+        document.getElementById('housingExampleResult').textContent = sheepCount * prices.housingCost;
+        
+        // Update feed cost guide
+        document.getElementById('feedSheepCount').textContent = sheepCount;
+        document.getElementById('feedSheepCount2').textContent = sheepCount;
+        document.getElementById('feedCostPerSheep').textContent = prices.feedCost;
+        document.getElementById('feedCostPerSheep2').textContent = prices.feedCost;
+        document.getElementById('feedExampleResult').textContent = sheepCount * prices.feedCost;
+        
+        // Update wool income guide
+        document.getElementById('woolSheepCount').textContent = sheepCount;
+        document.getElementById('woolSheepCount2').textContent = sheepCount;
+        document.getElementById('woolPricePerSheep').textContent = prices.woolPrice;
+        document.getElementById('woolPricePerSheep2').textContent = prices.woolPrice;
+        document.getElementById('woolExampleResult').textContent = sheepCount * prices.woolPrice;
+        
+        // Update profit guide
+        const woolIncome = sheepCount * prices.woolPrice;
+        const housingCost = sheepCount * prices.housingCost;
+        const feedCost = sheepCount * prices.feedCost;
+        const purchaseCost = this.gameState.currentRoundData ? this.gameState.currentRoundData.sheepPurchased * prices.sheepPurchasePrice : 0;
+        const totalCosts = housingCost + feedCost + purchaseCost;
+        const profit = woolIncome - totalCosts;
+        
+        document.getElementById('profitWoolIncome').textContent = woolIncome;
+        document.getElementById('profitWoolIncome2').textContent = woolIncome;
+        document.getElementById('profitHousingCost').textContent = housingCost;
+        document.getElementById('profitFeedCost').textContent = feedCost;
+        document.getElementById('profitPurchaseCost').textContent = purchaseCost;
+        document.getElementById('profitTotalCosts').textContent = totalCosts;
+        document.getElementById('profitTotalCosts2').textContent = totalCosts;
+        document.getElementById('profitExampleResult').textContent = profit;
     }
 
     /**

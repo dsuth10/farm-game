@@ -76,22 +76,102 @@
 
             <div class="calculations-section">
                 <h3>Your Calculations</h3>
+                
+                <!-- Housing Cost Calculation with Guide -->
                 <div class="calculation-item">
+                    <div class="calculation-guide" id="housingGuide">
+                        <button class="guide-toggle" aria-expanded="false" aria-controls="housingGuideContent">
+                            <span class="guide-icon">📖</span>
+                            <span class="guide-text">Show Help: How to calculate Housing Cost</span>
+                        </button>
+                        <div class="guide-content" id="housingGuideContent" aria-hidden="true">
+                            <div class="guide-steps">
+                                <h4>Housing Cost Calculation Guide</h4>
+                                <p><strong>Formula:</strong> Housing Cost = Number of Sheep × Housing Cost per Sheep</p>
+                                <div class="guide-example">
+                                    <p><strong>Step 1:</strong> Count your sheep: <span class="guide-value" id="housingSheepCount">0</span> sheep</p>
+                                    <p><strong>Step 2:</strong> Find housing cost per sheep: $<span class="guide-value" id="housingCostPerSheep">8</span></p>
+                                    <p><strong>Step 3:</strong> Multiply: <span class="guide-value" id="housingSheepCount2">0</span> × $<span class="guide-value" id="housingCostPerSheep2">8</span> = $<span class="guide-result" id="housingExampleResult">0</span></p>
+                                </div>
+                                <p class="guide-tip">💡 <strong>Tip:</strong> This is a multiplication problem. You're finding the total cost to house all your sheep.</p>
+                            </div>
+                        </div>
+                    </div>
                     <label for="housingCalculation">Housing Cost Calculation:</label>
                     <input type="number" id="housingCalculation" placeholder="Enter your answer">
                     <button class="btn btn-check" data-calculation="housing">Check</button>
                 </div>
+
+                <!-- Feed Cost Calculation with Guide -->
                 <div class="calculation-item">
+                    <div class="calculation-guide" id="feedGuide">
+                        <button class="guide-toggle" aria-expanded="false" aria-controls="feedGuideContent">
+                            <span class="guide-icon">📖</span>
+                            <span class="guide-text">Show Help: How to calculate Feed Cost</span>
+                        </button>
+                        <div class="guide-content" id="feedGuideContent" aria-hidden="true">
+                            <div class="guide-steps">
+                                <h4>Feed Cost Calculation Guide</h4>
+                                <p><strong>Formula:</strong> Feed Cost = Number of Sheep × Feed Cost per Sheep</p>
+                                <div class="guide-example">
+                                    <p><strong>Step 1:</strong> Count your sheep: <span class="guide-value" id="feedSheepCount">0</span> sheep</p>
+                                    <p><strong>Step 2:</strong> Find feed cost per sheep: $<span class="guide-value" id="feedCostPerSheep">12</span></p>
+                                    <p><strong>Step 3:</strong> Multiply: <span class="guide-value" id="feedSheepCount2">0</span> × $<span class="guide-value" id="feedCostPerSheep2">12</span> = $<span class="guide-result" id="feedExampleResult">0</span></p>
+                                </div>
+                                <p class="guide-tip">💡 <strong>Tip:</strong> Feed costs change with seasons. Check the current prices above!</p>
+                            </div>
+                        </div>
+                    </div>
                     <label for="feedCalculation">Feed Cost Calculation:</label>
                     <input type="number" id="feedCalculation" placeholder="Enter your answer">
                     <button class="btn btn-check" data-calculation="feed">Check</button>
                 </div>
+
+                <!-- Wool Income Calculation with Guide -->
                 <div class="calculation-item">
+                    <div class="calculation-guide" id="woolGuide">
+                        <button class="guide-toggle" aria-expanded="false" aria-controls="woolGuideContent">
+                            <span class="guide-icon">📖</span>
+                            <span class="guide-text">Show Help: How to calculate Wool Income</span>
+                        </button>
+                        <div class="guide-content" id="woolGuideContent" aria-hidden="true">
+                            <div class="guide-steps">
+                                <h4>Wool Income Calculation Guide</h4>
+                                <p><strong>Formula:</strong> Wool Income = Number of Sheep × Wool Price per Sheep</p>
+                                <div class="guide-example">
+                                    <p><strong>Step 1:</strong> Count your sheep: <span class="guide-value" id="woolSheepCount">0</span> sheep</p>
+                                    <p><strong>Step 2:</strong> Find wool price per sheep: $<span class="guide-value" id="woolPricePerSheep">18</span></p>
+                                    <p><strong>Step 3:</strong> Multiply: <span class="guide-value" id="woolSheepCount2">0</span> × $<span class="guide-value" id="woolPricePerSheep2">18</span> = $<span class="guide-result" id="woolExampleResult">0</span></p>
+                                </div>
+                                <p class="guide-tip">💡 <strong>Tip:</strong> This is your income! Wool prices change with seasons, so check current prices.</p>
+                            </div>
+                        </div>
+                    </div>
                     <label for="woolCalculation">Wool Income Calculation:</label>
                     <input type="number" id="woolCalculation" placeholder="Enter your answer">
                     <button class="btn btn-check" data-calculation="wool">Check</button>
                 </div>
+
+                <!-- Profit Calculation with Guide -->
                 <div class="calculation-item">
+                    <div class="calculation-guide" id="profitGuide">
+                        <button class="guide-toggle" aria-expanded="false" aria-controls="profitGuideContent">
+                            <span class="guide-icon">📖</span>
+                            <span class="guide-text">Show Help: How to calculate Profit/Loss</span>
+                        </button>
+                        <div class="guide-content" id="profitGuideContent" aria-hidden="true">
+                            <div class="guide-steps">
+                                <h4>Profit/Loss Calculation Guide</h4>
+                                <p><strong>Formula:</strong> Profit = Wool Income - (Housing Cost + Feed Cost + Purchase Cost)</p>
+                                <div class="guide-example">
+                                    <p><strong>Step 1:</strong> Calculate wool income: $<span class="guide-value" id="profitWoolIncome">0</span></p>
+                                    <p><strong>Step 2:</strong> Add all costs: Housing ($<span class="guide-value" id="profitHousingCost">0</span>) + Feed ($<span class="guide-value" id="profitFeedCost">0</span>) + Purchase ($<span class="guide-value" id="profitPurchaseCost">0</span>) = $<span class="guide-result" id="profitTotalCosts">0</span></p>
+                                    <p><strong>Step 3:</strong> Subtract costs from income: $<span class="guide-value" id="profitWoolIncome2">0</span> - $<span class="guide-result" id="profitTotalCosts2">0</span> = $<span class="guide-result" id="profitExampleResult">0</span></p>
+                                </div>
+                                <p class="guide-tip">💡 <strong>Tip:</strong> Positive numbers mean profit, negative numbers mean loss. This shows if you're making money!</p>
+                            </div>
+                        </div>
+                    </div>
                     <label for="profitCalculation">Profit/Loss Calculation:</label>
                     <input type="number" id="profitCalculation" placeholder="Enter your answer">
                     <button class="btn btn-check" data-calculation="profit">Check</button>
