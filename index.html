@@ -23,11 +23,11 @@
 
     <!-- Main Game Container -->
     <main class="game-container">
-        <!-- Market Information Section - NEW LEFT COLUMN -->
+        <!-- Market Information Section - COLUMN 1 -->
         <section class="market-info-section">
             <h2>Market Information</h2>
             
-            <!-- Price Display - MOVED FROM PURCHASE SECTION -->
+            <!-- Price Display -->
             <div class="price-display">
                 <h3>Current Prices</h3>
                 <div class="price-grid">
@@ -54,13 +54,13 @@
                 </div>
             </div>
 
-            <!-- Market Trends and History Buttons - MOVED FROM PURCHASE SECTION -->
+            <!-- Market Trends and History Buttons -->
             <div class="market-buttons">
                 <button id="marketTrendsBtn" class="btn btn-secondary">Market Trends</button>
                 <button id="roundHistoryBtn" class="btn btn-secondary" onclick="window.sheepGame.showRoundHistory()">Round History</button>
             </div>
 
-            <!-- Market Conditions Section - MOVED FROM BOTTOM -->
+            <!-- Market Conditions Section -->
             <div class="market-conditions">
                 <h3>Market Conditions</h3>
                 <p id="marketCondition">Growing season - Prices are favorable for expansion</p>
@@ -69,7 +69,7 @@
                 </div>
             </div>
 
-            <!-- Game Controls - MOVED FROM BOTTOM -->
+            <!-- Game Controls -->
             <div class="game-controls">
                 <button id="nextRoundBtn" class="btn btn-primary" disabled>Next Round</button>
                 <button id="resetBtn" class="btn btn-secondary">Reset Game</button>
@@ -77,9 +77,11 @@
             </div>
         </section>
 
-        <!-- Purchase Section - MIDDLE COLUMN -->
-        <section class="purchase-section">
-            <!-- Housing Purchase Section - MOVED TO TOP -->
+        <!-- Expenses Section - COLUMN 2 -->
+        <section class="expenses-section">
+            <h2>Expenses</h2>
+            
+            <!-- Housing Purchase Section -->
             <div class="housing-purchase-section">
                 <div class="section-header">
                     <h3>Purchase Housing</h3>
@@ -106,50 +108,42 @@
                 </div>
             </div>
             
-            <!-- Sheep Purchase Section - MOVED BELOW HOUSING -->
-            <div class="section-header">
-                <h2>Purchase Sheep</h2>
-                <button class="help-icon" title="Sheep Purchase System Help" onclick="window.sheepGame.showSheepPurchaseHelp()">❓</button>
+            <!-- Sheep Purchase Section -->
+            <div class="sheep-purchase-section">
+                <div class="section-header">
+                    <h3>Purchase Sheep</h3>
+                    <button class="help-icon" title="Sheep Purchase System Help" onclick="window.sheepGame.showSheepPurchaseHelp()">❓</button>
+                </div>
+                
+                <div class="purchase-controls">
+                    <label for="sheepMoneyInput" title="Enter the amount of money you want to spend on sheep. The number of sheep will be calculated based on current seasonal prices.">Amount to spend on sheep ($):</label>
+                    <input type="number" id="sheepMoneyInput" min="0" step="1" value="0" placeholder="Enter amount" title="Enter the amount of money you want to spend on sheep">
+                    <button id="purchaseBtn" class="btn btn-primary" title="Purchase sheep with the entered amount">Purchase Sheep</button>
+                </div>
+                <div class="sheep-info">
+                    <div class="sheep-cost-info">
+                        <span class="sheep-cost-label">Cost per sheep:</span>
+                        <span class="sheep-cost-value" id="sheepCostPerUnit">$45</span>
+                    </div>
+                    <div class="sheep-units-preview">
+                        <span class="sheep-units-label">Sheep to purchase:</span>
+                        <span class="sheep-units-value" id="sheepUnitsPreview">0</span>
+                    </div>
+                    <div class="sheep-round-purchases" id="sheepRoundPurchases" role="status" aria-live="polite">
+                        <span class="round-purchases-label">This round:</span>
+                        <span class="round-purchases-value" id="sheepRoundPurchasesValue">No sheep purchased yet</span>
+                    </div>
+                </div>
             </div>
             
-            <div class="purchase-controls">
-                <label for="sheepMoneyInput" title="Enter the amount of money you want to spend on sheep. The number of sheep will be calculated based on current seasonal prices.">Amount to spend on sheep ($):</label>
-                <input type="number" id="sheepMoneyInput" min="0" step="1" value="0" placeholder="Enter amount" title="Enter the amount of money you want to spend on sheep">
-                <button id="purchaseBtn" class="btn btn-primary" title="Purchase sheep with the entered amount">Purchase Sheep</button>
-            </div>
-            <div class="sheep-info">
-                <div class="sheep-cost-info">
-                    <span class="sheep-cost-label">Cost per sheep:</span>
-                    <span class="sheep-cost-value" id="sheepCostPerUnit">$45</span>
-                </div>
-                <div class="sheep-units-preview">
-                    <span class="sheep-units-label">Sheep to purchase:</span>
-                    <span class="sheep-units-value" id="sheepUnitsPreview">0</span>
-                </div>
-                <div class="sheep-round-purchases" id="sheepRoundPurchases" role="status" aria-live="polite">
-                    <span class="round-purchases-label">This round:</span>
-                    <span class="round-purchases-value" id="sheepRoundPurchasesValue">No sheep purchased yet</span>
-                </div>
-            </div>
-            
-            <!-- Skip Option Box - MOVED BELOW SHEEP SECTION -->
-            <div class="skip-option-box">
-                <div class="info-box">
-                    <h4>💡 Skip Purchase Option</h4>
-                    <p>You can skip purchasing new sheep and housing after round one.</p>
-                </div>
-            </div>
+
             
             <!-- Skip Purchase Button will be dynamically inserted here by JavaScript -->
         </section>
 
-        <!-- Financial Ledger Section - RIGHT COLUMN -->
-        <section class="ledger-section">
-            <h2>Financial Ledger</h2>
-            <div class="balance-display">
-                <span class="balance-label">Current Balance:</span>
-                <span class="balance-amount" id="currentBalance">$200</span>
-            </div>
+        <!-- Income Section - COLUMN 3 -->
+        <section class="income-section">
+            <h2>Income</h2>
             
             <div class="flock-info">
                 <span class="flock-label">Flock Size:</span>
@@ -161,9 +155,41 @@
                 <span class="housing-capacity" id="housingCapacity">0</span>
                 <span class="housing-status" id="housingStatus"></span>
             </div>
+
+            <!-- Wool Income Calculation with Guide -->
+            <div class="calculation-item">
+                <div class="calculation-guide" id="woolGuide">
+                    <button class="guide-toggle" aria-expanded="false" aria-controls="woolGuideContent">
+                        <span class="guide-icon">📖</span>
+                        <span class="guide-text">Show Help: How to calculate Wool Income</span>
+                    </button>
+                    <div class="guide-content" id="woolGuideContent" aria-hidden="true">
+                        <div class="guide-steps">
+                            <h4>Wool Income Calculation Guide</h4>
+                            <p><strong>What to do:</strong> Multiply the number of sheep by the income from wool per sheep</p>
+                            <div class="guide-example">
+                                <p><strong>Step 1:</strong> Count how many sheep you have</p>
+                                <p><strong>Step 2:</strong> Look at the current wool price per sheep (shown in the prices above)</p>
+                                <p><strong>Step 3:</strong> Multiply: Number of sheep × Wool price per sheep</p>
+                            </div>
+                            <p class="guide-tip">💡 <strong>Tip:</strong> This is your income! Wool prices change with seasons, so check current prices.</p>
+                        </div>
+                    </div>
+                </div>
+                <label for="woolCalculation">Wool Income Calculation:</label>
+                <input type="number" id="woolCalculation" placeholder="Enter your answer">
+                <button class="btn btn-check" data-calculation="wool">Check</button>
+            </div>
+        </section>
+
+        <!-- Financial Ledger Section - COLUMN 4 -->
+        <section class="ledger-section">
+            <h2>Financial Ledger</h2>
+            <div class="balance-display">
+                <span class="balance-label">Current Balance:</span>
+                <span class="balance-amount" id="currentBalance">$200</span>
+            </div>
             
-
-
             <div class="calculations-section">
                 <h3>Your Calculations</h3>
                 
@@ -190,31 +216,6 @@
                     <label for="feedCalculation">Feed Cost Calculation:</label>
                     <input type="number" id="feedCalculation" placeholder="Enter your answer">
                     <button class="btn btn-check" data-calculation="feed">Check</button>
-                </div>
-
-                <!-- Wool Income Calculation with Guide -->
-                <div class="calculation-item">
-                    <div class="calculation-guide" id="woolGuide">
-                        <button class="guide-toggle" aria-expanded="false" aria-controls="woolGuideContent">
-                            <span class="guide-icon">📖</span>
-                            <span class="guide-text">Show Help: How to calculate Wool Income</span>
-                        </button>
-                        <div class="guide-content" id="woolGuideContent" aria-hidden="true">
-                            <div class="guide-steps">
-                                <h4>Wool Income Calculation Guide</h4>
-                                <p><strong>What to do:</strong> Multiply the number of sheep by the income from wool per sheep</p>
-                                <div class="guide-example">
-                                    <p><strong>Step 1:</strong> Count how many sheep you have</p>
-                                    <p><strong>Step 2:</strong> Look at the current wool price per sheep (shown in the prices above)</p>
-                                    <p><strong>Step 3:</strong> Multiply: Number of sheep × Wool price per sheep</p>
-                                </div>
-                                <p class="guide-tip">💡 <strong>Tip:</strong> This is your income! Wool prices change with seasons, so check current prices.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <label for="woolCalculation">Wool Income Calculation:</label>
-                    <input type="number" id="woolCalculation" placeholder="Enter your answer">
-                    <button class="btn btn-check" data-calculation="wool">Check</button>
                 </div>
 
                 <!-- Profit Calculation with Guide -->
@@ -247,8 +248,8 @@
                 </div>
             </div>
 
-            <div class="profit-chart">
-                <h3>Profit Trend</h3>
+            <div class="money-trend-chart">
+                <h3>Money Trend</h3>
                 <div id="profitChart" class="chart-container">
                     <!-- Chart will be rendered here -->
                 </div>

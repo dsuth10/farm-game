@@ -1,12 +1,73 @@
-/* Sheep Business Game - Responsive Stylesheet */
-/* Handles responsive design for different screen sizes */
+/* Sheep Business Game - Desktop-Focused Responsive Stylesheet */
+/* Optimized for 720p, 1080p, and 1440p displays with fallbacks for smaller screens */
 
-/* Large Desktop (1400px and up) */
-@media screen and (min-width: 1400px) {
+/* Ultra-Wide Desktop (2560px and up) - 2K/1440p displays */
+@media screen and (min-width: 2560px) {
+    .game-container {
+        max-width: 2400px;
+        margin: 0 auto;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: var(--spacing-2xl);
+        padding: var(--spacing-xl);
+    }
+    
+    .modal-content {
+        max-width: 1000px;
+    }
+    
+    .game-header h1 {
+        font-size: 3rem;
+    }
+    
+    .game-header {
+        padding: var(--spacing-xl);
+    }
+}
+
+/* 2K Desktop (2048px to 2559px) */
+@media screen and (min-width: 2048px) and (max-width: 2559px) {
+    .game-container {
+        max-width: 2000px;
+        margin: 0 auto;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: var(--spacing-2xl);
+        padding: var(--spacing-lg);
+    }
+    
+    .modal-content {
+        max-width: 900px;
+    }
+    
+    .game-header h1 {
+        font-size: 2.5rem;
+    }
+}
+
+/* Ultra-Wide Desktop (1920px to 2047px) */
+@media screen and (min-width: 1920px) and (max-width: 2047px) {
+    .game-container {
+        max-width: 1800px;
+        margin: 0 auto;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: var(--spacing-2xl);
+    }
+    
+    .modal-content {
+        max-width: 900px;
+    }
+    
+    .game-header h1 {
+        font-size: 2.5rem;
+    }
+}
+
+/* Full HD Desktop (1600px to 1919px) */
+@media screen and (min-width: 1600px) and (max-width: 1919px) {
     .game-container {
         max-width: 1600px;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: var(--spacing-2xl);
+        margin: 0 auto;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: var(--spacing-xl);
     }
     
     .modal-content {
@@ -14,32 +75,65 @@
     }
 }
 
-/* Desktop (1200px to 1399px) */
-@media screen and (min-width: 1200px) and (max-width: 1399px) {
+/* HD Desktop (1366px to 1599px) - Common laptop resolution */
+@media screen and (min-width: 1366px) and (max-width: 1599px) {
     .game-container {
         max-width: 1400px;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: var(--spacing-xl);
-    }
-}
-
-/* Medium Desktop (992px to 1199px) */
-@media screen and (max-width: 1199px) {
-    .game-container {
-        max-width: 1000px;
-        grid-template-columns: 1fr 1fr;
-        gap: var(--spacing-xl);
+        margin: 0 auto;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: var(--spacing-lg);
     }
     
-    .market-info-section {
-        grid-column: 1 / -1;
-        order: -1;
+    .modal-content {
+        max-width: 700px;
     }
 }
 
-/* Tablet (768px to 991px) */
-@media screen and (max-width: 991px) {
+/* Standard Desktop (1280px to 1365px) */
+@media screen and (min-width: 1280px) and (max-width: 1365px) {
     .game-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: var(--spacing-lg);
+    }
+    
+    .modal-content {
+        max-width: 600px;
+    }
+}
+
+/* Small Desktop (1024px to 1279px) */
+@media screen and (min-width: 1024px) and (max-width: 1279px) {
+    .game-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .modal-content {
+        max-width: 600px;
+    }
+    
+    .game-header h1 {
+        font-size: var(--font-size-2xl);
+    }
+    
+    .purchase-section,
+    .ledger-section,
+    .market-info-section,
+    .expenses-section,
+    .income-section {
+        padding: var(--spacing-md);
+    }
+}
+
+/* Tablet Landscape (900px to 1023px) - Fallback to 2-column layout */
+@media screen and (min-width: 900px) and (max-width: 1023px) {
+    .game-container {
+        max-width: 900px;
+        margin: 0 auto;
         grid-template-columns: 1fr 1fr;
         gap: var(--spacing-lg);
         padding: var(--spacing-md);
@@ -48,6 +142,18 @@
     .market-info-section {
         grid-column: 1 / -1;
         order: -1;
+    }
+    
+    .expenses-section {
+        grid-column: 1;
+    }
+    
+    .income-section {
+        grid-column: 2;
+    }
+    
+    .ledger-section {
+        grid-column: 1 / -1;
     }
     
     .game-header {
@@ -65,7 +171,9 @@
     
     .purchase-section,
     .ledger-section,
-    .market-info-section {
+    .market-info-section,
+    .expenses-section,
+    .income-section {
         padding: var(--spacing-md);
     }
     
@@ -94,12 +202,14 @@
     }
 }
 
-/* Mobile Large (576px to 767px) */
-@media screen and (max-width: 767px) {
+/* Tablet Portrait (600px to 899px) - Single column layout */
+@media screen and (min-width: 600px) and (max-width: 899px) {
     .game-container {
         grid-template-columns: 1fr;
         gap: var(--spacing-lg);
         padding: var(--spacing-sm);
+        max-width: 600px;
+        margin: 0 auto;
     }
     
     .market-info-section {
@@ -127,7 +237,9 @@
     
     .purchase-section,
     .ledger-section,
-    .market-info-section {
+    .market-info-section,
+    .expenses-section,
+    .income-section {
         padding: var(--spacing-md);
         margin-bottom: var(--spacing-md);
     }
@@ -210,11 +322,13 @@
     }
 }
 
-/* Mobile Small (320px to 575px) */
-@media screen and (max-width: 575px) {
+/* Mobile Large (480px to 599px) */
+@media screen and (min-width: 480px) and (max-width: 599px) {
     .game-container {
         padding: var(--spacing-xs);
         gap: var(--spacing-md);
+        max-width: 480px;
+        margin: 0 auto;
     }
     
     .game-header {
@@ -231,13 +345,15 @@
     
     .purchase-section,
     .ledger-section,
-    .market-info-section {
+    .market-info-section,
+    .expenses-section,
+    .income-section {
         padding: var(--spacing-sm);
     }
     
     .price-display h3,
     .calculations-section h3,
-    .profit-chart h3 {
+    .money-trend-chart h3 {
         font-size: var(--font-size-base);
     }
     
@@ -297,8 +413,15 @@
     }
 }
 
-/* Extra Small Mobile (320px and below) */
-@media screen and (max-width: 320px) {
+/* Mobile Small (320px to 479px) */
+@media screen and (max-width: 479px) {
+    .game-container {
+        padding: var(--spacing-xs);
+        gap: var(--spacing-sm);
+        max-width: 320px;
+        margin: 0 auto;
+    }
+    
     .game-header h1 {
         font-size: var(--font-size-base);
     }
@@ -309,7 +432,9 @@
     
     .purchase-section,
     .ledger-section,
-    .market-info-section {
+    .market-info-section,
+    .expenses-section,
+    .income-section {
         padding: var(--spacing-xs);
     }
     
@@ -331,7 +456,7 @@
     }
 }
 
-/* Landscape Orientation Adjustments */
+/* Landscape Orientation Adjustments for smaller screens */
 @media screen and (max-height: 600px) and (orientation: landscape) {
     .game-header {
         padding: var(--spacing-xs);
@@ -349,7 +474,9 @@
     
     .purchase-section,
     .ledger-section,
-    .market-info-section {
+    .market-info-section,
+    .expenses-section,
+    .income-section {
         padding: var(--spacing-sm);
     }
     
@@ -389,7 +516,9 @@
     
     .purchase-section,
     .ledger-section,
-    .market-info-section {
+    .market-info-section,
+    .expenses-section,
+    .income-section {
         break-inside: avoid;
         margin-bottom: 1rem;
         box-shadow: none;
@@ -413,7 +542,9 @@
     .game-container,
     .purchase-section,
     .ledger-section,
-    .market-info-section {
+    .market-info-section,
+    .expenses-section,
+    .income-section {
         transition: none;
     }
     

@@ -996,34 +996,154 @@ class SheepBusinessGame {
         const chartContainer = document.getElementById('profitChart');
         
         if (this.gameState.roundHistory.length === 0) {
-            chartContainer.innerHTML = '<p>Complete your first round to see profit trends</p>';
+            chartContainer.innerHTML = '<p>Complete your first round to see your money trend</p>';
             return;
         }
 
-        // Simple chart implementation - can be enhanced with a charting library
-        const profits = this.gameState.roundHistory.map(round => round.finalProfit);
-        const chartHTML = this.createSimpleChart(profits);
-        chartContainer.innerHTML = chartHTML;
+        // Create line chart showing money at end of each round
+        const moneyData = this.createMoneyLineChart();
+        chartContainer.innerHTML = moneyData;
     }
 
     /**
-     * Create a simple text-based chart
+     * Create a line chart showing money at end of each round
      */
-    createSimpleChart(profits) {
-        let chartHTML = '<div class="simple-chart">';
-        profits.forEach((profit, index) => {
-            const barHeight = Math.max(1, Math.abs(profit) / 10);
-            const barColor = profit >= 0 ? 'green' : 'red';
-            chartHTML += `
-                <div class="chart-bar">
-                    <div class="bar-label">Round ${index + 1}</div>
-                    <div class="bar" style="height: ${barHeight}px; background-color: ${barColor};"></div>
-                    <div class="bar-value">$${profit}</div>
-                </div>
-            `;
+    createMoneyLineChart() {
+        // Calculate money at end of each round
+        const moneyAtEndOfRounds = [];
+        let runningBalance = this.gameState.settings.startingBalance || 200;
+        
+        // Add starting balance as first point
+        moneyAtEndOfRounds.push({
+            round: 0,
+            season: 'start',
+            money: runningBalance
         });
-        chartHTML += '</div>';
-        return chartHTML;
+        
+        // Add money at end of each completed round
+        this.gameState.roundHistory.forEach((round, index) => {
+            runningBalance += round.finalProfit;
+            moneyAtEndOfRounds.push({
+                round: index + 1,
+                season: round.season,
+                money: runningBalance
+            });
+        });
+        
+        // Create SVG line chart
+        const chartWidth = 400;
+        const chartHeight = 200;
+        const padding = 40;
+        const plotWidth = chartWidth - 2 * padding;
+        const plotHeight = chartHeight - 2 * padding;
+        
+        // Find min and max values for scaling
+        const minMoney = Math.min(...moneyAtEndOfRounds.map(d => d.money));
+        const maxMoney = Math.max(...moneyAtEndOfRounds.map(d => d.money));
+        const moneyRange = maxMoney - minMoney;
+        
+        // Create SVG
+        let svg = `<svg width="${chartWidth}" height="${chartHeight}" class="money-line-chart">`;
+        
+        // Add chart background
+        svg += `<rect x="0" y="0" width="${chartWidth}" height="${chartHeight}" fill="#f8f9fa" stroke="none"/>`;
+        
+        // Add chart title
+        svg += `<text x="${chartWidth/2}" y="15" text-anchor="middle" class="chart-title">Money at End of Each Round</text>`;
+        
+        // Add Y-axis label
+        svg += `<text x="10" y="${chartHeight/2}" text-anchor="middle" transform="rotate(-90, 10, ${chartHeight/2})" class="axis-label">Money ($)</text>`;
+        
+        // Add X-axis label
+        svg += `<text x="${chartWidth/2}" y="${chartHeight-5}" text-anchor="middle" class="axis-label">Seasons</text>`;
+        
+        // Draw Y-axis grid lines and labels
+        const yTicks = 5;
+        for (let i = 0; i <= yTicks; i++) {
+            const y = padding + (i / yTicks) * plotHeight;
+            const moneyValue = maxMoney - (i / yTicks) * moneyRange;
+            const moneyLabel = Math.round(moneyValue);
+            
+            // Grid line
+            svg += `<line x1="${padding}" y1="${y}" x2="${chartWidth-padding}" y2="${y}" stroke="#e9ecef" stroke-width="1"/>`;
+            // Y-axis label
+            svg += `<text x="${padding-5}" y="${y+3}" text-anchor="end" class="tick-label">$${moneyLabel}</text>`;
+        }
+        
+        // Draw X-axis grid lines and labels
+        moneyAtEndOfRounds.forEach((dataPoint, index) => {
+            const x = padding + (index / (moneyAtEndOfRounds.length - 1)) * plotWidth;
+            
+            // Grid line
+            svg += `<line x1="${x}" y1="${padding}" x2="${x}" y2="${chartHeight-padding}" stroke="#e9ecef" stroke-width="1"/>`;
+            
+            // X-axis label (season or "Start")
+            const label = dataPoint.round === 0 ? 'Start' : dataPoint.season.charAt(0).toUpperCase() + dataPoint.season.slice(1);
+            svg += `<text x="${x}" y="${chartHeight-padding+15}" text-anchor="middle" class="tick-label">${label}</text>`;
+        });
+        
+        // Draw the line
+        let pathData = '';
+        moneyAtEndOfRounds.forEach((dataPoint, index) => {
+            const x = padding + (index / (moneyAtEndOfRounds.length - 1)) * plotWidth;
+            const y = padding + ((maxMoney - dataPoint.money) / moneyRange) * plotHeight;
+            
+            if (index === 0) {
+                pathData += `M ${x} ${y}`;
+            } else {
+                pathData += ` L ${x} ${y}`;
+            }
+        });
+        
+        svg += `<path d="${pathData}" stroke="#2c5aa0" stroke-width="3" fill="none"/>`;
+        
+        // Draw data points
+        moneyAtEndOfRounds.forEach((dataPoint, index) => {
+            const x = padding + (index / (moneyAtEndOfRounds.length - 1)) * plotWidth;
+            const y = padding + ((maxMoney - dataPoint.money) / moneyRange) * plotHeight;
+            
+            // Add shadow for depth
+            svg += `<circle cx="${x+1}" cy="${y+1}" r="4" fill="rgba(0,0,0,0.1)" stroke="none"/>`;
+            svg += `<circle cx="${x}" cy="${y}" r="4" fill="${this.getSeasonColor(dataPoint.season)}" stroke="white" stroke-width="2"/>`;
+            
+            // Add tooltip with money value
+            svg += `<title>Round ${dataPoint.round}: $${dataPoint.money}</title>`;
+        });
+        
+        svg += '</svg>';
+        
+        // Add legend
+        let legendHTML = '<div class="chart-legend">';
+        legendHTML += '<h4>Legend:</h4>';
+        legendHTML += '<div class="legend-items">';
+        
+        const seasons = ['start', 'spring', 'summer', 'autumn', 'winter'];
+        const seasonLabels = ['Start', 'Spring', 'Summer', 'Autumn', 'Winter'];
+        
+        seasons.forEach((season, index) => {
+            legendHTML += `<div class="legend-item">
+                <span class="legend-color" style="background-color: ${this.getSeasonColor(season)}"></span>
+                <span class="legend-label">${seasonLabels[index]}</span>
+            </div>`;
+        });
+        
+        legendHTML += '</div></div>';
+        
+        return svg + legendHTML;
+    }
+
+    /**
+     * Get color for season
+     */
+    getSeasonColor(season) {
+        const colors = {
+            'start': '#6c757d',
+            'spring': '#28a745',
+            'summer': '#ffc107',
+            'autumn': '#fd7e14',
+            'winter': '#17a2b8'
+        };
+        return colors[season] || '#6c757d';
     }
 
     /**
@@ -1490,7 +1610,11 @@ class SheepBusinessGame {
      * Update purchase section visibility based on whether purchases can be skipped
      */
     updatePurchaseSectionVisibility() {
-        const purchaseSection = document.querySelector('.purchase-section');
+        console.log('Update purchase section visibility called');
+        console.log('Can skip purchases:', this.gameState.canSkipPurchases);
+        console.log('Current round:', this.gameState.currentRound);
+        console.log('Flock size:', this.gameState.flockSize);
+        
         const skipPurchaseBtn = document.getElementById('skipPurchaseBtn');
         
         if (this.gameState.canSkipPurchases) {
@@ -1505,10 +1629,13 @@ class SheepBusinessGame {
                     this.handleSkipPurchase();
                 });
                 
-                // Insert the skip button after the skip option box
-                const skipOptionBox = document.querySelector('.skip-option-box');
-                if (skipOptionBox) {
-                    skipOptionBox.parentNode.insertBefore(skipButton, skipOptionBox.nextSibling);
+                // Insert the skip button after the sheep purchase section
+                const sheepPurchaseSection = document.querySelector('.sheep-purchase-section');
+                if (sheepPurchaseSection) {
+                    sheepPurchaseSection.appendChild(skipButton);
+                    console.log('Skip purchase button added to sheep purchase section');
+                } else {
+                    console.error('Sheep purchase section not found');
                 }
             }
         } else {
@@ -1523,6 +1650,10 @@ class SheepBusinessGame {
      * Handle skip purchase - use existing flock for calculations
      */
     handleSkipPurchase() {
+        console.log('Handle skip purchase called');
+        console.log('Current flock size:', this.gameState.flockSize);
+        console.log('Current housing capacity:', this.gameState.housingCapacity);
+        
         // Validate that player has sheep to work with
         if (this.gameState.flockSize === 0) {
             this.showFeedback('You need to have sheep to skip purchases. Please purchase some sheep first.', 'error');

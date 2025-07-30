@@ -1,0 +1,4 @@
+---
+alwaysApply: true
+---
+Always use the Windows syntax of PowerShell in your own opinion. If that doesn't work, try something else.
