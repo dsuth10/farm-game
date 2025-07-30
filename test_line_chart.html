@@ -47,9 +47,11 @@
                 });
             });
             
-            // Create SVG line chart
+            // Create SVG line chart with improved dark theme
             const chartWidth = 400;
             const chartHeight = 200;
+            const legendHeight = 30; // Space for legend below
+            const totalHeight = chartHeight + legendHeight;
             const padding = 40;
             const plotWidth = chartWidth - 2 * padding;
             const plotHeight = chartHeight - 2 * padding;
@@ -59,47 +61,44 @@
             const maxMoney = Math.max(...moneyAtEndOfRounds.map(d => d.money));
             const moneyRange = maxMoney - minMoney;
             
-            // Create SVG
-            let svg = `<svg width="${chartWidth}" height="${chartHeight}" class="money-line-chart">`;
+            // Create SVG with dark theme and space for legend
+            let svg = `<svg width="${chartWidth}" height="${totalHeight}" class="money-line-chart">`;
             
-            // Add chart background
-            svg += `<rect x="0" y="0" width="${chartWidth}" height="${chartHeight}" fill="#f8f9fa" stroke="none"/>`;
+            // Add dark chart background (only for the chart area)
+            svg += `<rect x="0" y="0" width="${chartWidth}" height="${chartHeight}" fill="#1a1a1a" stroke="none"/>`;
             
-            // Add chart title
-            svg += `<text x="${chartWidth/2}" y="15" text-anchor="middle" class="chart-title">Money at End of Each Round</text>`;
+            // Add chart title with light text
+            svg += `<text x="${chartWidth/2}" y="15" text-anchor="middle" class="chart-title" fill="#ffffff">Money Trend</text>`;
             
-            // Add Y-axis label
-            svg += `<text x="10" y="${chartHeight/2}" text-anchor="middle" transform="rotate(-90, 10, ${chartHeight/2})" class="axis-label">Money ($)</text>`;
+            // Add Y-axis label with light text
+            svg += `<text x="10" y="${chartHeight/2}" text-anchor="middle" transform="rotate(-90, 10, ${chartHeight/2})" class="axis-label" fill="#cccccc">Money ($)</text>`;
             
-            // Add X-axis label
-            svg += `<text x="${chartWidth/2}" y="${chartHeight-5}" text-anchor="middle" class="axis-label">Seasons</text>`;
-            
-            // Draw Y-axis grid lines and labels
+            // Draw Y-axis grid lines and labels with subtle styling
             const yTicks = 5;
             for (let i = 0; i <= yTicks; i++) {
                 const y = padding + (i / yTicks) * plotHeight;
                 const moneyValue = maxMoney - (i / yTicks) * moneyRange;
                 const moneyLabel = Math.round(moneyValue);
                 
-                // Grid line
-                svg += `<line x1="${padding}" y1="${y}" x2="${chartWidth-padding}" y2="${y}" stroke="#e9ecef" stroke-width="1"/>`;
-                // Y-axis label
-                svg += `<text x="${padding-5}" y="${y+3}" text-anchor="end" class="tick-label">$${moneyLabel}</text>`;
+                // Subtle grid line
+                svg += `<line x1="${padding}" y1="${y}" x2="${chartWidth-padding}" y2="${y}" stroke="#404040" stroke-width="0.5"/>`;
+                // Y-axis label with light color
+                svg += `<text x="${padding-5}" y="${y+3}" text-anchor="end" class="tick-label" fill="#cccccc">$${moneyLabel}</text>`;
             }
             
             // Draw X-axis grid lines and labels
             moneyAtEndOfRounds.forEach((dataPoint, index) => {
                 const x = padding + (index / (moneyAtEndOfRounds.length - 1)) * plotWidth;
                 
-                // Grid line
-                svg += `<line x1="${x}" y1="${padding}" x2="${x}" y2="${chartHeight-padding}" stroke="#e9ecef" stroke-width="1"/>`;
+                // Subtle grid line
+                svg += `<line x1="${x}" y1="${padding}" x2="${x}" y2="${chartHeight-padding}" stroke="#404040" stroke-width="0.5"/>`;
                 
-                // X-axis label (season or "Start")
+                // X-axis label (season or "Start") with light color
                 const label = dataPoint.round === 0 ? 'Start' : dataPoint.season.charAt(0).toUpperCase() + dataPoint.season.slice(1);
-                svg += `<text x="${x}" y="${chartHeight-padding+15}" text-anchor="middle" class="tick-label">${label}</text>`;
+                svg += `<text x="${x}" y="${chartHeight-padding+15}" text-anchor="middle" class="tick-label" fill="#cccccc">${label}</text>`;
             });
             
-            // Draw the line
+            // Draw the line with light color and glow effect
             let pathData = '';
             moneyAtEndOfRounds.forEach((dataPoint, index) => {
                 const x = padding + (index / (moneyAtEndOfRounds.length - 1)) * plotWidth;
@@ -112,41 +111,52 @@
                 }
             });
             
-            svg += `<path d="${pathData}" stroke="#2c5aa0" stroke-width="3" fill="none"/>`;
+            // Add glow effect and light line color
+            svg += `<defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                    <feMerge> 
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>`;
             
-            // Draw data points
+            svg += `<path d="${pathData}" stroke="#4a90e2" stroke-width="3" fill="none" filter="url(#glow)"/>`;
+            
+            // Draw data points with improved styling
             moneyAtEndOfRounds.forEach((dataPoint, index) => {
                 const x = padding + (index / (moneyAtEndOfRounds.length - 1)) * plotWidth;
                 const y = padding + ((maxMoney - dataPoint.money) / moneyRange) * plotHeight;
                 
-                // Add shadow for depth
-                svg += `<circle cx="${x+1}" cy="${y+1}" r="4" fill="rgba(0,0,0,0.1)" stroke="none"/>`;
-                svg += `<circle cx="${x}" cy="${y}" r="4" fill="${getSeasonColor(dataPoint.season)}" stroke="white" stroke-width="2"/>`;
+                // Add subtle glow for data points
+                svg += `<circle cx="${x}" cy="${y}" r="5" fill="rgba(74, 144, 226, 0.3)" stroke="none"/>`;
+                svg += `<circle cx="${x}" cy="${y}" r="4" fill="${getSeasonColor(dataPoint.season)}" stroke="#ffffff" stroke-width="2"/>`;
                 
                 // Add tooltip with money value
                 svg += `<title>Round ${dataPoint.round}: $${dataPoint.money}</title>`;
             });
             
-            svg += '</svg>';
-            
-            // Add legend
-            let legendHTML = '<div class="chart-legend">';
-            legendHTML += '<h4>Legend:</h4>';
-            legendHTML += '<div class="legend-items">';
-            
+            // Add legend below the chart as SVG elements
             const seasons = ['start', 'spring', 'summer', 'autumn', 'winter'];
             const seasonLabels = ['Start', 'Spring', 'Summer', 'Autumn', 'Winter'];
+            const legendY = chartHeight + 20; // Position below chart
+            const legendStartX = 50;
+            const legendSpacing = 70;
             
             seasons.forEach((season, index) => {
-                legendHTML += `<div class="legend-item">
-                    <span class="legend-color" style="background-color: ${getSeasonColor(season)}"></span>
-                    <span class="legend-label">${seasonLabels[index]}</span>
-                </div>`;
+                const legendX = legendStartX + (index * legendSpacing);
+                
+                // Legend color circle
+                svg += `<circle cx="${legendX}" cy="${legendY}" r="4" fill="${getSeasonColor(season)}" stroke="#ffffff" stroke-width="1"/>`;
+                
+                // Legend label
+                svg += `<text x="${legendX + 8}" y="${legendY + 3}" class="legend-label-compact" fill="#cccccc" font-size="12">${seasonLabels[index]}</text>`;
             });
             
-            legendHTML += '</div></div>';
+            svg += '</svg>';
             
-            return svg + legendHTML;
+            return svg;
         }
 
         function getSeasonColor(season) {

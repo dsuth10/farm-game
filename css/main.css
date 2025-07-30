@@ -741,7 +741,7 @@ h3 { font-size: var(--font-size-xl); }
 
 /* Chart Container */
 .chart-container {
-    height: 200px;
+    height: 280px; /* Increased to accommodate legend below */
     background: var(--background-secondary);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-md);
@@ -750,6 +750,7 @@ h3 { font-size: var(--font-size-xl); }
     justify-content: center;
     color: var(--text-secondary);
     padding: var(--spacing-md);
+    position: relative;
 }
 
 /* Line Chart Styles */
@@ -822,6 +823,11 @@ h3 { font-size: var(--font-size-xl); }
 
 .legend-label {
     color: var(--text-secondary);
+}
+
+.legend-label-compact {
+    font-size: 12px;
+    fill: #cccccc;
 }
 
 /* Market Conditions */
