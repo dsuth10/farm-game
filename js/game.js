@@ -438,25 +438,23 @@ class SheepBusinessGame {
         switch (calculationType) {
             case 'feed':
                 example = `Feed Cost = Number of Sheep × Feed Cost per Sheep<br>
-                          Feed Cost = ${sheepCount} × $${prices.feedCost} = $${sheepCount * prices.feedCost}`;
+                          Feed Cost = ${sheepCount} × $${prices.feedCost}`;
                 break;
             case 'wool':
                 example = `Wool Income = Number of Sheep × Wool Price per Sheep<br>
-                          Wool Income = ${sheepCount} × $${prices.woolPrice} = $${sheepCount * prices.woolPrice}`;
+                          Wool Income = ${sheepCount} × $${prices.woolPrice}`;
                 break;
             case 'profit':
                 const feedCost = sheepCount * prices.feedCost;
                 const woolIncome = sheepCount * prices.woolPrice;
                 const purchaseCost = sheepPurchased * prices.sheepPurchasePrice;
                 const housingCost = housingPurchased * prices.housingCost;
-                const totalCosts = feedCost + purchaseCost + housingCost;
                 
                 let purchaseText = purchaseCost > 0 ? ` + Purchase Cost ($${purchaseCost})` : '';
                 let housingText = housingCost > 0 ? ` + Housing Cost ($${housingCost})` : '';
                 
                 example = `Profit = Wool Income - (Feed Cost${purchaseText}${housingText})<br>
-                          Profit = $${woolIncome} - ($${feedCost}${purchaseText}${housingText})<br>
-                          Profit = $${woolIncome} - $${totalCosts} = $${woolIncome - totalCosts}`;
+                          Profit = $${woolIncome} - ($${feedCost}${purchaseText}${housingText})`;
                 break;
         }
 
