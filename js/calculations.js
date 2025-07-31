@@ -4,10 +4,180 @@
  * Version 1.0
  */
 
+// Math Tips System for providing contextual guidance
+class MathTips {
+    constructor() {
+        this.lastTipIndex = -1; // Track last tip shown to prevent repetition
+        this.tipCategories = {
+            multiplication: [
+                "Remember to multiply the number of sheep by the cost per sheep",
+                "For total cost, multiply quantity by unit price",
+                "Think: How many sheep × How much per sheep = Total cost",
+                "Don't forget to multiply! Each sheep costs money",
+                "Use multiplication to find total costs: quantity × price"
+            ],
+            addition: [
+                "Add all costs together before subtracting from income",
+                "First add up all your expenses, then subtract from income",
+                "Remember: Total costs = housing + feed + purchase costs",
+                "Add up all the money you spent before calculating profit",
+                "Sum all your expenses first, then subtract from revenue"
+            ],
+            profit: [
+                "Profit equals income minus all expenses",
+                "Profit = Wool Income - (Feed Cost + Purchase Cost + Housing Cost)",
+                "Remember: Income - Expenses = Profit",
+                "Subtract all your costs from your income to find profit",
+                "Profit is what's left after paying all your bills"
+            ],
+            placeValue: [
+                "Check your decimal places - make sure numbers line up correctly",
+                "Double-check your place values when adding or subtracting",
+                "Make sure you're not mixing dollars and cents incorrectly",
+                "Count your decimal places carefully",
+                "Verify that your numbers are properly aligned"
+            ],
+            general: [
+                "Take your time and double-check your calculations",
+                "Write down each step to avoid mistakes",
+                "Remember: slow and steady wins the race!",
+                "Don't rush - accuracy is more important than speed",
+                "Check your work before submitting your answer"
+            ]
+        };
+    }
+
+    /**
+     * Get a tip based on calculation type and error pattern
+     * @param {string} calculationType - Type of calculation (feed, wool, profit)
+     * @param {string} errorType - Type of error detected
+     * @param {number} studentAnswer - Student's answer
+     * @param {number} correctAnswer - Correct answer
+     * @returns {string} Appropriate tip
+     */
+    getTip(calculationType, errorType, studentAnswer, correctAnswer) {
+        let category = this.determineTipCategory(calculationType, errorType, studentAnswer, correctAnswer);
+        return this.selectTip(category);
+    }
+
+    /**
+     * Determine which category of tip is most appropriate
+     * @param {string} calculationType - Type of calculation
+     * @param {string} errorType - Type of error
+     * @param {number} studentAnswer - Student's answer
+     * @param {number} correctAnswer - Correct answer
+     * @returns {string} Tip category
+     */
+    determineTipCategory(calculationType, errorType, studentAnswer, correctAnswer) {
+        // Analyze the error pattern
+        const errorPattern = this.analyzeErrorPattern(studentAnswer, correctAnswer, calculationType);
+        
+        switch (errorPattern) {
+            case 'multiplication_error':
+                return 'multiplication';
+            case 'addition_error':
+                return 'addition';
+            case 'place_value_error':
+                return 'placeValue';
+            case 'profit_error':
+                return 'profit';
+            default:
+                return 'general';
+        }
+    }
+
+    /**
+     * Analyze the error pattern to determine what went wrong
+     * @param {number} studentAnswer - Student's answer
+     * @param {number} correctAnswer - Correct answer
+     * @param {string} calculationType - Type of calculation
+     * @returns {string} Error pattern type
+     */
+    analyzeErrorPattern(studentAnswer, correctAnswer, calculationType) {
+        const difference = Math.abs(studentAnswer - correctAnswer);
+        const ratio = studentAnswer / correctAnswer;
+
+        // Check for common multiplication errors
+        if (calculationType === 'feed' || calculationType === 'wool') {
+            // If student used unit price instead of total
+            if (Math.abs(ratio - 1) < 0.1 && difference > 0) {
+                return 'multiplication_error';
+            }
+            // If student forgot to multiply
+            if (ratio < 0.5 && studentAnswer > 0) {
+                return 'multiplication_error';
+            }
+        }
+
+        // Check for profit calculation errors
+        if (calculationType === 'profit') {
+            // If student added instead of subtracted
+            if (studentAnswer > correctAnswer && difference > correctAnswer * 0.5) {
+                return 'profit_error';
+            }
+            // If student forgot to include all costs
+            if (studentAnswer > correctAnswer && difference < correctAnswer * 0.3) {
+                return 'addition_error';
+            }
+        }
+
+        // Check for place value errors
+        if (difference > 0 && (ratio > 10 || ratio < 0.1)) {
+            return 'place_value_error';
+        }
+
+        // Default to general error
+        return 'general_error';
+    }
+
+    /**
+     * Select a tip from the appropriate category, avoiding repetition
+     * @param {string} category - Tip category
+     * @returns {string} Selected tip
+     */
+    selectTip(category) {
+        const tips = this.tipCategories[category] || this.tipCategories.general;
+        
+        // Find a different tip than the last one shown
+        let tipIndex;
+        do {
+            tipIndex = Math.floor(Math.random() * tips.length);
+        } while (tipIndex === this.lastTipIndex && tips.length > 1);
+        
+        this.lastTipIndex = tipIndex;
+        return tips[tipIndex];
+    }
+
+    /**
+     * Get a proactive tip for a specific calculation type
+     * @param {string} calculationType - Type of calculation
+     * @returns {string} Proactive tip
+     */
+    getProactiveTip(calculationType) {
+        switch (calculationType) {
+            case 'feed':
+            case 'wool':
+                return this.selectTip('multiplication');
+            case 'profit':
+                return this.selectTip('profit');
+            default:
+                return this.selectTip('general');
+        }
+    }
+
+    /**
+     * Reset the tip tracking (called when starting a new round)
+     */
+    resetTipTracking() {
+        this.lastTipIndex = -1;
+    }
+}
+
 class GameCalculations {
     constructor() {
         this.maxAttempts = 5;
         this.penaltyAmount = 10;
+        this.mathTips = new MathTips(); // Initialize math tips system
     }
 
 

@@ -674,11 +674,289 @@
             "testStrategy": "Test new UI elements with screen readers and keyboard navigation; verify state isolation between rounds and accessibility compliance."
           }
         ]
+      },
+      {
+        "id": 22,
+        "title": "Implement Basic Math Tips System for Sheep Business Game",
+        "description": "Create a contextual math tips system that provides helpful mathematical guidance to students during gameplay, with categorized tips for different calculation types and integration with the existing error handling system.",
+        "details": "Implement the Phase 1 Basic Math Tips System with the following components:\n\n1. Create a MathTips class in calculations.js:\n   - Implement categorized tip collections for:\n     * Multiplication tips (e.g., \"Remember to multiply the number of sheep by the cost per sheep\")\n     * Addition tips (e.g., \"Add all costs together before subtracting from income\")\n     * Profit calculation tips (e.g., \"Profit equals income minus all expenses\")\n   - Create methods to retrieve appropriate tips based on context\n   - Implement tip selection logic that varies tips to prevent repetition\n\n2. Integrate with existing error handling:\n   - Modify the validation system in validation.js to call the MathTips system when errors are detected\n   - Add context awareness to determine which category of tip is most relevant\n   - Pass the specific error type and user input to the tip system for targeted guidance\n\n3. Implement smart tip triggers:\n   - Create pattern recognition for common mistakes:\n     * Forgetting to multiply (e.g., using the price per sheep instead of total)\n     * Place value errors (e.g., misaligning decimal points)\n     * Addition/subtraction errors (e.g., adding costs instead of subtracting)\n   - Analyze student input to identify the likely error type\n   - Generate appropriate tips based on the detected error pattern\n\n4. Add teacher settings integration:\n   - Extend the existing teacher settings panel with math tip controls\n   - Implement toggle for enabling/disabling the math tips system\n   - Add frequency control with options:\n     * Always (show tips proactively)\n     * On Error (show tips only after incorrect answers)\n     * Never (disable tips completely)\n   - Save settings in the game state\n\n5. Create visual feedback system:\n   - Utilize the existing feedback banner for displaying tips\n   - Implement appropriate styling for math tips (distinct from error messages)\n   - Add subtle animations to draw attention to tips\n   - Ensure tips are displayed clearly and legibly\n   - Make tips dismissible by the student\n\nThe implementation should maintain consistency with the existing vanilla JavaScript architecture and follow established code patterns. No external libraries should be used.",
+        "testStrategy": "1. Unit Testing:\n   - Test the MathTips class methods with various inputs to verify correct tip selection\n   - Verify that tip categories contain appropriate guidance for each calculation type\n   - Test pattern recognition logic with sample incorrect inputs\n   - Ensure no duplicate tips are shown consecutively\n\n2. Integration Testing:\n   - Verify math tips are correctly triggered when validation errors occur\n   - Test that the appropriate tip category is selected based on the context\n   - Confirm tips are displayed in the feedback banner with correct styling\n   - Test that tips change appropriately based on the specific error pattern\n\n3. Teacher Settings Testing:\n   - Verify enabling/disabling math tips works correctly\n   - Test each frequency setting (Always, On Error, Never)\n   - Confirm settings are saved and persist between sessions\n   - Test that settings changes take immediate effect\n\n4. User Interface Testing:\n   - Verify tips are clearly visible and properly formatted\n   - Test tip display on various screen sizes\n   - Confirm animations work as expected\n   - Test dismissal functionality\n\n5. Accessibility Testing:\n   - Verify tips are accessible to screen readers\n   - Test keyboard navigation for dismissing tips\n   - Ensure color contrast meets WCAG standards\n   - Confirm tips don't interfere with other accessibility features\n\n6. Edge Case Testing:\n   - Test behavior when multiple errors occur simultaneously\n   - Verify system handles rapid consecutive errors appropriately\n   - Test with extreme input values",
+        "status": "done",
+        "dependencies": [
+          6,
+          7,
+          13,
+          16
+        ],
+        "priority": "high",
+        "subtasks": []
+      },
+      {
+        "id": 23,
+        "title": "Implement Visual Aids System for Mathematical Concepts",
+        "description": "Create an interactive visual aids system with multiplication grid, number line, and money counter visualizers to help students understand mathematical concepts, integrated with the existing calculation validation system.",
+        "details": "Implement the Visual Aids System with the following components:\n\n1. Multiplication Grid Visualizer:\n   - Create a modal component that displays a visual grid representation of multiplication problems\n   - Implement a dynamic grid generator that creates rows and columns based on the multiplication factors\n   - For example, 5×8 would show 5 rows of 8 dots or squares\n   - Add animation for sequential highlighting of rows/columns to demonstrate the concept\n   - Include clear labeling of factors and product\n\n2. Number Line Visualizer:\n   - Develop an interactive number line component for addition/subtraction visualization\n   - Implement animated highlighting/movement along the number line to show operations\n   - Include markers for starting value, operation, and result\n   - Support both positive and negative numbers\n   - Add zoom functionality for larger numbers\n\n3. Money Counter Visualizer:\n   - Create a visual representation of money amounts using colored \"bills\" and \"coins\"\n   - Implement different denominations with appropriate styling\n   - Support counting operations with animated grouping/ungrouping\n   - Include totaling functionality that updates as items are added/removed\n\n4. Integration with Calculation Validation:\n   - Modify the existing validation system in calculations.js to detect when students are struggling\n   - Add logic to offer visual aids after 1-2 incorrect attempts\n   - Implement a \"Show me visually\" button that appears after an incorrect attempt\n   - Create helper functions to determine which visualizer is appropriate for each calculation type\n\n5. Animation and Styling:\n   - Implement CSS animations for smooth transitions between states\n   - Create engaging visual effects for highlighting, counting, and results\n   - Ensure consistent styling with the existing game interface\n   - Optimize animations for performance across devices\n\n6. Teacher Settings Integration:\n   - Add options to the teacher settings panel to enable/disable visual aids\n   - Implement controls for visual aid frequency (always, after first mistake, after second mistake, never)\n   - Add settings for animation speed and complexity level\n   - Include option to set default visualizer type for each calculation\n\n7. Accessibility Considerations:\n   - Ensure all visualizers are keyboard navigable\n   - Add appropriate ARIA attributes for screen reader support\n   - Include text descriptions of visual operations\n   - Support high contrast mode and other accessibility features from Task 13\n\n8. Code Organization:\n   - Create a new file js/visualizers.js for the visual aid components\n   - Implement a VisualizerManager class to handle selection and display of appropriate visualizers\n   - Use the factory pattern to instantiate the correct visualizer type based on the calculation",
+        "testStrategy": "1. Unit Testing:\n   - Test each visualizer component in isolation with various inputs\n   - Verify the multiplication grid correctly displays the proper number of rows and columns\n   - Test the number line with different starting points and operations\n   - Verify the money counter correctly represents different monetary values\n   - Test the integration with the calculation validation system\n\n2. Integration Testing:\n   - Verify visual aids appear at the appropriate times based on student performance\n   - Test that the \"Show me visually\" button appears after incorrect attempts\n   - Confirm that the correct visualizer is selected based on calculation type\n   - Test integration with teacher settings to ensure controls work as expected\n\n3. Accessibility Testing:\n   - Test keyboard navigation through all visualizer components\n   - Verify screen reader compatibility using NVDA and VoiceOver\n   - Test with high contrast mode enabled\n   - Verify all animations can be disabled for users with vestibular disorders\n\n4. Cross-browser Testing:\n   - Test visualizers in Chrome, Firefox, Safari, and Edge\n   - Verify animations work consistently across browsers\n   - Test on mobile devices to ensure touch interactions work properly\n\n5. Performance Testing:\n   - Measure rendering performance with complex visualizations\n   - Test with multiple visualizers active simultaneously\n   - Verify smooth animations even on lower-end devices\n\n6. User Testing:\n   - Conduct sessions with students to verify the visualizers improve understanding\n   - Gather feedback on clarity and helpfulness of visual representations\n   - Test with teachers to ensure settings provide adequate control",
+        "status": "pending",
+        "dependencies": [
+          6,
+          7,
+          13,
+          16,
+          22
+        ],
+        "priority": "medium",
+        "subtasks": []
+      },
+      {
+        "id": 24,
+        "title": "Implement Smart Integration for Math Tips and Visual Aids",
+        "description": "Create an intelligent system that adapts to individual student needs by analyzing error patterns, adjusting tip frequency, customizing learning paths, and integrating with existing analytics while maintaining the vanilla JavaScript architecture.",
+        "details": "Implement the Phase 3 Smart Integration system with the following components:\n\n1. Advanced Mistake Analysis:\n   - Extend the existing validation system to identify specific error patterns:\n     * Place value errors (e.g., 12 × 10 = 120 vs 12 × 10 = 102)\n     * Sign errors (e.g., adding instead of subtracting)\n     * Calculation order mistakes (e.g., applying operations in incorrect sequence)\n   - Create a PatternRecognizer class in calculations.js that:\n     * Analyzes input against expected results\n     * Categorizes errors using pattern matching algorithms\n     * Stores error history per student\n     * Generates targeted feedback based on error type\n\n2. Adaptive Tip Frequency System:\n   - Implement a student performance tracker that:\n     * Monitors calculation accuracy over time\n     * Calculates a \"proficiency score\" (0-100) for each math concept\n     * Adjusts tip frequency inversely to proficiency (more tips for lower scores)\n   - Create adaptive display logic:\n     * High proficiency (>80%): Show tips only on request or after errors\n     * Medium proficiency (40-80%): Show occasional tips at key decision points\n     * Low proficiency (<40%): Proactively display tips before calculations\n\n3. Learning Path Customization:\n   - Implement specialized game modes focusing on specific skills:\n     * Multiplication Focus: Emphasizes sheep quantity × price calculations\n     * Addition Focus: Highlights combining different cost categories\n     * Profit Calculation Focus: Centers on income/expense relationships\n   - Create a mode selector in the UI with:\n     * Visual indicators of skill focus\n     * Brief descriptions of learning objectives\n     * Teacher recommendations based on student performance\n\n4. Student Progress Tracking:\n   - Implement a comprehensive tracking system for:\n     * Tip usage (which tips viewed, how often, time spent)\n     * Visual aid utilization (which visualizers used, frequency)\n     * Correlation between aid usage and performance improvement\n   - Create a data structure to store this information:\n```javascript\nconst studentProgressData = {\n  tipUsage: {\n    viewed: [], // Array of tip IDs viewed\n    timeSpent: {}, // Object mapping tip IDs to time spent\n    helpfulness: {} // Student ratings of tip usefulness\n  },\n  visualAidUsage: {\n    viewed: [], // Array of visual aid IDs used\n    timeSpent: {}, // Time spent with each visualizer\n    helpfulness: {} // Student ratings of visualizer usefulness\n  },\n  performanceMetrics: {\n    accuracyTrend: [], // Array of accuracy percentages over time\n    conceptMastery: {} // Object mapping concepts to mastery levels\n  }\n};\n```\n\n5. Analytics Integration:\n   - Extend the existing analytics system to include:\n     * Tip effectiveness metrics (correlation with correct answers)\n     * Visual aid impact on learning outcomes\n     * Adaptive system performance data\n   - Modify the PDF report generation to include:\n     * Section on learning support utilization\n     * Effectiveness of different support types\n     * Recommendations for future learning focus\n\n6. Advanced Visual Aid Preferences:\n   - Implement a learning style preference system:\n     * Visual: Enhanced grid-based visualizers with color coding\n     * Auditory: Text-to-speech explanations of mathematical concepts\n     * Kinesthetic: Interactive drag-and-drop calculation components\n   - Create a preference selector in the UI\n   - Store preferences in localStorage for persistence\n   - Apply preferred style across all game interactions\n\n7. Integration with Existing Architecture:\n   - Maintain vanilla JavaScript implementation without frameworks\n   - Use the existing event system for communication between components\n   - Extend the current MathTips and VisualAids classes rather than replacing them\n   - Implement new functionality as modular components that can be disabled if needed",
+        "testStrategy": "1. Advanced Mistake Analysis Testing:\n   - Create a test suite with common mathematical errors for each category\n   - Verify the system correctly identifies place value errors, sign errors, and calculation order mistakes\n   - Test that appropriate targeted feedback is generated for each error type\n   - Verify error patterns are correctly stored in student history\n\n2. Adaptive Tip Frequency Testing:\n   - Create test scenarios with varying student proficiency levels\n   - Verify tip frequency increases appropriately for struggling students\n   - Confirm tips decrease for students demonstrating mastery\n   - Test the transition between proficiency levels to ensure smooth adaptation\n\n3. Learning Path Customization Testing:\n   - Test each specialized game mode to verify it emphasizes the correct skills\n   - Verify the mode selector UI displays appropriate information\n   - Test that teacher recommendations appear based on simulated performance data\n   - Ensure game mechanics function correctly in each specialized mode\n\n4. Student Progress Tracking Testing:\n   - Verify all tip and visual aid interactions are correctly recorded\n   - Test the data structure with various usage patterns\n   - Confirm time tracking accuracy for tip and visualizer usage\n   - Test persistence of tracking data between sessions\n\n5. Analytics Integration Testing:\n   - Verify new metrics are correctly calculated and stored\n   - Test PDF report generation with the new learning support sections\n   - Validate that effectiveness correlations are mathematically sound\n   - Test the recommendations engine with various performance scenarios\n\n6. Visual Aid Preferences Testing:\n   - Test each learning style mode (visual, auditory, kinesthetic)\n   - Verify preference selection is saved correctly to localStorage\n   - Confirm that the selected preference applies consistently across the game\n   - Test accessibility of each mode with screen readers and keyboard navigation\n\n7. Integration Testing:\n   - Perform end-to-end testing of the complete system\n   - Verify performance impact is minimal (page load under 2 seconds)\n   - Test backward compatibility with existing game features\n   - Conduct user testing with students of varying mathematical abilities\n   - Verify the system works across supported browsers (Chrome, Firefox, Safari, Edge)",
+        "status": "pending",
+        "dependencies": [
+          6,
+          7,
+          13,
+          16,
+          22,
+          23
+        ],
+        "priority": "low",
+        "subtasks": []
+      },
+      {
+        "id": 25,
+        "title": "Move Feed Calculation from Financial Ledger to Expenses Section",
+        "description": "Relocate the feed calculation component from Column 4 (Financial Ledger) to Column 2 (Expenses), positioning it above the sheep and housing purchase sections while maintaining all existing functionality and styling.",
+        "details": "Implement the relocation of the feed calculation component with the following steps:\n\n1. HTML Modifications:\n   - Identify the feed calculation component in the Financial Ledger section (Column 4)\n   - Move the entire component (input field, label, check button, and guide) to the Expenses section (Column 2)\n   - Position the component above the existing sheep and housing purchase sections\n   - Ensure proper HTML structure and semantic markup is maintained\n   - Update any section-specific CSS classes or IDs as needed\n\n2. CSS Adjustments:\n   - Update any column-specific styling references for the feed calculation component\n   - Ensure consistent styling between the component's new location and surrounding elements\n   - Verify responsive design behavior in the new location\n   - Maintain proper spacing and alignment within the Expenses column\n\n3. JavaScript Updates:\n   - Update any DOM selectors that reference the feed calculation component by its previous location\n   - Verify event listeners are properly reattached after relocation\n   - Ensure the calculation guide toggle functionality works in the new location\n   - Update any column-specific logic that might reference the feed calculation\n\n4. Validation and Calculation Logic:\n   - Verify the feed calculation validation still functions correctly in the new location\n   - Ensure the calculation engine still processes feed calculations properly\n   - Maintain the connection between the feed calculation and other dependent calculations (like profit)\n   - Preserve any error handling and feedback mechanisms\n\n5. Documentation:\n   - Update any relevant documentation to reflect the new location of the feed calculation\n   - Add comments in the code to explain the relocation",
+        "testStrategy": "1. UI Verification:\n   - Verify the feed calculation component appears correctly in the Expenses section (Column 2)\n   - Confirm it is positioned above the sheep and housing purchase sections\n   - Check that all elements (input field, label, check button, guide) are present and properly aligned\n   - Verify the styling is consistent with other components in the Expenses section\n\n2. Functionality Testing:\n   - Test the feed calculation input field accepts valid numerical values\n   - Verify the check button validates the calculation correctly\n   - Test that the calculation guide can be toggled open/closed\n   - Confirm error messages display properly when incorrect values are entered\n   - Verify the worked example appears after appropriate number of incorrect attempts\n\n3. Integration Testing:\n   - Test that the feed calculation still properly factors into the profit calculation\n   - Verify round progression works correctly with the relocated feed calculation\n   - Test that analytics still track feed calculation attempts correctly\n   - Confirm the PDF report generation includes the feed calculation data\n\n4. Responsive Design Testing:\n   - Test the new layout on various screen sizes (mobile, tablet, desktop)\n   - Verify the component displays correctly at all breakpoints\n   - Confirm the layout adjusts appropriately when resizing the browser\n\n5. Accessibility Testing:\n   - Verify keyboard navigation flows logically with the new component position\n   - Test screen reader announcements for the relocated component\n   - Confirm focus states are visible and working correctly",
+        "status": "done",
+        "dependencies": [
+          3,
+          6,
+          7,
+          16
+        ],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Identify and Move Feed Calculation Component in HTML",
+            "description": "Locate the feed calculation component within the Financial Ledger section (Column 4) and move the entire component—including input field, label, check button, and guide—to the Expenses section (Column 2), positioning it above the sheep and housing purchase sections. Ensure semantic HTML structure is preserved and update any section-specific classes or IDs as needed.",
+            "dependencies": [],
+            "details": "Use DOM inspection and editing tools to accurately identify all elements and wrappers belonging to the feed calculation component. Move these elements in the HTML markup or via JavaScript DOM manipulation, ensuring the new placement matches the specified location and maintains accessibility and semantic standards.",
+            "status": "done",
+            "testStrategy": "Verify the feed calculation component appears in the correct position in Column 2, above the sheep and housing purchase sections, with all sub-elements present and properly structured."
+          },
+          {
+            "id": 2,
+            "title": "Update CSS for New Component Location",
+            "description": "Adjust CSS to ensure the feed calculation component inherits the correct styling for its new location in the Expenses section, including spacing, alignment, and responsive behavior. Update or add any necessary selectors to maintain visual consistency.",
+            "dependencies": [
+              "25.1"
+            ],
+            "details": "Review and modify CSS rules that target the feed calculation component, especially those that reference its previous column or section. Ensure the component visually integrates with surrounding elements and behaves correctly across screen sizes.",
+            "status": "done",
+            "testStrategy": "Check that the component's appearance matches the design in its new location, with correct spacing and alignment. Test responsiveness by resizing the browser window and verifying layout integrity."
+          },
+          {
+            "id": 3,
+            "title": "Refactor JavaScript for Component Relocation",
+            "description": "Update JavaScript code to reference the feed calculation component in its new location. Ensure all event listeners, DOM queries, and logic related to the component function correctly after the move.",
+            "dependencies": [
+              "25.1"
+            ],
+            "details": "Search for and update any DOM selectors, event bindings, or logic that assume the component's previous location. Reattach event listeners if necessary and verify that all interactive features, such as the calculation guide toggle, work as intended.",
+            "status": "done",
+            "testStrategy": "Test all interactive features of the feed calculation component, including input validation, button actions, and guide toggling, to confirm they function as before."
+          },
+          {
+            "id": 4,
+            "title": "Validate Calculation Logic and Integration",
+            "description": "Ensure the feed calculation logic, validation, and integration with other calculations (such as profit) remain fully functional after relocation. Preserve all error handling and feedback mechanisms.",
+            "dependencies": [
+              "25.3"
+            ],
+            "details": "Run through all calculation scenarios, including edge cases, to confirm that the feed calculation produces correct results and that dependent calculations update accordingly. Check that error messages and validation feedback are displayed as expected.",
+            "status": "done",
+            "testStrategy": "Perform manual and automated tests to verify calculation accuracy, validation behavior, and integration with related components. Confirm that no regressions have occurred due to the move."
+          },
+          {
+            "id": 5,
+            "title": "Update Documentation and Code Comments",
+            "description": "Revise any relevant documentation and in-code comments to reflect the new location of the feed calculation component and any changes made during the relocation process.",
+            "dependencies": [
+              "25.4"
+            ],
+            "details": "Update user-facing and developer documentation to describe the feed calculation's new placement. Add or revise code comments to clarify the rationale and implementation details of the relocation.",
+            "status": "done",
+            "testStrategy": "Review documentation and code comments for accuracy and completeness, ensuring they match the current implementation."
+          }
+        ]
+      },
+      {
+        "id": 26,
+        "title": "Replace Money Trend Graph with Comprehensive Transaction Record",
+        "description": "Remove the Money Trend Graph and implement a comprehensive purchase and sales record that displays all transactions for the current round, helping players calculate their profit or loss.",
+        "details": "Implement the replacement of the Money Trend Graph with a comprehensive transaction record through the following steps:\n\n1. Remove the existing Money Trend Graph:\n   - Identify and remove the Money Trend Graph component from the UI\n   - Remove any associated JavaScript code that generates and updates the graph\n   - Clean up any CSS styles specific to the graph component\n\n2. Design and implement the new Transaction Record component:\n   - Create a structured table layout with clear headers for transaction types, quantities, and costs\n   - Implement sections for:\n     * Sheep purchases (quantity, price per sheep, total cost)\n     * Housing purchases (units purchased, price per unit, total cost)\n     * Feed costs (calculated for the flock)\n     * Wool income (quantity sold, price per unit, total income)\n   - Add a prominent \"Current Round Profit/Loss\" calculation at the bottom\n   - Use color coding to distinguish between expenses (red) and income (green)\n\n3. Implement data binding:\n   - Connect the transaction record to the existing game state\n   - Update the display whenever a purchase is made or a calculation is completed\n   - Ensure the component reflects the `sheepPurchasedThisRound` and `housingUnitsPurchasedThisRound` data\n   - Calculate and display running totals as transactions occur\n\n4. Style the component:\n   - Use consistent styling with the rest of the game interface\n   - Ensure the component is visually prominent in the same location as the previous graph\n   - Implement responsive design for different screen sizes\n   - Apply accessibility standards (high contrast, screen reader support)\n\n5. Add interactive elements:\n   - Implement collapsible sections for transaction categories if needed\n   - Add tooltips explaining each transaction type\n   - Include a \"Reset View\" button to clear highlighting or filters\n\n6. Update the round progression logic:\n   - Ensure the transaction record resets properly at the beginning of each new round\n   - Archive previous round data for potential review",
+        "testStrategy": "1. UI Verification:\n   - Verify the Money Trend Graph has been completely removed\n   - Confirm the new Transaction Record component appears in the same location\n   - Check that all transaction sections (purchases, costs, income) are displayed correctly\n   - Verify the profit/loss calculation is prominently displayed\n\n2. Functional Testing:\n   - Test that sheep purchases are correctly recorded and displayed in the transaction record\n   - Verify housing purchases appear with accurate unit counts and costs\n   - Confirm feed costs are properly calculated and displayed\n   - Test that wool income is accurately reflected\n   - Verify the profit/loss calculation updates correctly as transactions occur\n\n3. Data Accuracy Testing:\n   - Compare the displayed transaction data with the actual game state\n   - Verify all calculations match the expected values based on game rules\n   - Test with various purchase combinations to ensure consistent accuracy\n\n4. Round Progression Testing:\n   - Verify the transaction record resets properly at the beginning of each new round\n   - Confirm no data leaks between rounds\n\n5. Responsive Design Testing:\n   - Test the component on various screen sizes (mobile, tablet, desktop)\n   - Verify all information remains readable and accessible at different resolutions\n\n6. Accessibility Testing:\n   - Verify color contrast meets WCAG standards\n   - Test screen reader compatibility\n   - Confirm keyboard navigation works correctly",
+        "status": "done",
+        "dependencies": [
+          3,
+          6,
+          7,
+          19,
+          21
+        ],
+        "priority": "high",
+        "subtasks": []
+      },
+      {
+        "id": 27,
+        "title": "Convert Market Information Column to Side Panel",
+        "description": "Redesign the Market Information column (currently the first column on the left-hand side) into a narrow side panel while maintaining all existing functionality and information display.",
+        "details": "Implement the conversion of the Market Information column to a side panel with the following steps:\n\n1. UI Structure Modifications:\n   - Redesign the Market Information column to fit a narrow side panel format\n   - Maintain a fixed width (approximately 200-250px) for the side panel\n   - Implement vertical stacking of all elements that were previously in the Market Information column\n   - Add appropriate padding and margins for readability in the narrow format\n   - Ensure the side panel spans the full height of the game interface\n\n2. Content Reorganization:\n   - Maintain all existing Market Information features:\n     * Price display section with current market prices\n     * Market trends button (previously implemented in Task 11)\n     * Round history button\n     * Market conditions display\n     * Game controls (start/next round buttons)\n   - Optimize layout for vertical presentation:\n     * Use smaller font sizes where appropriate\n     * Implement collapsible sections if needed for space efficiency\n     * Ensure critical information remains immediately visible\n\n3. CSS Implementation:\n   - Update the main CSS grid layout to accommodate the new side panel structure\n   - Create specific styles for the narrow panel format\n   - Implement responsive behavior to ensure the side panel works across device sizes\n   - Use flexbox for vertical arrangement of elements within the panel\n   - Add appropriate shadows or borders to visually separate the panel from main content\n\n4. JavaScript Updates:\n   - Update any DOM references to Market Information elements\n   - Ensure all event listeners are properly reattached to the new structure\n   - Modify any positioning calculations that might be affected by the new layout\n   - Update any animations or transitions related to the Market Information elements\n\n5. Ensure Consistency:\n   - Maintain visual consistency with the rest of the application\n   - Use the same color scheme and typography as the existing design\n   - Ensure all interactive elements maintain the same functionality\n   - Preserve all data display formats and information hierarchy",
+        "testStrategy": "1. UI Layout Testing:\n   - Verify the Market Information content is correctly displayed in the side panel format\n   - Confirm the side panel maintains appropriate width across different screen sizes\n   - Test that all elements are properly aligned and spaced within the narrow format\n   - Ensure no content is cut off or illegible in the new layout\n\n2. Functionality Testing:\n   - Test all buttons and interactive elements within the side panel:\n     * Verify the Market Trends button opens the trends display correctly\n     * Test the Round History button functionality\n     * Confirm game control buttons work as expected\n   - Ensure all market information is displayed accurately\n   - Verify price displays update correctly when market conditions change\n\n3. Responsive Design Testing:\n   - Test the layout on various screen sizes from mobile to desktop\n   - Verify the side panel adapts appropriately at each breakpoint\n   - Confirm the layout remains usable on smaller screens\n   - Test landscape and portrait orientations on tablet devices\n\n4. Integration Testing:\n   - Verify the side panel works correctly with all other game components\n   - Test interactions between the side panel and main game area\n   - Ensure the new layout doesn't interfere with existing game functionality\n   - Confirm that all data flows correctly between components\n\n5. Performance Testing:\n   - Measure any impact on page load time or rendering performance\n   - Verify smooth scrolling and interactions within the side panel\n   - Test with various amounts of market data to ensure scalability",
+        "status": "done",
+        "dependencies": [
+          1,
+          3,
+          11
+        ],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Redesign UI Structure for Side Panel",
+            "description": "Transform the Market Information column into a vertically stacked, narrow side panel with a fixed width (200-250px), ensuring it spans the full height of the interface and includes appropriate padding and margins for readability.",
+            "dependencies": [],
+            "details": "Update the main layout to replace the first column with a side panel. Arrange all Market Information elements vertically, maintaining a clear hierarchy and visual separation from the main content.\n<info added on 2025-07-31T10:28:19.192Z>\nHTML Structure Changes:\n- Converted `<section class=\"market-info-section\">` to `<aside class=\"market-info-side-panel\">`\n- Wrapped remaining sections in `<div class=\"main-content-area\">` with 3-column grid\n- Maintained all existing Market Information content and functionality\n\nCSS Layout Implementation:\n- Updated main container to use `grid-template-columns: 250px 1fr` for side panel layout\n- Created `.market-info-side-panel` with fixed width (250px), sticky positioning, and vertical flex layout\n- Added `.main-content-area` with 3-column grid for remaining sections\n- Implemented responsive breakpoints for different screen sizes\n\nResponsive Design:\n- Desktop (1024px+): Side panel with 250px width, main content in 3 columns\n- Tablet (900px-1023px): Reduced side panel to 220px with optimized fonts\n- Tablet (600px-899px): Side panel stacks above main content in single column\n- Mobile (480px-599px): Side panel becomes full-width section at top\n- Mobile (up to 479px): Optimized for smallest screens\n\nVisual Optimization:\n- Added sticky positioning for side panel on desktop\n- Implemented proper shadows and borders for visual separation\n- Optimized font sizes and spacing for narrow panel format\n- Added overflow handling for long content\n</info added on 2025-07-31T10:28:19.192Z>",
+            "status": "done",
+            "testStrategy": "Verify the side panel appears at the left, maintains fixed width, and all elements are vertically aligned and readable across screen sizes."
+          },
+          {
+            "id": 2,
+            "title": "Reorganize and Optimize Panel Content",
+            "description": "Rearrange all Market Information features (price display, market trends, round history, market conditions, game controls) for vertical presentation, using smaller fonts and collapsible sections as needed to maximize space and maintain visibility of critical information.",
+            "dependencies": [
+              "27.1"
+            ],
+            "details": "Ensure all features from the original column are present and logically grouped. Implement collapsible or expandable sections for less critical information to optimize for the narrow format.\n<info added on 2025-07-31T10:55:33.597Z>\nContent reorganization and optimization improvements for the side panel:\n\n1. Added visual hierarchy with section icons (💰 for prices, 📊 for market conditions, 📈 for market tools)\n2. Shortened price labels for narrow panel format\n3. Implemented collapsible sections with proper ARIA attributes and toggle animations\n4. Optimized visual hierarchy with always-visible critical information and collapsible secondary content\n5. Added visual separation between sections using borders and backgrounds\n6. Implemented toggleCollapsibleSection() JavaScript method with ARIA state management\n7. Improved space efficiency through reduced gaps, optimized font sizes, and compact layout design\n8. Enhanced game control buttons with icons for better visual recognition\n\nAll original functionality maintained while providing a more organized and space-efficient layout.\n</info added on 2025-07-31T10:55:33.597Z>",
+            "status": "done",
+            "testStrategy": "Check that all features are present, accessible, and that critical information is always visible. Test collapsible sections for usability and accessibility."
+          },
+          {
+            "id": 3,
+            "title": "Implement Responsive and Accessible CSS",
+            "description": "Update CSS grid and flexbox rules to support the new side panel layout, ensuring responsive behavior and accessibility across devices and screen sizes.",
+            "dependencies": [
+              "27.1",
+              "27.2"
+            ],
+            "details": "Create specific styles for the side panel, including shadows or borders for separation, and ensure the panel adapts to different viewports. Use ARIA roles and keyboard navigation for accessibility.\n<info added on 2025-07-31T10:57:33.075Z>\nSuccessfully implemented comprehensive responsive and accessible CSS for the side panel with enhanced responsive design across all screen sizes, optimized font sizing and spacing, and improved collapsible section behavior for smaller screens. Added accessibility improvements including enhanced focus states, focus-visible support, ARIA attributes for screen readers, custom scrollbar styling, and high contrast mode support. Implemented visual feedback enhancements with hover effects, proper visual feedback for toggles, enhanced button focus states, and subtle animations with reduced motion support. Ensured cross-browser compatibility with webkit scrollbar styling, proper fallbacks, and consistent behavior across devices. Optimized performance with reduced motion support, efficient transitions, and minimal repaints. Applied mobile-first responsive design with optimized behavior for different orientations, enhanced touch targets, improved modal behavior, and proper stacking on mobile devices.\n</info added on 2025-07-31T10:57:33.075Z>",
+            "status": "done",
+            "testStrategy": "Test the side panel on various devices and browsers. Verify that the panel remains usable and visually consistent, and that accessibility features function as intended."
+          },
+          {
+            "id": 4,
+            "title": "Update JavaScript for DOM and Event Handling",
+            "description": "Refactor JavaScript to update DOM references, event listeners, and any layout-dependent logic to match the new side panel structure, ensuring all interactive features remain functional.",
+            "dependencies": [
+              "27.3"
+            ],
+            "details": "Modify selectors, event bindings, and any animations or transitions related to Market Information elements to work with the new panel. Ensure all controls and dynamic updates function correctly.\n<info added on 2025-07-31T10:58:56.218Z>\nSuccessfully updated JavaScript for DOM and event handling to support the new side panel structure. The implementation includes enhanced initialization with proper ARIA state management and keyboard navigation support. Event handling has been improved with better accessibility compliance, focus management, and keyboard event listeners. Dynamic updates are now handled through dedicated methods for side panel elements, with optimized positioning for narrow panel layouts. Accessibility improvements include proper ARIA attributes, keyboard navigation, enhanced focus states, and state management for collapsible sections. Performance has been optimized through efficient DOM queries, minimal reflows, proper event delegation, and smooth animations with reduced motion support. Cross-browser compatibility ensures consistent behavior across different browsers and devices with appropriate fallbacks for unsupported features.\n</info added on 2025-07-31T10:58:56.218Z>",
+            "status": "done",
+            "testStrategy": "Test all interactive features (buttons, dynamic updates, transitions) to confirm they work as before. Check for errors or broken functionality after the layout change."
+          },
+          {
+            "id": 5,
+            "title": "Ensure Visual and Functional Consistency",
+            "description": "Review and adjust the side panel to maintain visual consistency with the rest of the application, preserving color schemes, typography, data formats, and information hierarchy.",
+            "dependencies": [
+              "27.4"
+            ],
+            "details": "Compare the side panel with other UI components to ensure a unified look and feel. Confirm that all data displays and controls match the application's standards.\n<info added on 2025-07-31T11:00:38.005Z>\nSuccessfully ensured visual and functional consistency across the entire application with the following improvements:\n\n1. **Design System Integration:**\n   - Ensured side panel uses consistent CSS variables and design tokens\n   - Applied uniform typography with `var(--font-family-primary)` throughout\n   - Maintained consistent color scheme using established CSS variables\n   - Unified spacing and border radius using design system values\n\n2. **Visual Consistency:**\n   - Aligned side panel styling with main content sections (expenses, income, ledger)\n   - Applied consistent shadows, borders, and background colors\n   - Ensured uniform button styling across all components\n   - Maintained consistent focus states and hover effects\n\n3. **Typography Harmony:**\n   - Applied consistent font weights (600 for headings, 500 for buttons)\n   - Unified line heights and text colors across all components\n   - Ensured proper text hierarchy and readability\n   - Maintained consistent font sizes using design system variables\n\n4. **Interactive Element Consistency:**\n   - Unified button styling across side panel and main content\n   - Applied consistent focus states for all interactive elements\n   - Ensured uniform hover effects and transitions\n   - Maintained consistent spacing and padding patterns\n\n5. **Layout Integration:**\n   - Added proper spacing between side panel and main content\n   - Ensured visual separation while maintaining design unity\n   - Applied consistent border radius and shadow patterns\n   - Maintained proper alignment and visual hierarchy\n\n6. **Accessibility Consistency:**\n   - Applied uniform focus indicators across all interactive elements\n   - Ensured consistent keyboard navigation patterns\n   - Maintained proper ARIA attributes and screen reader support\n   - Applied consistent color contrast ratios throughout\n\nThe side panel now seamlessly integrates with the rest of the application while maintaining its distinct functionality and improved user experience.\n</info added on 2025-07-31T11:00:38.005Z>",
+            "status": "done",
+            "testStrategy": "Conduct a UI review for consistency. Validate that all interactive and display elements match the application's design system and that no regressions have occurred."
+          }
+        ]
+      },
+      {
+        "id": 28,
+        "title": "Move Flock Size and Housing Info to Prominent Sidebar Position",
+        "description": "Relocate the flock's current size and housing information to the top of the far-left sidebar, ensuring it is visually prominent and clearly indicates both current flock size and housing capacity above the market information section.",
+        "details": "1. Refactor the sidebar component to position flock size and housing capacity information at the very top, above all other sections, especially above the market information.\n2. Design this section with strong visual hierarchy: use larger font sizes, bold text, and clear icons to distinguish flock size and housing capacity. Consider using color highlights or badges to make the data stand out.\n3. Ensure the information is grouped logically and labeled clearly (e.g., 'Current Flock Size: 12 / Housing Capacity: 15').\n4. Maintain visual consistency with the rest of the UI, but use contrast and spacing to ensure prominence without overwhelming the sidebar.\n5. Make the sidebar responsive: ensure the information remains visible and prominent on various screen sizes, including tablets and mobile devices. Use a fixed or sticky sidebar if appropriate for the layout.\n6. Follow best practices for sidebar design: keep the sidebar width within 240–300px for expanded mode, and ensure the section remains clear and uncluttered[1][2][3].\n7. Update any relevant state management or data-binding logic to ensure flock size and housing capacity are always current and reactively updated.\n8. Conduct user testing or gather feedback from students to confirm the information is easily noticed and understood.",
+        "testStrategy": "- Verify that flock size and housing capacity are always displayed at the top of the left sidebar, above market information, on all supported devices and screen sizes.\n- Check that the section uses larger, bold text and/or icons, and stands out visually from other sidebar content.\n- Confirm that the displayed values update reactively as the flock size or housing capacity changes during gameplay.\n- Test sidebar responsiveness: collapse/expand behavior, mobile and tablet layouts, and accessibility (screen reader labels, color contrast).\n- Solicit feedback from representative users (students) to ensure the information is prominent, clear, and not easily overlooked.",
+        "status": "done",
+        "dependencies": [
+          1,
+          2,
+          4,
+          11
+        ],
+        "priority": "medium",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Refactor Sidebar Structure to Relocate Flock Info",
+            "description": "Modify the sidebar component so that flock size and housing capacity information is positioned at the very top, above all other sections, especially above the market information.",
+            "dependencies": [],
+            "details": "Update the sidebar layout in the codebase, ensuring the flock size and housing capacity section is the first visible element in the far-left sidebar.",
+            "status": "done",
+            "testStrategy": "Verify that flock size and housing capacity are always displayed at the top of the sidebar, above market information, on all supported devices."
+          },
+          {
+            "id": 2,
+            "title": "Design Visually Prominent Flock Info Section",
+            "description": "Apply strong visual hierarchy to the flock size and housing capacity section using larger font sizes, bold text, clear icons, and color highlights or badges to ensure prominence.",
+            "dependencies": [
+              "28.1"
+            ],
+            "details": "Use UI design principles such as contrast, spacing, and iconography to make the section stand out while maintaining consistency with the overall UI.",
+            "status": "done",
+            "testStrategy": "Check that the section uses larger, bold text and/or icons, and stands out visually from other sidebar content without overwhelming the sidebar."
+          },
+          {
+            "id": 3,
+            "title": "Ensure Logical Grouping and Clear Labeling",
+            "description": "Group flock size and housing capacity information logically and label it clearly (e.g., 'Current Flock Size: 12 / Housing Capacity: 15') for immediate user comprehension.",
+            "dependencies": [
+              "28.2"
+            ],
+            "details": "Review and update labels, grouping, and formatting to maximize clarity and minimize cognitive load for users.",
+            "status": "done",
+            "testStrategy": "Confirm that the information is grouped and labeled in a way that is immediately understandable to users."
+          },
+          {
+            "id": 4,
+            "title": "Implement Responsive and Accessible Sidebar Design",
+            "description": "Ensure the sidebar and flock info section remain visually prominent and accessible across all supported screen sizes and devices, using responsive layout techniques.",
+            "dependencies": [
+              "28.3"
+            ],
+            "details": "Apply responsive CSS and accessibility best practices so the section is always visible and prominent, including on tablets and mobile devices. Consider fixed or sticky positioning if appropriate.",
+            "status": "done",
+            "testStrategy": "Test the sidebar on various devices and screen sizes to verify that the flock info section remains prominent and accessible."
+          },
+          {
+            "id": 5,
+            "title": "Update Data Binding and Validate User Comprehension",
+            "description": "Update state management or data-binding logic to ensure flock size and housing capacity are always current and reactively updated; conduct user testing or gather feedback to confirm the section is easily noticed and understood.",
+            "dependencies": [
+              "28.4"
+            ],
+            "details": "Integrate real-time data updates for flock size and housing capacity, and perform user testing or feedback sessions to validate the effectiveness of the new design.",
+            "status": "done",
+            "testStrategy": "Verify that the displayed values update reactively with state changes and that user feedback confirms the section is prominent and clear."
+          }
+        ]
       }
     ],
     "metadata": {
       "created": "2025-07-29T07:14:38.071Z",
-      "updated": "2025-07-29T11:17:08.281Z",
+      "updated": "2025-07-31T11:10:56.620Z",
       "description": "Tasks for master context"
     }
   }

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Functionality Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        .btn { padding: 10px 15px; margin: 5px; cursor: pointer; }
+        .btn-primary { background: #007bff; color: white; border: none; }
+        .btn-secondary { background: #6c757d; color: white; border: none; }
+        input { padding: 8px; margin: 5px; }
+        .feedback { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <h1>Purchase Functionality Test</h1>
+    
+    <div class="test-section">
+        <h2>Game State</h2>
+        <p>Balance: <span id="balance">$200</span></p>
+        <p>Flock Size: <span id="flockSize">0</span></p>
+        <p>Housing Capacity: <span id="housingCapacity">0</span></p>
+        <p>Sheep Price: <span id="sheepPrice">$45</span></p>
+        <p>Housing Cost: <span id="housingCost">$8</span></p>
+    </div>
+
+    <div class="test-section">
+        <h2>Sheep Purchase Test</h2>
+        <label for="sheepMoneyInput">Amount to spend on sheep ($):</label>
+        <input type="number" id="sheepMoneyInput" value="0" min="0" step="1">
+        <button id="purchaseBtn" class="btn btn-primary">Purchase Sheep</button>
+        <p>Sheep to purchase: <span id="sheepUnitsPreview">0</span></p>
+    </div>
+
+    <div class="test-section">
+        <h2>Housing Purchase Test</h2>
+        <label for="housingAmount">Amount to spend on housing ($):</label>
+        <input type="number" id="housingAmount" value="0" min="0" step="1">
+        <button id="purchaseHousingBtn" class="btn btn-secondary">Purchase Housing</button>
+        <p>Housing units to purchase: <span id="housingUnitsPreview">0</span></p>
+    </div>
+
+    <div class="test-section">
+        <h2>Feedback</h2>
+        <div id="feedbackBanner" class="feedback"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Console Log</h2>
+        <div id="consoleLog" style="background: #f8f9fa; padding: 10px; height: 200px; overflow-y: auto; font-family: monospace;"></div>
+    </div>
+
+    <script>
+        // Simple test game state
+        const gameState = {
+            balance: 200,
+            flockSize: 0,
+            housingCapacity: 0,
+            marketPrices: {
+                sheepPurchasePrice: 45,
+                housingCost: 8
+            }
+        };
+
+        // Log function for debugging
+        function log(message) {
+            const consoleLog = document.getElementById('consoleLog');
+            const timestamp = new Date().toLocaleTimeString();
+            consoleLog.innerHTML += `[${timestamp}] ${message}<br>`;
+            consoleLog.scrollTop = consoleLog.scrollHeight;
+            console.log(message);
+        }
+
+        // Update display
+        function updateDisplay() {
+            document.getElementById('balance').textContent = `$${gameState.balance}`;
+            document.getElementById('flockSize').textContent = gameState.flockSize;
+            document.getElementById('housingCapacity').textContent = gameState.housingCapacity;
+            document.getElementById('sheepPrice').textContent = `$${gameState.marketPrices.sheepPurchasePrice}`;
+            document.getElementById('housingCost').textContent = `$${gameState.marketPrices.housingCost}`;
+        }
+
+        // Show feedback
+        function showFeedback(message, type = 'info') {
+            const banner = document.getElementById('feedbackBanner');
+            banner.textContent = message;
+            banner.className = `feedback ${type}`;
+            log(`Feedback: ${message}`);
+        }
+
+        // Handle sheep purchase
+        function handlePurchase() {
+            log('handlePurchase called');
+            const moneyInput = parseFloat(document.getElementById('sheepMoneyInput').value) || 0;
+            log(`Money input: ${moneyInput}`);
+            
+            // Validate input
+            if (isNaN(moneyInput) || moneyInput < 0) {
+                showFeedback('Please enter a valid amount for sheep purchase.', 'error');
+                return;
+            }
+            
+            if (moneyInput > gameState.balance) {
+                showFeedback('Insufficient funds for sheep purchase.', 'error');
+                return;
+            }
+            
+            // Calculate sheep quantity to purchase
+            const sheepPrice = gameState.marketPrices.sheepPurchasePrice;
+            log(`Sheep price: ${sheepPrice}`);
+            
+            // Check if the amount is an exact multiple of the sheep price
+            if (moneyInput % sheepPrice !== 0) {
+                showFeedback(`Amount must be an exact multiple of the sheep price ($${sheepPrice}). Please calculate the correct amount.`, 'error');
+                return;
+            }
+            
+            const quantity = moneyInput / sheepPrice;
+            log(`Calculated quantity: ${quantity}`);
+            
+            if (quantity === 0) {
+                showFeedback('Amount too small to purchase any sheep.', 'error');
+                return;
+            }
+            
+            // Check maximum sheep limit
+            if (quantity > 20) {
+                showFeedback('Cannot purchase more than 20 sheep per round.', 'error');
+                return;
+            }
+            
+            // Check housing capacity
+            if (gameState.flockSize + quantity > gameState.housingCapacity) {
+                showFeedback(`Insufficient housing! You can only house ${gameState.housingCapacity} sheep. Purchase more housing first.`, 'error');
+                return;
+            }
+            
+            // Calculate actual cost and update game state
+            const actualCost = quantity * sheepPrice;
+            gameState.balance -= actualCost;
+            gameState.flockSize += quantity;
+            
+            // Clear the input
+            document.getElementById('sheepMoneyInput').value = '0';
+            updateSheepPurchasePreview();
+            
+            updateDisplay();
+            showFeedback(`🐑 Successfully purchased ${quantity} sheep for $${actualCost}!`, 'success');
+            log(`Purchase successful: ${quantity} sheep for $${actualCost}`);
+        }
+
+        // Handle housing purchase
+        function handleHousingPurchase() {
+            log('handleHousingPurchase called');
+            const housingAmount = parseFloat(document.getElementById('housingAmount').value);
+            log(`Housing amount: ${housingAmount}`);
+            
+            // Validate input
+            if (isNaN(housingAmount) || housingAmount < 0) {
+                showFeedback('Please enter a valid amount for housing purchase.', 'error');
+                return;
+            }
+            
+            if (housingAmount > gameState.balance) {
+                showFeedback('Insufficient funds for housing purchase.', 'error');
+                return;
+            }
+            
+            // Calculate housing units to purchase
+            const housingCostPerUnit = gameState.marketPrices.housingCost;
+            log(`Housing cost per unit: ${housingCostPerUnit}`);
+            
+            // Check if the amount is an exact multiple of the housing cost per unit
+            if (housingAmount % housingCostPerUnit !== 0) {
+                showFeedback(`Amount must be an exact multiple of the housing cost per unit ($${housingCostPerUnit}). Please calculate the correct amount.`, 'error');
+                return;
+            }
+            
+            const housingUnits = housingAmount / housingCostPerUnit;
+            log(`Calculated housing units: ${housingUnits}`);
+            
+            if (housingUnits === 0) {
+                showFeedback('Amount too small to purchase any housing units.', 'error');
+                return;
+            }
+            
+            // Calculate actual cost and update game state
+            const actualCost = housingUnits * housingCostPerUnit;
+            gameState.balance -= actualCost;
+            gameState.housingCapacity += housingUnits;
+            
+            // Clear the input
+            document.getElementById('housingAmount').value = '0';
+            updateHousingPreview();
+            
+            updateDisplay();
+            showFeedback(`🏠 Successfully purchased ${housingUnits} housing units for $${actualCost}!`, 'success');
+            log(`Housing purchase successful: ${housingUnits} units for $${actualCost}`);
+        }
+
+        // Update sheep purchase preview
+        function updateSheepPurchasePreview() {
+            const sheepAmount = parseFloat(document.getElementById('sheepMoneyInput').value) || 0;
+            const sheepCostPerUnit = gameState.marketPrices.sheepPurchasePrice;
+            
+            // Check if amount is an exact multiple
+            const isExactMultiple = sheepAmount % sheepCostPerUnit === 0;
+            const sheepUnits = Math.floor(sheepAmount / sheepCostPerUnit);
+            
+            // Show preview with validation indicator
+            if (sheepAmount > 0 && !isExactMultiple) {
+                document.getElementById('sheepUnitsPreview').textContent = `${sheepUnits} (Invalid - not exact multiple)`;
+                document.getElementById('sheepUnitsPreview').style.color = '#ff6b6b';
+            } else {
+                document.getElementById('sheepUnitsPreview').textContent = sheepUnits;
+                document.getElementById('sheepUnitsPreview').style.color = '';
+            }
+        }
+
+        // Update housing preview
+        function updateHousingPreview() {
+            const housingAmount = parseFloat(document.getElementById('housingAmount').value) || 0;
+            const housingCostPerUnit = gameState.marketPrices.housingCost;
+            
+            // Check if amount is an exact multiple
+            const isExactMultiple = housingAmount % housingCostPerUnit === 0;
+            const housingUnits = Math.floor(housingAmount / housingCostPerUnit);
+            
+            // Show preview with validation indicator
+            if (housingAmount > 0 && !isExactMultiple) {
+                document.getElementById('housingUnitsPreview').textContent = `${housingUnits} (Invalid - not exact multiple)`;
+                document.getElementById('housingUnitsPreview').style.color = '#ff6b6b';
+            } else {
+                document.getElementById('housingUnitsPreview').textContent = housingUnits;
+                document.getElementById('housingUnitsPreview').style.color = '';
+            }
+        }
+
+        // Set up event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            log('Test page loaded');
+            updateDisplay();
+            
+            // Purchase button
+            document.getElementById('purchaseBtn').addEventListener('click', () => {
+                log('Purchase button clicked');
+                handlePurchase();
+            });
+
+            // Housing purchase button
+            document.getElementById('purchaseHousingBtn').addEventListener('click', () => {
+                log('Housing purchase button clicked');
+                handleHousingPurchase();
+            });
+
+            // Housing amount input for real-time preview
+            document.getElementById('housingAmount').addEventListener('input', () => {
+                updateHousingPreview();
+            });
+
+            // Sheep money input for real-time preview
+            document.getElementById('sheepMoneyInput').addEventListener('input', () => {
+                updateSheepPurchasePreview();
+            });
+
+            log('Event listeners set up');
+        });
+    </script>
+</body>
+</html> 

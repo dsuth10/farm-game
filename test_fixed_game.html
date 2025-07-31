@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Fixed Game</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 10px; border: 1px solid #ccc; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>Game Debug Test</h1>
+    
+    <div class="test-section">
+        <h2>Test Results</h2>
+        <div id="testResults"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Console Output</h2>
+        <div id="consoleOutput" style="background: #f5f5f5; padding: 10px; height: 200px; overflow-y: scroll; font-family: monospace;"></div>
+    </div>
+
+    <script>
+        // Capture console output
+        const originalConsole = {
+            log: console.log,
+            error: console.error,
+            warn: console.warn
+        };
+        
+        const consoleOutput = document.getElementById('consoleOutput');
+        const testResults = document.getElementById('testResults');
+        
+        function addToConsole(type, message) {
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            consoleOutput.appendChild(div);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+        
+        console.log = (message) => {
+            originalConsole.log(message);
+            addToConsole('log', message);
+        };
+        
+        console.error = (message) => {
+            originalConsole.error(message);
+            addToConsole('error', message);
+        };
+        
+        console.warn = (message) => {
+            originalConsole.warn(message);
+            addToConsole('warn', message);
+        };
+        
+        // Test game initialization
+        let gameLoaded = false;
+        let gameInitialized = false;
+        
+        window.addEventListener('error', (event) => {
+            addToConsole('error', `JavaScript Error: ${event.message} at ${event.filename}:${event.lineno}`);
+        });
+        
+        // Load the game scripts
+        const scripts = [
+            'js/calculations.js',
+            'js/validation.js',
+            'js/game.js'
+        ];
+        
+        let loadedScripts = 0;
+        
+        scripts.forEach(script => {
+            const scriptElement = document.createElement('script');
+            scriptElement.src = script;
+            scriptElement.onload = () => {
+                loadedScripts++;
+                addToConsole('log', `Loaded: ${script}`);
+                
+                if (loadedScripts === scripts.length) {
+                    gameLoaded = true;
+                    addToConsole('success', 'All scripts loaded successfully');
+                    
+                    // Try to initialize the game
+                    try {
+                        if (typeof SheepBusinessGame !== 'undefined') {
+                            window.game = new SheepBusinessGame();
+                            gameInitialized = true;
+                            addToConsole('success', 'Game initialized successfully');
+                        } else {
+                            addToConsole('error', 'SheepBusinessGame class not found');
+                        }
+                    } catch (error) {
+                        addToConsole('error', `Game initialization failed: ${error.message}`);
+                    }
+                }
+            };
+            scriptElement.onerror = () => {
+                addToConsole('error', `Failed to load: ${script}`);
+            };
+            document.head.appendChild(scriptElement);
+        });
+        
+        // Update test results
+        setTimeout(() => {
+            let results = '';
+            results += `<p><strong>Scripts Loaded:</strong> <span class="${gameLoaded ? 'success' : 'error'}">${gameLoaded ? 'Yes' : 'No'}</span></p>`;
+            results += `<p><strong>Game Initialized:</strong> <span class="${gameInitialized ? 'success' : 'error'}">${gameInitialized ? 'Yes' : 'No'}</span></p>`;
+            
+            if (gameInitialized) {
+                results += '<p><strong>Status:</strong> <span class="success">Game should be working!</span></p>';
+            } else {
+                results += '<p><strong>Status:</strong> <span class="error">Game failed to initialize</span></p>';
+            }
+            
+            testResults.innerHTML = results;
+        }, 2000);
+    </script>
+</body>
+</html> 

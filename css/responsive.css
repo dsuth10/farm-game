@@ -6,9 +6,14 @@
     .game-container {
         max-width: 2400px;
         margin: 0 auto;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: 280px 1fr;
         gap: var(--spacing-2xl);
         padding: var(--spacing-xl);
+    }
+    
+    .market-info-side-panel {
+        width: 280px;
+        max-height: calc(100vh - 160px);
     }
     
     .modal-content {
@@ -29,9 +34,14 @@
     .game-container {
         max-width: 2000px;
         margin: 0 auto;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: 250px 1fr;
         gap: var(--spacing-2xl);
         padding: var(--spacing-lg);
+    }
+    
+    .market-info-side-panel {
+        width: 250px;
+        max-height: calc(100vh - 140px);
     }
     
     .modal-content {
@@ -48,8 +58,13 @@
     .game-container {
         max-width: 1800px;
         margin: 0 auto;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: 250px 1fr;
         gap: var(--spacing-2xl);
+    }
+    
+    .market-info-side-panel {
+        width: 250px;
+        max-height: calc(100vh - 140px);
     }
     
     .modal-content {
@@ -66,8 +81,13 @@
     .game-container {
         max-width: 1600px;
         margin: 0 auto;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: 250px 1fr;
         gap: var(--spacing-xl);
+    }
+    
+    .market-info-side-panel {
+        width: 250px;
+        max-height: calc(100vh - 140px);
     }
     
     .modal-content {
@@ -80,8 +100,13 @@
     .game-container {
         max-width: 1400px;
         margin: 0 auto;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: 250px 1fr;
         gap: var(--spacing-lg);
+    }
+    
+    .market-info-side-panel {
+        width: 250px;
+        max-height: calc(100vh - 140px);
     }
     
     .modal-content {
@@ -89,27 +114,18 @@
     }
 }
 
-/* Standard Desktop (1280px to 1365px) */
-@media screen and (min-width: 1280px) and (max-width: 1365px) {
+/* Standard Desktop (1024px to 1279px) */
+@media screen and (min-width: 1024px) and (max-width: 1279px) {
     .game-container {
         max-width: 1200px;
         margin: 0 auto;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: 250px 1fr;
         gap: var(--spacing-lg);
     }
     
-    .modal-content {
-        max-width: 600px;
-    }
-}
-
-/* Small Desktop (1024px to 1279px) */
-@media screen and (min-width: 1024px) and (max-width: 1279px) {
-    .game-container {
-        max-width: 1000px;
-        margin: 0 auto;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        gap: var(--spacing-md);
+    .market-info-side-panel {
+        width: 250px;
+        max-height: calc(100vh - 140px);
     }
     
     .modal-content {
@@ -117,39 +133,193 @@
     }
     
     .game-header h1 {
-        font-size: var(--font-size-2xl);
+        font-size: 2rem;
     }
     
     .purchase-section,
-    .ledger-section,
-    .market-info-section,
     .expenses-section,
-    .income-section {
+    .income-section,
+    .ledger-section {
         padding: var(--spacing-md);
+    }
+    
+    .calculation-item {
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .calculation-item label {
+        font-size: var(--font-size-small);
+    }
+    
+    .btn {
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+    
+    .game-controls {
+        flex-direction: column;
+    }
+    
+    .modal-content {
+        max-width: 500px;
     }
 }
 
-/* Tablet Landscape (900px to 1023px) - Fallback to 2-column layout */
+/* Accessibility improvements for side panel */
+@media screen and (min-width: 1024px) {
+    /* Enhanced focus states for side panel */
+    .market-info-side-panel .section-toggle:focus {
+        outline: 3px solid var(--primary-color);
+        outline-offset: 2px;
+        background: var(--background-tertiary);
+    }
+    
+    .market-info-side-panel .btn:focus {
+        outline: 3px solid var(--primary-color);
+        outline-offset: 2px;
+        box-shadow: 0 0 0 2px var(--background-primary);
+    }
+    
+    /* Improved keyboard navigation */
+    .market-info-side-panel .section-toggle:hover {
+        background: var(--background-tertiary);
+    }
+    
+    /* Better visual feedback for interactive elements */
+    .market-info-side-panel .price-item:hover {
+        background: var(--background-tertiary);
+        transform: translateY(-1px);
+        transition: all 0.2s ease;
+    }
+}
+
+/* Tablet and smaller desktop (900px to 1023px) */
 @media screen and (min-width: 900px) and (max-width: 1023px) {
     .game-container {
-        max-width: 900px;
-        margin: 0 auto;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 220px 1fr;
         gap: var(--spacing-lg);
         padding: var(--spacing-md);
     }
     
-    .market-info-section {
-        grid-column: 1 / -1;
+    .market-info-side-panel {
+        width: 220px;
+        max-height: calc(100vh - 120px);
+        padding: var(--spacing-md);
+    }
+    
+    /* Optimized font sizes for smaller side panel */
+    .market-info-side-panel h2 {
+        font-size: var(--font-size-large);
+    }
+    
+    .market-info-side-panel h3 {
+        font-size: var(--font-size-medium);
+    }
+    
+    .market-info-side-panel .price-item {
+        padding: var(--spacing-xs);
+    }
+    
+    .market-info-side-panel .price-label {
+        font-size: var(--font-size-xs);
+    }
+    
+    .market-info-side-panel .price-value {
+        font-size: var(--font-size-medium);
+    }
+    
+    .market-info-side-panel .btn {
+        font-size: var(--font-size-xs);
+        padding: var(--spacing-xs) var(--spacing-sm);
+    }
+    
+    /* Enhanced accessibility for smaller screens */
+    .market-info-side-panel .section-toggle {
+        padding: var(--spacing-sm);
+        font-size: var(--font-size-xs);
+    }
+    
+    .market-info-side-panel .section-content {
+        padding: var(--spacing-sm);
+    }
+    
+    .game-header {
+        padding: var(--spacing-md);
+    }
+    
+    .game-header h1 {
+        font-size: var(--font-size-2xl);
+    }
+    
+    .round-info, .season-info {
+        font-size: var(--font-size-small);
+    }
+    
+    .purchase-section,
+    .income-section,
+    .ledger-section {
+        padding: var(--spacing-md);
+    }
+    
+    .calculation-item {
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .calculation-item label {
+        font-size: var(--font-size-small);
+    }
+    
+    .btn {
+        font-size: var(--font-size-small);
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+    
+    .game-controls {
+        gap: var(--spacing-sm);
+    }
+    
+    .modal-content {
+        max-width: 90vw;
+        padding: var(--spacing-lg);
+    }
+}
+
+/* Tablet (600px to 899px) - Stack side panel above main content */
+@media screen and (min-width: 600px) and (max-width: 899px) {
+    .game-container {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+        padding: var(--spacing-md);
+    }
+    
+    .market-info-side-panel {
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+        position: static;
+        max-height: none;
         order: -1;
+        padding: var(--spacing-md);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-sm);
     }
     
-    .expenses-section {
-        grid-column: 1;
+    /* Optimize collapsible sections for stacked layout */
+    .market-info-side-panel .collapsible-section {
+        margin-bottom: var(--spacing-sm);
     }
     
-    .income-section {
-        grid-column: 2;
+    .market-info-side-panel .section-toggle {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: var(--font-size-small);
+    }
+    
+    .market-info-side-panel .section-content {
+        padding: var(--spacing-md);
+    }
+    
+    .main-content-area {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-lg);
     }
     
     .ledger-section {
@@ -165,131 +335,56 @@
     }
     
     .round-info, .season-info {
-        font-size: var(--font-size-base);
-        margin: 0 var(--spacing-sm);
-    }
-    
-    .purchase-section,
-    .ledger-section,
-    .market-info-section,
-    .expenses-section,
-    .income-section {
-        padding: var(--spacing-md);
-    }
-    
-    .calculation-item {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-sm);
-    }
-    
-    .calculation-item label {
-        margin-bottom: var(--spacing-xs);
-    }
-    
-    .btn {
-        min-width: 80px;
-        padding: var(--spacing-sm) var(--spacing-md);
-    }
-    
-    .game-controls {
-        gap: var(--spacing-sm);
-    }
-    
-    .modal-content {
-        margin: 10% auto;
-        padding: var(--spacing-lg);
-        width: 95%;
-    }
-}
-
-/* Tablet Portrait (600px to 899px) - Single column layout */
-@media screen and (min-width: 600px) and (max-width: 899px) {
-    .game-container {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-lg);
-        padding: var(--spacing-sm);
-        max-width: 600px;
-        margin: 0 auto;
-    }
-    
-    .market-info-section {
-        order: -1;
-    }
-    
-    .game-header {
-        padding: var(--spacing-sm);
-    }
-    
-    .game-header h1 {
-        font-size: var(--font-size-xl);
-        margin-bottom: var(--spacing-xs);
-    }
-    
-    .round-info, .season-info {
-        display: block;
-        margin: var(--spacing-xs) 0;
         font-size: var(--font-size-small);
     }
     
     .season-icon {
-        font-size: var(--font-size-xl);
+        font-size: var(--font-size-large);
     }
     
     .purchase-section,
-    .ledger-section,
-    .market-info-section,
-    .expenses-section,
-    .income-section {
+    .income-section,
+    .ledger-section {
         padding: var(--spacing-md);
-        margin-bottom: var(--spacing-md);
     }
     
     .price-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: var(--spacing-xs);
+        padding: var(--spacing-sm);
     }
     
     .price-change {
-        align-self: flex-end;
+        font-size: var(--font-size-xs);
     }
     
     .balance-display,
     .flock-info {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: var(--spacing-xs);
+        font-size: var(--font-size-small);
     }
     
     .calculation-item {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-sm);
+        margin-bottom: var(--spacing-md);
     }
     
     .calculation-item input {
-        width: 100%;
+        font-size: var(--font-size-small);
     }
     
     .btn-check {
-        width: 100%;
-        margin-top: var(--spacing-xs);
+        font-size: var(--font-size-small);
     }
     
     .game-controls {
-        flex-direction: column;
         gap: var(--spacing-sm);
     }
     
     .btn {
-        width: 100%;
-        min-width: auto;
+        font-size: var(--font-size-small);
+        padding: var(--spacing-sm) var(--spacing-md);
     }
     
     .modal-content {
-        margin: 5% auto;
-        padding: var(--spacing-md);
-        width: 95%;
-        max-height: 90vh;
+        max-width: 95vw;
+        padding: var(--spacing-lg);
     }
     
     .settings-grid {
@@ -297,14 +392,12 @@
     }
     
     .setting-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: var(--spacing-sm);
+        margin-bottom: var(--spacing-md);
     }
     
     .setting-item input[type="number"],
-    .setting-item select {
-        width: 100%;
+    .setting-item input[type="checkbox"] {
+        font-size: var(--font-size-small);
     }
     
     .modal-actions {
@@ -317,44 +410,82 @@
     }
     
     .price-changes {
-        flex-direction: column;
-        gap: var(--spacing-sm);
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-xs);
+        margin-top: var(--spacing-sm);
     }
 }
 
-/* Mobile Large (480px to 599px) */
+/* Mobile Landscape (480px to 599px) */
 @media screen and (min-width: 480px) and (max-width: 599px) {
     .game-container {
-        padding: var(--spacing-xs);
+        grid-template-columns: 1fr;
         gap: var(--spacing-md);
-        max-width: 480px;
+        padding: var(--spacing-sm);
+    }
+    
+    .market-info-side-panel {
+        width: 100%;
+        max-width: none;
         margin: 0 auto;
+        position: static;
+        max-height: none;
+        order: -1;
+        padding: var(--spacing-md);
+        border-radius: var(--border-radius-md);
+        box-shadow: var(--shadow-sm);
+    }
+    
+    /* Optimize for mobile landscape */
+    .market-info-side-panel .critical-info {
+        padding: var(--spacing-sm);
+    }
+    
+    .market-info-side-panel .price-grid {
+        gap: var(--spacing-xs);
+    }
+    
+    .market-info-side-panel .price-item {
+        padding: var(--spacing-xs);
+    }
+    
+    .market-info-side-panel .section-toggle {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: var(--font-size-xs);
+    }
+    
+    .market-info-side-panel .section-content {
+        padding: var(--spacing-sm);
+    }
+    
+    .main-content-area {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
     }
     
     .game-header {
-        padding: var(--spacing-xs);
+        padding: var(--spacing-sm);
     }
     
     .game-header h1 {
-        font-size: var(--font-size-large);
+        font-size: var(--font-size-xl);
     }
     
     .round-info, .season-info {
-        font-size: var(--font-size-small);
+        font-size: var(--font-size-xs);
     }
     
     .purchase-section,
-    .ledger-section,
-    .market-info-section,
-    .expenses-section,
-    .income-section {
+    .income-section,
+    .ledger-section {
         padding: var(--spacing-sm);
     }
     
     .price-display h3,
-    .calculations-section h3,
-    .money-trend-chart h3 {
-        font-size: var(--font-size-base);
+    .income-section h2,
+    .ledger-section h2 {
+        font-size: var(--font-size-large);
     }
     
     .price-item {
@@ -362,11 +493,11 @@
     }
     
     .price-label {
-        font-size: var(--font-size-small);
+        font-size: var(--font-size-xs);
     }
     
     .price-value {
-        font-size: var(--font-size-base);
+        font-size: var(--font-size-medium);
     }
     
     .balance-amount,
@@ -375,84 +506,136 @@
     }
     
     .calculation-item {
-        padding: var(--spacing-sm);
+        margin-bottom: var(--spacing-sm);
     }
     
     .calculation-item label {
-        font-size: var(--font-size-small);
+        font-size: var(--font-size-xs);
     }
     
     .calculation-item input {
-        padding: var(--spacing-xs);
         font-size: var(--font-size-small);
     }
     
     .btn {
-        padding: var(--spacing-xs) var(--spacing-sm);
         font-size: var(--font-size-small);
+        padding: var(--spacing-xs) var(--spacing-sm);
     }
     
     .modal-content {
-        margin: 2% auto;
-        padding: var(--spacing-sm);
-        width: 98%;
+        max-width: 95vw;
+        padding: var(--spacing-md);
     }
     
     .modal-content h2 {
-        font-size: var(--font-size-large);
-    }
-    
-    .close {
-        top: var(--spacing-xs);
-        right: var(--spacing-sm);
         font-size: var(--font-size-xl);
     }
     
-    .chart-container {
-        height: 150px;
+    .close {
+        font-size: var(--font-size-large);
+    }
+    
+    .transaction-container {
+        max-height: 200px;
+        overflow-y: auto;
     }
 }
 
-/* Mobile Small (320px to 479px) */
+/* Mobile Portrait (up to 479px) */
 @media screen and (max-width: 479px) {
     .game-container {
-        padding: var(--spacing-xs);
+        grid-template-columns: 1fr;
         gap: var(--spacing-sm);
-        max-width: 320px;
+        padding: var(--spacing-xs);
+    }
+    
+    .market-info-side-panel {
+        width: 100%;
+        max-width: none;
         margin: 0 auto;
+        position: static;
+        max-height: none;
+        order: -1;
+        padding: var(--spacing-sm);
+        border-radius: var(--border-radius-md);
+        box-shadow: var(--shadow-sm);
+    }
+    
+    /* Optimize for mobile portrait */
+    .market-info-side-panel h2 {
+        font-size: var(--font-size-large);
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .market-info-side-panel .critical-info {
+        padding: var(--spacing-xs);
+    }
+    
+    .market-info-side-panel .price-grid {
+        gap: var(--spacing-xs);
+    }
+    
+    .market-info-side-panel .price-item {
+        padding: var(--spacing-xs);
+    }
+    
+    .market-info-side-panel .price-label {
+        font-size: var(--font-size-xs);
+    }
+    
+    .market-info-side-panel .price-value {
+        font-size: var(--font-size-small);
+    }
+    
+    .market-info-side-panel .section-toggle {
+        padding: var(--spacing-xs);
+        font-size: var(--font-size-xs);
+    }
+    
+    .market-info-side-panel .section-content {
+        padding: var(--spacing-xs);
+    }
+    
+    .market-info-side-panel .btn {
+        font-size: var(--font-size-xs);
+        padding: var(--spacing-xs);
+    }
+    
+    .main-content-area {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
     }
     
     .game-header h1 {
-        font-size: var(--font-size-base);
+        font-size: var(--font-size-large);
     }
     
     .round-info, .season-info {
-        font-size: 0.75rem;
+        font-size: var(--font-size-xs);
     }
     
     .purchase-section,
-    .ledger-section,
-    .market-info-section,
-    .expenses-section,
-    .income-section {
+    .income-section,
+    .ledger-section {
         padding: var(--spacing-xs);
     }
     
     .price-item {
-        padding: 0.25rem;
-    }
-    
-    .calculation-item {
         padding: var(--spacing-xs);
     }
     
+    .calculation-item {
+        margin-bottom: var(--spacing-sm);
+    }
+    
     .btn {
-        padding: 0.25rem 0.5rem;
-        font-size: 0.75rem;
+        font-size: var(--font-size-small);
+        padding: var(--spacing-xs) var(--spacing-sm);
     }
     
     .modal-content {
-        padding: 0.5rem;
+        max-width: 98vw;
+        padding: var(--spacing-sm);
     }
 }
 

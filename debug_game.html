@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Sheep Game</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .debug-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        .btn { padding: 10px 15px; margin: 5px; cursor: pointer; }
+        .btn-primary { background: #007bff; color: white; border: none; }
+        .btn-secondary { background: #6c757d; color: white; border: none; }
+        input { padding: 8px; margin: 5px; }
+        .feedback { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        #consoleLog { background: #f8f9fa; padding: 10px; height: 300px; overflow-y: auto; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <h1>Debug Sheep Game</h1>
+    
+    <div class="debug-section">
+        <h2>Game State</h2>
+        <p>Balance: <span id="currentBalance">$200</span></p>
+        <p>Flock Size: <span id="flockSize">0</span></p>
+        <p>Housing Capacity: <span id="housingCapacity">0</span></p>
+        <p>Sheep Price: <span id="sheepPrice">$45</span></p>
+        <p>Housing Cost: <span id="housingCost">$8</span></p>
+    </div>
+
+    <div class="debug-section">
+        <h2>Purchase Controls</h2>
+        <div>
+            <label for="sheepMoneyInput">Amount to spend on sheep ($):</label>
+            <input type="number" id="sheepMoneyInput" value="0" min="0" step="1">
+            <button id="purchaseBtn" class="btn btn-primary">Purchase Sheep</button>
+            <p>Sheep to purchase: <span id="sheepUnitsPreview">0</span></p>
+        </div>
+        <div>
+            <label for="housingAmount">Amount to spend on housing ($):</label>
+            <input type="number" id="housingAmount" value="0" min="0" step="1">
+            <button id="purchaseHousingBtn" class="btn btn-secondary">Purchase Housing</button>
+            <p>Housing units to purchase: <span id="housingUnitsPreview">0</span></p>
+        </div>
+    </div>
+
+    <div class="debug-section">
+        <h2>Feedback</h2>
+        <div id="feedbackBanner" class="feedback"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>Console Log</h2>
+        <div id="consoleLog"></div>
+    </div>
+
+    <script>
+        // Debug logging function
+        function debugLog(message) {
+            const consoleLog = document.getElementById('consoleLog');
+            const timestamp = new Date().toLocaleTimeString();
+            consoleLog.innerHTML += `[${timestamp}] ${message}<br>`;
+            consoleLog.scrollTop = consoleLog.scrollHeight;
+            console.log(message);
+        }
+
+        // Override console.log to capture all logs
+        const originalConsoleLog = console.log;
+        console.log = function(...args) {
+            debugLog(args.join(' '));
+            originalConsoleLog.apply(console, args);
+        };
+
+        // Override console.error to capture errors
+        const originalConsoleError = console.error;
+        console.error = function(...args) {
+            debugLog('ERROR: ' + args.join(' '));
+            originalConsoleError.apply(console, args);
+        };
+
+        // Override showFeedback to capture feedback
+        window.showFeedback = function(message, type = 'info') {
+            const banner = document.getElementById('feedbackBanner');
+            banner.textContent = message;
+            banner.className = `feedback ${type}`;
+            debugLog(`Feedback: ${message}`);
+        };
+
+        debugLog('Debug page loaded');
+    </script>
+
+    <!-- Load the original game files -->
+    <script src="js/game.js"></script>
+    <script src="js/calculations.js"></script>
+    <script src="js/validation.js"></script>
+    <script src="js/pdf-export.js"></script>
+    
+    <script>
+        // Wait for the game to initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            debugLog('DOM loaded, waiting for game initialization...');
+            
+            // Check if game was initialized
+            setTimeout(() => {
+                if (window.sheepGame) {
+                    debugLog('Game initialized successfully');
+                    debugLog('Game state: ' + JSON.stringify(window.sheepGame.gameState, null, 2));
+                    
+                    // Test button existence
+                    const purchaseBtn = document.getElementById('purchaseBtn');
+                    const housingBtn = document.getElementById('purchaseHousingBtn');
+                    
+                    debugLog('Purchase button exists: ' + (purchaseBtn !== null));
+                    debugLog('Housing button exists: ' + (housingBtn !== null));
+                    
+                    if (purchaseBtn) {
+                        debugLog('Purchase button text: ' + purchaseBtn.textContent);
+                        debugLog('Purchase button onclick: ' + purchaseBtn.onclick);
+                    }
+                    
+                    if (housingBtn) {
+                        debugLog('Housing button text: ' + housingBtn.textContent);
+                        debugLog('Housing button onclick: ' + housingBtn.onclick);
+                    }
+                    
+                    // Test event listeners
+                    purchaseBtn.addEventListener('click', () => {
+                        debugLog('Purchase button clicked (debug listener)');
+                    });
+                    
+                    housingBtn.addEventListener('click', () => {
+                        debugLog('Housing button clicked (debug listener)');
+                    });
+                    
+                } else {
+                    debugLog('ERROR: Game not initialized');
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html> 

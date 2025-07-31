@@ -60,7 +60,9 @@ class SheepBusinessGame {
                 seasonalFluctuation: true,
                 randomVariation: false,
                 sheepMortality: false,
-                marketDifficulty: 'medium'
+                marketDifficulty: 'medium',
+                mathTipsEnabled: true,
+                mathTipsFrequency: 'on_error' // 'always', 'on_error', 'never'
             },
             currentRoundData: null
         };
@@ -72,6 +74,9 @@ class SheepBusinessGame {
             autumn: '🍂',
             winter: '❄️'
         };
+
+        // Initialize calculations module
+        this.calculations = new GameCalculations();
 
         this.initializeGame();
         this.setupEventListeners();
@@ -88,17 +93,99 @@ class SheepBusinessGame {
         this.updateSeasonalPrices();
         this.updateMarketConditions();
         this.clearCalculations();
-        this.updateChart();
+        this.updateTransactionRecord();
         this.updateHousingPreview();
         this.updateSheepPurchasePreview();
         this.initializeRoundData();
         this.updatePurchaseSectionVisibility();
         
+        // Ensure all inputs are enabled at startup
+        this.ensureAllInputsEnabled();
+        
         // Ensure purchase inputs are enabled
         this.enablePurchaseInputs();
         
-        // Check if calculations should be auto-enabled for round 2+
-        this.checkAutoEnableCalculations();
+        // Initialize side panel functionality
+        this.initializeSidePanel();
+    }
+
+    /**
+     * Initialize side panel specific functionality
+     */
+    initializeSidePanel() {
+        // Ensure collapsible sections are properly initialized
+        const collapsibleSections = document.querySelectorAll('.collapsible-section');
+        collapsibleSections.forEach(section => {
+            const toggle = section.querySelector('.section-toggle');
+            const content = section.querySelector('.section-content');
+            
+            if (toggle && content) {
+                // Set initial ARIA states
+                const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+                content.setAttribute('aria-hidden', isExpanded ? 'false' : 'true');
+                
+                // Add keyboard support for toggles
+                toggle.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.toggleCollapsibleSection(toggle);
+                    }
+                });
+            }
+        });
+        
+        // Add smooth scrolling for side panel content
+        const sidePanel = document.querySelector('.market-info-side-panel');
+        if (sidePanel) {
+            sidePanel.style.scrollBehavior = 'smooth';
+        }
+        
+        // Ensure price change indicators are properly positioned
+        this.updatePriceChangeIndicators();
+    }
+
+    /**
+     * Update price change indicators with enhanced positioning
+     */
+    updatePriceChangeIndicators() {
+        const priceItems = document.querySelectorAll('.market-info-side-panel .price-item');
+        priceItems.forEach(item => {
+            const priceChange = item.querySelector('.price-change');
+            if (priceChange) {
+                // Ensure price change indicators are properly styled for side panel
+                priceChange.style.fontSize = 'var(--font-size-xs)';
+                priceChange.style.marginTop = 'var(--spacing-xs)';
+            }
+        });
+    }
+
+    /**
+     * Update side panel specific elements
+     */
+    updateSidePanelElements() {
+        // Update price change indicators
+        this.updatePriceChangeIndicators();
+        
+        // Ensure collapsible sections maintain proper state
+        const collapsibleSections = document.querySelectorAll('.collapsible-section');
+        collapsibleSections.forEach(section => {
+            const toggle = section.querySelector('.section-toggle');
+            const content = section.querySelector('.section-content');
+            
+            if (toggle && content) {
+                const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+                content.setAttribute('aria-hidden', isExpanded ? 'false' : 'true');
+            }
+        });
+        
+        // Update button states for side panel
+        const sidePanelButtons = document.querySelectorAll('.market-info-side-panel .btn');
+        sidePanelButtons.forEach(button => {
+            // Ensure buttons have proper focus states
+            if (!button.hasAttribute('tabindex')) {
+                button.setAttribute('tabindex', '0');
+            }
+        });
     }
 
     /**
@@ -106,26 +193,43 @@ class SheepBusinessGame {
      */
     setupEventListeners() {
         // Purchase button
-        document.getElementById('purchaseBtn').addEventListener('click', () => {
-            this.handlePurchase();
-        });
+        const purchaseBtn = document.getElementById('purchaseBtn');
+        if (purchaseBtn) {
+            purchaseBtn.addEventListener('click', () => {
+                console.log('Purchase button clicked');
+                this.handlePurchase();
+            });
+        } else {
+            console.error('Purchase button not found');
+        }
         
 
-
         // Housing purchase button
-        document.getElementById('purchaseHousingBtn').addEventListener('click', () => {
-            this.handleHousingPurchase();
-        });
+        const housingBtn = document.getElementById('purchaseHousingBtn');
+        if (housingBtn) {
+            housingBtn.addEventListener('click', () => {
+                console.log('Housing purchase button clicked');
+                this.handleHousingPurchase();
+            });
+        } else {
+            console.error('Housing purchase button not found');
+        }
 
         // Housing amount input for real-time preview
-        document.getElementById('housingAmount').addEventListener('input', () => {
-            this.updateHousingPreview();
-        });
+        const housingInput = document.getElementById('housingAmount');
+        if (housingInput) {
+            housingInput.addEventListener('input', () => {
+                this.updateHousingPreview();
+            });
+        }
 
         // Sheep money input for real-time preview
-        document.getElementById('sheepMoneyInput').addEventListener('input', () => {
-            this.updateSheepPurchasePreview();
-        });
+        const sheepInput = document.getElementById('sheepMoneyInput');
+        if (sheepInput) {
+            sheepInput.addEventListener('input', () => {
+                this.updateSheepPurchasePreview();
+            });
+        }
 
         // Guide toggle buttons
         document.querySelectorAll('.guide-toggle').forEach(button => {
@@ -151,21 +255,30 @@ class SheepBusinessGame {
         });
 
         // Reset button
-        document.getElementById('resetBtn').addEventListener('click', () => {
-            this.resetGame();
-        });
+        const resetBtn = document.getElementById('resetBtn');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => {
+                this.resetGame();
+            });
+        }
 
         // Help button
-        document.getElementById('helpBtn').addEventListener('click', () => {
-            this.showHelp();
-        });
+        const helpBtn = document.getElementById('helpBtn');
+        if (helpBtn) {
+            helpBtn.addEventListener('click', () => {
+                this.showHelp();
+            });
+        }
 
 
 
         // Market trends button
-        document.getElementById('marketTrendsBtn').addEventListener('click', () => {
-            this.showMarketTrends();
-        });
+        const marketTrendsBtn = document.getElementById('marketTrendsBtn');
+        if (marketTrendsBtn) {
+            marketTrendsBtn.addEventListener('click', () => {
+                this.showMarketTrends();
+            });
+        }
 
         // Modal close buttons
         document.querySelectorAll('.close').forEach(closeBtn => {
@@ -184,12 +297,25 @@ class SheepBusinessGame {
         });
 
         // Teacher settings save/cancel
-        document.getElementById('saveSettings').addEventListener('click', () => {
-            this.saveTeacherSettings();
-        });
+        const saveSettingsBtn = document.getElementById('saveSettings');
+        if (saveSettingsBtn) {
+            saveSettingsBtn.addEventListener('click', () => {
+                this.saveTeacherSettings();
+            });
+        }
 
-        document.getElementById('cancelSettings').addEventListener('click', () => {
-            this.closeModal(document.getElementById('teacherSettingsModal'));
+        const cancelSettingsBtn = document.getElementById('cancelSettings');
+        if (cancelSettingsBtn) {
+            cancelSettingsBtn.addEventListener('click', () => {
+                this.closeModal(document.getElementById('teacherSettingsModal'));
+            });
+        }
+
+        // Collapsible section toggles
+        document.querySelectorAll('.section-toggle').forEach(toggle => {
+            toggle.addEventListener('click', (e) => {
+                this.toggleCollapsibleSection(e.target.closest('.section-toggle'));
+            });
         });
 
         // Enter key support for inputs
@@ -200,11 +326,21 @@ class SheepBusinessGame {
                     const calculationType = this.getCalculationTypeFromInput(input);
                     if (calculationType) {
                         this.handleCalculationCheck(calculationType);
-                    } else if (input.id === 'sheepQuantity') {
+                    } else if (input.id === 'sheepMoneyInput') {
                         this.handlePurchase();
+                    } else if (input.id === 'housingAmount') {
+                        this.handleHousingPurchase();
                     }
                 }
             });
+
+            // Add focus event listeners for calculation inputs to show proactive tips
+            const calculationType = this.getCalculationTypeFromInput(input);
+            if (calculationType) {
+                input.addEventListener('focus', () => {
+                    this.handleCalculationFocus(calculationType);
+                });
+            }
         });
     }
 
@@ -308,14 +444,13 @@ class SheepBusinessGame {
         this.updateSheepPurchasePreview();
         
         this.updateDisplay();
+        this.updateTransactionRecord();
         this.showFeedback(`🐑 Successfully purchased ${quantity} sheep for $${actualCost}!`, 'success');
-        
-        // Enable calculation inputs
-        this.enableCalculations();
     }
 
     /**
      * Handle calculation validation
+     * Note: Feed calculation has been relocated from Financial Ledger to Expenses section
      */
     handleCalculationCheck(calculationType) {
         const inputElement = document.getElementById(`${calculationType}Calculation`);
@@ -387,6 +522,9 @@ class SheepBusinessGame {
                 attempts: this.gameState.currentRoundData.calculations[calculationType].attempts + 1
             };
         }
+        
+        // Update transaction record to show the calculated value
+        this.updateTransactionRecord();
     }
 
     /**
@@ -413,13 +551,35 @@ class SheepBusinessGame {
             this.gameState.currentRoundData.calculations[calculationType].studentAnswer = studentAnswer;
             this.gameState.currentRoundData.calculations[calculationType].correctAnswer = correctAnswer;
 
+            // Get attempt count for feedback
+            const attemptCount = this.gameState.currentRoundData.calculations[calculationType].attempts;
+            
+            // Generate feedback with math tips if enabled
+            let feedbackMessage = 'Try again! Check your calculation.';
+            let mathTip = '';
+            
+            if (this.gameState.settings.mathTipsEnabled && this.gameState.settings.mathTipsFrequency !== 'never') {
+                // Get math tip based on error pattern - safely handle if mathTips is not available
+                if (this.calculations && this.calculations.mathTips) {
+                    mathTip = this.calculations.mathTips.getTip(calculationType, 'error', studentAnswer, correctAnswer);
+                }
+                
+                // Combine feedback message with math tip
+                if (mathTip) {
+                    feedbackMessage = `Try again! ${mathTip}`;
+                }
+            }
+
+            // Show feedback with math tip
+            this.showFeedback(feedbackMessage, 'error');
+
             // Show worked example after 2 attempts
-            if (this.gameState.currentRoundData.calculations[calculationType].attempts >= 2) {
+            if (attemptCount >= 2) {
                 this.showWorkedExample(calculationType);
             }
 
             // Auto-fill after 5 attempts with penalty
-            if (this.gameState.currentRoundData.calculations[calculationType].attempts >= 5) {
+            if (attemptCount >= 5) {
                 this.autoFillCalculation(calculationType, correctAnswer);
             }
         }
@@ -661,7 +821,7 @@ class SheepBusinessGame {
             this.initializeRoundData();
             this.updateDisplay();
             this.updateMarketConditions();
-            this.updateChart();
+            this.updateTransactionRecord();
             
             // Check housing sufficiency at start of new round
             this.checkHousingSufficiency();
@@ -672,10 +832,18 @@ class SheepBusinessGame {
             // Re-enable purchase inputs for new round
             this.enablePurchaseInputs();
             
+            // Ensure all inputs are enabled (safety check)
+            this.ensureAllInputsEnabled();
+            
             this.showFeedback(`Welcome to ${this.gameState.currentSeason}! New prices are in effect.`, 'success');
             
             // Check if calculations should be auto-enabled for round 2+
             this.checkAutoEnableCalculations();
+            
+            // Reset MathTips tracking for new round
+            if (this.calculations && this.calculations.mathTips) {
+                this.calculations.mathTips.resetTipTracking();
+            }
         }
     }
 
@@ -691,18 +859,33 @@ class SheepBusinessGame {
      */
     updateDisplay() {
         // Update header
-        document.getElementById('currentRound').textContent = this.gameState.currentRound;
-        document.getElementById('maxRounds').textContent = this.gameState.maxRounds;
-        document.getElementById('currentSeason').textContent = this.gameState.currentSeason.charAt(0).toUpperCase() + this.gameState.currentSeason.slice(1);
-        document.getElementById('seasonIcon').textContent = this.seasonIcons[this.gameState.currentSeason];
+        const currentRoundEl = document.getElementById('currentRound');
+        const maxRoundsEl = document.getElementById('maxRounds');
+        const currentSeasonEl = document.getElementById('currentSeason');
+        const seasonIconEl = document.getElementById('seasonIcon');
+        
+        if (currentRoundEl) currentRoundEl.textContent = this.gameState.currentRound;
+        if (maxRoundsEl) maxRoundsEl.textContent = this.gameState.maxRounds;
+        if (currentSeasonEl) currentSeasonEl.textContent = this.gameState.currentSeason.charAt(0).toUpperCase() + this.gameState.currentSeason.slice(1);
+        if (seasonIconEl) seasonIconEl.textContent = this.seasonIcons[this.gameState.currentSeason];
         
         // Update financial information
-        document.getElementById('currentBalance').textContent = `$${this.gameState.balance}`;
-        document.getElementById('flockSize').textContent = this.gameState.flockSize;
+        const currentBalanceEl = document.getElementById('currentBalance');
+        if (currentBalanceEl) currentBalanceEl.textContent = `$${this.gameState.balance}`;
         
-        // Update housing information
-        document.getElementById('housingCapacity').textContent = this.gameState.housingCapacity;
-        document.getElementById('housingStatus').textContent = this.getHousingStatus();
+        // Update flock and housing information (both old and new sidebar elements)
+        const flockSizeEl = document.getElementById('flockSize');
+        const sidebarFlockSizeEl = document.getElementById('sidebarFlockSize');
+        const housingCapacityEl = document.getElementById('housingCapacity');
+        const sidebarHousingCapacityEl = document.getElementById('sidebarHousingCapacity');
+        const sidebarHousingStatusEl = document.getElementById('sidebarHousingStatus');
+        
+        if (flockSizeEl) flockSizeEl.textContent = this.gameState.flockSize;
+        if (sidebarFlockSizeEl) sidebarFlockSizeEl.textContent = this.gameState.flockSize;
+        
+        if (housingCapacityEl) housingCapacityEl.textContent = this.gameState.housingCapacity;
+        if (sidebarHousingCapacityEl) sidebarHousingCapacityEl.textContent = this.gameState.housingCapacity;
+        if (sidebarHousingStatusEl) sidebarHousingStatusEl.textContent = this.getHousingStatus();
         
 
         
@@ -710,16 +893,25 @@ class SheepBusinessGame {
         this.updateHousingVisualIndicators();
         
         // Update prices
-        document.getElementById('sheepPrice').textContent = `$${this.gameState.marketPrices.sheepPurchasePrice}`;
-        document.getElementById('housingCost').textContent = `$${this.gameState.marketPrices.housingCost}`;
-        document.getElementById('feedCost').textContent = `$${this.gameState.marketPrices.feedCost}`;
-        document.getElementById('woolPrice').textContent = `$${this.gameState.marketPrices.woolPrice}`;
+        const sheepPriceEl = document.getElementById('sheepPrice');
+        const housingCostEl = document.getElementById('housingCost');
+        const feedCostEl = document.getElementById('feedCost');
+        const woolPriceEl = document.getElementById('woolPrice');
+        const marketConditionEl = document.getElementById('marketCondition');
+        
+        if (sheepPriceEl) sheepPriceEl.textContent = `$${this.gameState.marketPrices.sheepPurchasePrice}`;
+        if (housingCostEl) housingCostEl.textContent = `$${this.gameState.marketPrices.housingCost}`;
+        if (feedCostEl) feedCostEl.textContent = `$${this.gameState.marketPrices.feedCost}`;
+        if (woolPriceEl) woolPriceEl.textContent = `$${this.gameState.marketPrices.woolPrice}`;
         
         // Update market condition
-        document.getElementById('marketCondition').textContent = this.gameState.seasonalPrices[this.gameState.currentSeason].marketCondition;
+        if (marketConditionEl) marketConditionEl.textContent = this.gameState.seasonalPrices[this.gameState.currentSeason].marketCondition;
         
         // Update round-specific purchase displays
         this.updateRoundPurchaseDisplays();
+        
+        // Update side panel specific elements
+        this.updateSidePanelElements();
         
         // Guide values are no longer updated since guides show operation instructions only
     }
@@ -732,30 +924,34 @@ class SheepBusinessGame {
         const sheepRoundPurchases = document.getElementById('sheepRoundPurchases');
         const sheepRoundValue = document.getElementById('sheepRoundPurchasesValue');
         
-        if (this.gameState.sheepPurchasedThisRound > 0) {
-            const message = `During this round you have purchased ${this.gameState.sheepPurchasedThisRound} sheep`;
-            sheepRoundValue.textContent = message;
-            sheepRoundPurchases.classList.add('has-purchases');
-            sheepRoundPurchases.setAttribute('aria-label', message);
-        } else {
-            sheepRoundValue.textContent = 'No sheep purchased yet';
-            sheepRoundPurchases.classList.remove('has-purchases');
-            sheepRoundPurchases.setAttribute('aria-label', 'No sheep purchased in this round');
+        if (sheepRoundValue && sheepRoundPurchases) {
+            if (this.gameState.sheepPurchasedThisRound > 0) {
+                const message = `During this round you have purchased ${this.gameState.sheepPurchasedThisRound} sheep`;
+                sheepRoundValue.textContent = message;
+                sheepRoundPurchases.classList.add('has-purchases');
+                sheepRoundPurchases.setAttribute('aria-label', message);
+            } else {
+                sheepRoundValue.textContent = 'No sheep purchased yet';
+                sheepRoundPurchases.classList.remove('has-purchases');
+                sheepRoundPurchases.setAttribute('aria-label', 'No sheep purchased in this round');
+            }
         }
         
         // Update housing purchase display
         const housingRoundPurchases = document.getElementById('housingRoundPurchases');
         const housingRoundValue = document.getElementById('housingRoundPurchasesValue');
         
-        if (this.gameState.housingUnitsPurchasedThisRound > 0) {
-            const message = `During this round you have purchased ${this.gameState.housingUnitsPurchasedThisRound} housing units`;
-            housingRoundValue.textContent = message;
-            housingRoundPurchases.classList.add('has-purchases');
-            housingRoundPurchases.setAttribute('aria-label', message);
-        } else {
-            housingRoundValue.textContent = 'No housing purchased yet';
-            housingRoundPurchases.classList.remove('has-purchases');
-            housingRoundPurchases.setAttribute('aria-label', 'No housing purchased in this round');
+        if (housingRoundValue && housingRoundPurchases) {
+            if (this.gameState.housingUnitsPurchasedThisRound > 0) {
+                const message = `During this round you have purchased ${this.gameState.housingUnitsPurchasedThisRound} housing units`;
+                housingRoundValue.textContent = message;
+                housingRoundPurchases.classList.add('has-purchases');
+                housingRoundPurchases.setAttribute('aria-label', message);
+            } else {
+                housingRoundValue.textContent = 'No housing purchased yet';
+                housingRoundPurchases.classList.remove('has-purchases');
+                housingRoundPurchases.setAttribute('aria-label', 'No housing purchased in this round');
+            }
         }
     }
 
@@ -975,9 +1171,9 @@ class SheepBusinessGame {
         if (this.gameState.canSkipPurchases && this.gameState.flockSize > 0) {
             console.log('Auto-enabling calculations for round', this.gameState.currentRound, 'with flock size', this.gameState.flockSize);
             
-            // Check if any purchases have been made this round
-            const sheepPurchased = this.gameState.currentRoundData ? this.gameState.currentRoundData.sheepPurchased : 0;
-            const housingPurchased = this.gameState.currentRoundData ? this.gameState.currentRoundData.housingPurchased : 0;
+            // Check if any purchases have been made this round using the actual counters
+            const sheepPurchased = this.gameState.sheepPurchasedThisRound || 0;
+            const housingPurchased = this.gameState.housingUnitsPurchasedThisRound || 0;
             
             if (sheepPurchased === 0 && housingPurchased === 0) {
                 console.log('No purchases made this round, enabling calculations');
@@ -990,170 +1186,75 @@ class SheepBusinessGame {
     }
 
     /**
-     * Update the profit chart
+     * Update the transaction record
      */
-    updateChart() {
-        const chartContainer = document.getElementById('profitChart');
+    updateTransactionRecord() {
+        const transactionContainer = document.getElementById('transactionRecord');
         
-        if (this.gameState.roundHistory.length === 0) {
-            chartContainer.innerHTML = '<p>Complete your first round to see your money trend</p>';
+        // Force clear any existing content
+        transactionContainer.innerHTML = '';
+        
+        if (!this.gameState.currentRoundData) {
+            transactionContainer.innerHTML = '<div class="no-transactions">Start purchasing to see your transaction record</div>';
             return;
         }
 
-        // Create line chart showing money at end of each round
-        const moneyData = this.createMoneyLineChart();
-        chartContainer.innerHTML = moneyData;
+        // Create transaction record showing only the four simple items
+        const transactionData = this.createTransactionRecord();
+        transactionContainer.innerHTML = transactionData;
+        
+        // Debug: log what was actually created
+        console.log('Transaction record HTML:', transactionContainer.innerHTML);
     }
 
     /**
-     * Create a line chart showing money at end of each round
+     * Create a simple transaction record for the current round
+     * Shows only the four basic items: Feed Cost, Shelter Cost, Sheep Purchase, Wool Income
+     * Only shows actual purchases made this round, not calculated totals
      */
-    createMoneyLineChart() {
-        // Calculate money at end of each round
-        const moneyAtEndOfRounds = [];
-        let runningBalance = this.gameState.settings.startingBalance || 200;
-        
-        // Add starting balance as first point
-        moneyAtEndOfRounds.push({
-            round: 0,
-            season: 'start',
-            money: runningBalance
-        });
-        
-        // Add money at end of each completed round
-        this.gameState.roundHistory.forEach((round, index) => {
-            runningBalance += round.finalProfit;
-            moneyAtEndOfRounds.push({
-                round: index + 1,
-                season: round.season,
-                money: runningBalance
-            });
-        });
-        
-        // Create SVG line chart with improved dark theme
-        const chartWidth = 400;
-        const chartHeight = 200;
-        const legendHeight = 30; // Space for legend below
-        const totalHeight = chartHeight + legendHeight;
-        const padding = 40;
-        const plotWidth = chartWidth - 2 * padding;
-        const plotHeight = chartHeight - 2 * padding;
-        
-        // Find min and max values for scaling
-        const minMoney = Math.min(...moneyAtEndOfRounds.map(d => d.money));
-        const maxMoney = Math.max(...moneyAtEndOfRounds.map(d => d.money));
-        const moneyRange = maxMoney - minMoney;
-        
-        // Create SVG with dark theme and space for legend
-        let svg = `<svg width="${chartWidth}" height="${totalHeight}" class="money-line-chart">`;
-        
-        // Add dark chart background (only for the chart area)
-        svg += `<rect x="0" y="0" width="${chartWidth}" height="${chartHeight}" fill="#1a1a1a" stroke="none"/>`;
-        
-        // Add chart title with light text
-        svg += `<text x="${chartWidth/2}" y="15" text-anchor="middle" class="chart-title" fill="#ffffff">Money Trend</text>`;
-        
-        // Add Y-axis label with light text
-        svg += `<text x="10" y="${chartHeight/2}" text-anchor="middle" transform="rotate(-90, 10, ${chartHeight/2})" class="axis-label" fill="#cccccc">Money ($)</text>`;
-        
-        // Draw Y-axis grid lines and labels with subtle styling
-        const yTicks = 5;
-        for (let i = 0; i <= yTicks; i++) {
-            const y = padding + (i / yTicks) * plotHeight;
-            const moneyValue = maxMoney - (i / yTicks) * moneyRange;
-            const moneyLabel = Math.round(moneyValue);
-            
-            // Subtle grid line
-            svg += `<line x1="${padding}" y1="${y}" x2="${chartWidth-padding}" y2="${y}" stroke="#404040" stroke-width="0.5"/>`;
-            // Y-axis label with light color
-            svg += `<text x="${padding-5}" y="${y+3}" text-anchor="end" class="tick-label" fill="#cccccc">$${moneyLabel}</text>`;
-        }
-        
-        // Draw X-axis grid lines and labels
-        moneyAtEndOfRounds.forEach((dataPoint, index) => {
-            const x = padding + (index / (moneyAtEndOfRounds.length - 1)) * plotWidth;
-            
-            // Subtle grid line
-            svg += `<line x1="${x}" y1="${padding}" x2="${x}" y2="${chartHeight-padding}" stroke="#404040" stroke-width="0.5"/>`;
-            
-            // X-axis label (season or "Start") with light color
-            const label = dataPoint.round === 0 ? 'Start' : dataPoint.season.charAt(0).toUpperCase() + dataPoint.season.slice(1);
-            svg += `<text x="${x}" y="${chartHeight-padding+15}" text-anchor="middle" class="tick-label" fill="#cccccc">${label}</text>`;
-        });
-        
-        // Draw the line with light color and glow effect
-        let pathData = '';
-        moneyAtEndOfRounds.forEach((dataPoint, index) => {
-            const x = padding + (index / (moneyAtEndOfRounds.length - 1)) * plotWidth;
-            const y = padding + ((maxMoney - dataPoint.money) / moneyRange) * plotHeight;
-            
-            if (index === 0) {
-                pathData += `M ${x} ${y}`;
-            } else {
-                pathData += ` L ${x} ${y}`;
-            }
-        });
-        
-        // Add glow effect and light line color
-        svg += `<defs>
-            <filter id="glow">
-                <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-                <feMerge> 
-                    <feMergeNode in="coloredBlur"/>
-                    <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-            </filter>
-        </defs>`;
-        
-        svg += `<path d="${pathData}" stroke="#4a90e2" stroke-width="3" fill="none" filter="url(#glow)"/>`;
-        
-        // Draw data points with improved styling
-        moneyAtEndOfRounds.forEach((dataPoint, index) => {
-            const x = padding + (index / (moneyAtEndOfRounds.length - 1)) * plotWidth;
-            const y = padding + ((maxMoney - dataPoint.money) / moneyRange) * plotHeight;
-            
-            // Add subtle glow for data points
-            svg += `<circle cx="${x}" cy="${y}" r="5" fill="rgba(74, 144, 226, 0.3)" stroke="none"/>`;
-            svg += `<circle cx="${x}" cy="${y}" r="4" fill="${this.getSeasonColor(dataPoint.season)}" stroke="#ffffff" stroke-width="2"/>`;
-            
-            // Add tooltip with money value
-            svg += `<title>Round ${dataPoint.round}: $${dataPoint.money}</title>`;
-        });
-        
-        // Add legend below the chart as SVG elements
-        const seasons = ['start', 'spring', 'summer', 'autumn', 'winter'];
-        const seasonLabels = ['Start', 'Spring', 'Summer', 'Autumn', 'Winter'];
-        const legendY = chartHeight + 20; // Position below chart
-        const legendStartX = 50;
-        const legendSpacing = 70;
-        
-        seasons.forEach((season, index) => {
-            const legendX = legendStartX + (index * legendSpacing);
-            
-            // Legend color circle
-            svg += `<circle cx="${legendX}" cy="${legendY}" r="4" fill="${this.getSeasonColor(season)}" stroke="#ffffff" stroke-width="1"/>`;
-            
-            // Legend label
-            svg += `<text x="${legendX + 8}" y="${legendY + 3}" class="legend-label-compact" fill="#cccccc" font-size="12">${seasonLabels[index]}</text>`;
-        });
-        
-        svg += '</svg>';
-        
-        return svg;
+    createTransactionRecord() {
+        const currentRound = this.gameState.currentRoundData;
+        let html = '';
+
+        // Feed cost - only show if user has calculated it
+        const feedInput = document.getElementById('feedCalculation');
+        const feedCost = feedInput && feedInput.value ? parseInt(feedInput.value) : 0;
+        html += `<div class="transaction-item">
+            <span class="transaction-label">Feed Cost:</span>
+            <span class="transaction-amount">$${feedCost}</span>
+        </div>`;
+
+        // Shelter cost (housing purchased this round)
+        const shelterCost = this.gameState.housingUnitsPurchasedThisRound * this.getCurrentSeasonalPrice('housingCost');
+        html += `<div class="transaction-item">
+            <span class="transaction-label">Shelter Cost:</span>
+            <span class="transaction-amount">$${shelterCost}</span>
+        </div>`;
+
+        // Sheep purchase cost
+        const sheepCost = this.gameState.sheepPurchasedThisRound * this.getCurrentSeasonalPrice('sheepPurchasePrice');
+        html += `<div class="transaction-item">
+            <span class="transaction-label">Sheep Purchase:</span>
+            <span class="transaction-amount">$${sheepCost}</span>
+        </div>`;
+
+        // Wool income - only show if user has calculated it
+        const woolInput = document.getElementById('woolCalculation');
+        const woolIncome = woolInput && woolInput.value ? parseInt(woolInput.value) : 0;
+        html += `<div class="transaction-item">
+            <span class="transaction-label">Wool Income:</span>
+            <span class="transaction-amount">$${woolIncome}</span>
+        </div>`;
+
+        return html;
     }
 
     /**
-     * Get color for season
+     * Get current seasonal price for a given price type
      */
-    getSeasonColor(season) {
-        const colors = {
-            'start': '#6c757d',
-            'spring': '#28a745',
-            'summer': '#ffc107',
-            'autumn': '#fd7e14',
-            'winter': '#17a2b8'
-        };
-        return colors[season] || '#6c757d';
+    getCurrentSeasonalPrice(priceType) {
+        const currentSeason = this.gameState.currentSeason;
+        return this.gameState.seasonalPrices[currentSeason][priceType];
     }
 
     /**
@@ -1162,12 +1263,21 @@ class SheepBusinessGame {
     showFeedback(message, type = 'info') {
         const banner = document.getElementById('feedbackBanner');
         banner.textContent = message;
-        banner.className = `feedback-banner ${type}`;
         
-        // Auto-hide after 5 seconds
-        setTimeout(() => {
-            banner.className = 'feedback-banner';
-        }, 5000);
+        // Special handling for math tips
+        if (message.includes('💡 Math Tip:') || message.includes('Math Tip:')) {
+            banner.className = 'feedback-banner math-tip info';
+            // Show math tips for longer duration
+            setTimeout(() => {
+                banner.className = 'feedback-banner';
+            }, 8000); // 8 seconds for math tips
+        } else {
+            banner.className = `feedback-banner ${type}`;
+            // Auto-hide after 5 seconds for regular feedback
+            setTimeout(() => {
+                banner.className = 'feedback-banner';
+            }, 5000);
+        }
     }
 
     /**
@@ -1307,7 +1417,9 @@ class SheepBusinessGame {
         document.getElementById('startingBalance').value = this.gameState.settings.startingBalance || 200;
         document.getElementById('maxRoundsSetting').value = this.gameState.settings.maxRounds || 12;
         document.getElementById('marketDifficulty').value = this.gameState.settings.marketDifficulty;
-        
+        document.getElementById('mathTipsEnabled').checked = this.gameState.settings.mathTipsEnabled;
+        document.getElementById('mathTipsFrequency').value = this.gameState.settings.mathTipsFrequency;
+
         this.showModal('teacherSettingsModal');
     }
 
@@ -1321,7 +1433,9 @@ class SheepBusinessGame {
         this.gameState.settings.startingBalance = parseInt(document.getElementById('startingBalance').value) || 200;
         this.gameState.settings.maxRounds = parseInt(document.getElementById('maxRoundsSetting').value) || 12;
         this.gameState.settings.marketDifficulty = document.getElementById('marketDifficulty').value;
-        
+        this.gameState.settings.mathTipsEnabled = document.getElementById('mathTipsEnabled').checked;
+        this.gameState.settings.mathTipsFrequency = document.getElementById('mathTipsFrequency').value;
+
         this.closeModal(document.getElementById('teacherSettingsModal'));
         this.showFeedback('Settings saved successfully!', 'success');
     }
@@ -1405,6 +1519,28 @@ class SheepBusinessGame {
     }
 
     /**
+     * Toggle collapsible section visibility in side panel
+     */
+    toggleCollapsibleSection(toggleButton) {
+        const isExpanded = toggleButton.getAttribute('aria-expanded') === 'true';
+        const contentId = toggleButton.getAttribute('aria-controls');
+        const content = document.getElementById(contentId);
+        const arrow = toggleButton.querySelector('.toggle-arrow');
+        
+        if (isExpanded) {
+            // Collapse section
+            toggleButton.setAttribute('aria-expanded', 'false');
+            content.setAttribute('aria-hidden', 'true');
+            arrow.textContent = '▶';
+        } else {
+            // Expand section
+            toggleButton.setAttribute('aria-expanded', 'true');
+            content.setAttribute('aria-hidden', 'false');
+            arrow.textContent = '▼';
+        }
+    }
+
+    /**
      * Update guide values with current game state
      * Note: This function is no longer needed since guides now show operation instructions only
      * Keeping the function for potential future use but removing the actual value updates
@@ -1479,17 +1615,20 @@ class SheepBusinessGame {
         
         // Update display
         this.updateDisplay();
+        this.updateTransactionRecord();
         
         // Enhanced feedback with visual effects
         this.showFeedback(`🏠 Successfully purchased ${housingUnits} housing units for $${actualCost}!`, 'success');
         
         // Add visual feedback to housing capacity display
-        const housingCapacityElement = document.getElementById('housingCapacity');
-        housingCapacityElement.style.transform = 'scale(1.2)';
-        housingCapacityElement.style.transition = 'transform 0.3s ease';
-        setTimeout(() => {
-            housingCapacityElement.style.transform = 'scale(1)';
-        }, 300);
+        const housingCapacityElement = document.getElementById('sidebarHousingCapacity');
+        if (housingCapacityElement) {
+            housingCapacityElement.style.transform = 'scale(1.2)';
+            housingCapacityElement.style.transition = 'transform 0.3s ease';
+            setTimeout(() => {
+                housingCapacityElement.style.transform = 'scale(1)';
+            }, 300);
+        }
     }
 
     /**
@@ -1588,31 +1727,43 @@ class SheepBusinessGame {
      */
     updateHousingVisualIndicators() {
         const housingInfoDisplay = document.querySelector('.housing-info-display');
-        const housingCapacity = document.getElementById('housingCapacity');
+        const sidebarHousingCapacity = document.getElementById('sidebarHousingCapacity');
+        const sidebarHousingStatus = document.getElementById('sidebarHousingStatus');
         const capacity = this.gameState.housingCapacity;
         const flockSize = this.gameState.flockSize;
         
         // Remove all existing classes
-        housingInfoDisplay.classList.remove('warning', 'danger', 'success');
-        housingCapacity.classList.remove('near-limit', 'at-limit', 'available');
+        if (housingInfoDisplay) {
+            housingInfoDisplay.classList.remove('warning', 'danger', 'success');
+        }
+        if (sidebarHousingCapacity) {
+            sidebarHousingCapacity.classList.remove('near-limit', 'at-limit', 'available');
+        }
+        if (sidebarHousingStatus) {
+            sidebarHousingStatus.classList.remove('warning', 'danger', 'success');
+        }
         
         // Apply appropriate classes based on housing status
         if (flockSize > capacity) {
             // Insufficient housing
-            housingInfoDisplay.classList.add('danger');
-            housingCapacity.classList.add('at-limit');
+            if (housingInfoDisplay) housingInfoDisplay.classList.add('danger');
+            if (sidebarHousingCapacity) sidebarHousingCapacity.classList.add('at-limit');
+            if (sidebarHousingStatus) sidebarHousingStatus.classList.add('danger');
         } else if (flockSize === capacity) {
             // At capacity
-            housingInfoDisplay.classList.add('warning');
-            housingCapacity.classList.add('at-limit');
+            if (housingInfoDisplay) housingInfoDisplay.classList.add('warning');
+            if (sidebarHousingCapacity) sidebarHousingCapacity.classList.add('at-limit');
+            if (sidebarHousingStatus) sidebarHousingStatus.classList.add('warning');
         } else if (capacity - flockSize <= 2) {
             // Nearly full
-            housingInfoDisplay.classList.add('warning');
-            housingCapacity.classList.add('near-limit');
+            if (housingInfoDisplay) housingInfoDisplay.classList.add('warning');
+            if (sidebarHousingCapacity) sidebarHousingCapacity.classList.add('near-limit');
+            if (sidebarHousingStatus) sidebarHousingStatus.classList.add('warning');
         } else {
             // Available capacity
-            housingInfoDisplay.classList.add('success');
-            housingCapacity.classList.add('available');
+            if (housingInfoDisplay) housingInfoDisplay.classList.add('success');
+            if (sidebarHousingCapacity) sidebarHousingCapacity.classList.add('available');
+            if (sidebarHousingStatus) sidebarHousingStatus.classList.add('success');
         }
     }
 
@@ -1736,22 +1887,141 @@ class SheepBusinessGame {
         const housingBtn = document.getElementById('purchaseHousingBtn');
         const skipBtn = document.getElementById('skipPurchaseBtn');
         
-        if (sheepInput) sheepInput.disabled = false;
-        if (housingInput) housingInput.disabled = false;
-        if (purchaseBtn) purchaseBtn.disabled = false;
-        if (housingBtn) housingBtn.disabled = false;
-        if (skipBtn) skipBtn.disabled = false;
+        // Enable all purchase inputs
+        if (sheepInput) {
+            sheepInput.disabled = false;
+            sheepInput.classList.remove('disabled');
+            sheepInput.value = '0'; // Reset to default value
+        }
+        if (housingInput) {
+            housingInput.disabled = false;
+            housingInput.classList.remove('disabled');
+            housingInput.value = '0'; // Reset to default value
+        }
+        if (purchaseBtn) {
+            purchaseBtn.disabled = false;
+            purchaseBtn.classList.remove('disabled');
+        }
+        if (housingBtn) {
+            housingBtn.disabled = false;
+            housingBtn.classList.remove('disabled');
+        }
+        if (skipBtn) {
+            skipBtn.disabled = false;
+            skipBtn.classList.remove('disabled');
+        }
         
-        // Remove visual indication that purchases are disabled
-        [sheepInput, housingInput, purchaseBtn, housingBtn, skipBtn].forEach(element => {
-            if (element) {
-                element.classList.remove('disabled');
+        // Also ensure calculation inputs are enabled
+        this.enableCalculationInputs();
+    }
+
+    /**
+     * Enable all calculation inputs
+     */
+    enableCalculationInputs() {
+        const calculationInputs = [
+            'feedCalculation',
+            'woolCalculation', 
+            'profitCalculation'
+        ];
+        
+        calculationInputs.forEach(id => {
+            const input = document.getElementById(id);
+            if (input) {
+                input.disabled = false;
+                input.classList.remove('disabled');
+                input.readOnly = false;
+                // Clear any previous values
+                if (!input.value || input.value === '0') {
+                    input.value = '';
+                }
             }
         });
     }
+
+    /**
+     * Ensure all inputs are properly enabled (safety function)
+     */
+    ensureAllInputsEnabled() {
+        // Enable purchase inputs
+        this.enablePurchaseInputs();
+        
+        // Enable calculation inputs
+        this.enableCalculationInputs();
+        
+        // Remove any disabled classes from all number inputs
+        const allNumberInputs = document.querySelectorAll('input[type="number"]');
+        allNumberInputs.forEach(input => {
+            input.disabled = false;
+            input.classList.remove('disabled');
+            input.readOnly = false;
+        });
+        
+        console.log('All inputs have been enabled');
+    }
+
+    /**
+     * Show proactive math tip for a calculation type
+     * @param {string} calculationType - Type of calculation
+     */
+    showProactiveMathTip(calculationType) {
+        if (this.gameState.settings.mathTipsEnabled && 
+            this.gameState.settings.mathTipsFrequency === 'always') {
+            if (this.calculations && this.calculations.mathTips) {
+                const mathTip = this.calculations.mathTips.getProactiveTip(calculationType);
+                if (mathTip) {
+                    this.showFeedback(`💡 Math Tip: ${mathTip}`, 'info');
+                }
+            }
+        }
+    }
+
+    /**
+     * Handle calculation input focus to show proactive tips
+     * @param {string} calculationType - Type of calculation
+     */
+    handleCalculationFocus(calculationType) {
+        this.showProactiveMathTip(calculationType);
+    }
 }
 
-// Initialize the game when the page loads
+// Global error handler for browser extension conflicts
+window.addEventListener('error', (event) => {
+    // Ignore errors related to message channel closures (browser extension conflicts)
+    if (event.message && event.message.includes('message channel closed')) {
+        console.log('Browser extension conflict detected and ignored');
+        return;
+    }
+    
+    // Log other errors normally
+    console.error('Game error:', event.error);
+});
+
+// Global unhandled promise rejection handler
+window.addEventListener('unhandledrejection', (event) => {
+    // Ignore promise rejections related to message channel closures
+    if (event.reason && event.reason.message && event.reason.message.includes('message channel closed')) {
+        console.log('Browser extension promise conflict detected and ignored');
+        event.preventDefault(); // Prevent the error from being logged
+        return;
+    }
+    
+    // Log other promise rejections normally
+    console.error('Unhandled promise rejection:', event.reason);
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     window.sheepGame = new SheepBusinessGame();
+
+    // Add a global function to fix input issues
+    window.fixInputs = () => {
+        if (window.sheepGame) {
+            window.sheepGame.ensureAllInputsEnabled();
+            console.log('Inputs have been manually enabled');
+            alert('All inputs have been enabled. Try entering numbers now.');
+        } else {
+            console.error('Game object not found');
+            alert('Game object not found. Please refresh the page.');
+        }
+    };
 }); 

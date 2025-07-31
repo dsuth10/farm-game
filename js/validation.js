@@ -208,46 +208,105 @@ class GameValidation {
      * Generate feedback message based on attempt count
      * @param {number} attemptCount - Number of attempts
      * @param {string} calculationType - Type of calculation
+     * @param {number} studentAnswer - Student's answer
+     * @param {number} correctAnswer - Correct answer
+     * @param {object} mathTips - MathTips instance (optional)
      * @returns {object} Feedback result
      */
-    generateAttemptFeedback(attemptCount, calculationType) {
+    generateAttemptFeedback(attemptCount, calculationType, studentAnswer = null, correctAnswer = null, mathTips = null) {
+        let message = '';
+        let type = 'error';
+        let showHint = false;
+        let showWorkedExample = false;
+        let autoFill = false;
+        let mathTip = '';
+
         if (attemptCount === 1) {
-            return {
-                message: this.validationMessages.general.incorrect,
-                type: 'error',
-                showHint: false,
-                showWorkedExample: false
-            };
+            message = this.validationMessages.general.incorrect;
+            type = 'error';
+            showHint = false;
+            showWorkedExample = false;
+            
+            // Add math tip on first error if math tips are enabled
+            if (mathTips && studentAnswer !== null && correctAnswer !== null) {
+                mathTip = mathTips.getTip(calculationType, 'first_error', studentAnswer, correctAnswer);
+            }
         } else if (attemptCount === 2) {
-            return {
-                message: this.validationMessages.general.hint,
-                type: 'warning',
-                showHint: true,
-                showWorkedExample: false
-            };
+            message = this.validationMessages.general.hint;
+            type = 'warning';
+            showHint = true;
+            showWorkedExample = false;
+            
+            // Add more specific math tip on second error
+            if (mathTips && studentAnswer !== null && correctAnswer !== null) {
+                mathTip = mathTips.getTip(calculationType, 'second_error', studentAnswer, correctAnswer);
+            }
         } else if (attemptCount >= 3 && attemptCount < 5) {
-            return {
-                message: this.validationMessages.general.workedExample,
-                type: 'warning',
-                showHint: false,
-                showWorkedExample: true
-            };
+            message = this.validationMessages.general.workedExample;
+            type = 'warning';
+            showHint = false;
+            showWorkedExample = true;
+            
+            // Add targeted math tip on third+ error
+            if (mathTips && studentAnswer !== null && correctAnswer !== null) {
+                mathTip = mathTips.getTip(calculationType, 'multiple_errors', studentAnswer, correctAnswer);
+            }
         } else if (attemptCount >= 5) {
-            return {
-                message: this.validationMessages.general.autoFill,
-                type: 'warning',
-                showHint: false,
-                showWorkedExample: false,
-                autoFill: true
-            };
+            message = this.validationMessages.general.autoFill;
+            type = 'warning';
+            showHint = false;
+            showWorkedExample = false;
+            autoFill = true;
+            
+            // Add final math tip before auto-fill
+            if (mathTips && studentAnswer !== null && correctAnswer !== null) {
+                mathTip = mathTips.getTip(calculationType, 'final_error', studentAnswer, correctAnswer);
+            }
+        } else {
+            message = this.validationMessages.general.incorrect;
+            type = 'error';
+            showHint = false;
+            showWorkedExample = false;
         }
 
         return {
-            message: this.validationMessages.general.incorrect,
-            type: 'error',
-            showHint: false,
-            showWorkedExample: false
+            message: message,
+            type: type,
+            showHint: showHint,
+            showWorkedExample: showWorkedExample,
+            autoFill: autoFill,
+            mathTip: mathTip
         };
+    }
+
+    /**
+     * Generate a math tip based on error pattern and calculation type
+     * @param {string} calculationType - Type of calculation
+     * @param {number} studentAnswer - Student's answer
+     * @param {number} correctAnswer - Correct answer
+     * @param {object} mathTips - MathTips instance
+     * @returns {string} Math tip message
+     */
+    generateMathTip(calculationType, studentAnswer, correctAnswer, mathTips) {
+        if (!mathTips) {
+            return '';
+        }
+        
+        return mathTips.getTip(calculationType, 'error', studentAnswer, correctAnswer);
+    }
+
+    /**
+     * Get proactive math tip for a calculation type
+     * @param {string} calculationType - Type of calculation
+     * @param {object} mathTips - MathTips instance
+     * @returns {string} Proactive math tip
+     */
+    getProactiveMathTip(calculationType, mathTips) {
+        if (!mathTips) {
+            return '';
+        }
+        
+        return mathTips.getProactiveTip(calculationType);
     }
 
     /**

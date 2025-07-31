@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Debug Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="number"] {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        button {
+            padding: 8px 16px;
+            margin: 5px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 3px;
+        }
+        .status.info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        .status.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .status.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <h1>Input Debug Test</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: Basic Input Functionality</h2>
+        <p>Try typing in these inputs to see if they work:</p>
+        <input type="number" id="testInput1" placeholder="Test input 1" min="0" step="1">
+        <input type="number" id="testInput2" placeholder="Test input 2" min="0" step="1">
+        <button onclick="testInputs()">Test Inputs</button>
+        <div id="testResult1" class="status info"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: Game Inputs</h2>
+        <p>Check the actual game inputs:</p>
+        <input type="number" id="sheepMoneyInput" min="0" step="1" value="0" placeholder="Enter amount">
+        <input type="number" id="housingAmount" min="0" step="1" value="0" placeholder="Enter amount">
+        <input type="number" id="feedCalculation" placeholder="Enter your answer">
+        <input type="number" id="woolCalculation" placeholder="Enter your answer">
+        <input type="number" id="profitCalculation" placeholder="Enter your answer">
+        <button onclick="checkGameInputs()">Check Game Inputs</button>
+        <div id="testResult2" class="status info"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Enable/Disable Functions</h2>
+        <button onclick="disableInputs()">Disable All Inputs</button>
+        <button onclick="enableInputs()">Enable All Inputs</button>
+        <button onclick="checkInputStates()">Check Input States</button>
+        <div id="testResult3" class="status info"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 4: Browser Console</h2>
+        <p>Open browser console (F12) and check for any JavaScript errors.</p>
+        <button onclick="runConsoleTests()">Run Console Tests</button>
+        <div id="testResult4" class="status info"></div>
+    </div>
+
+    <script>
+        function testInputs() {
+            const input1 = document.getElementById('testInput1');
+            const input2 = document.getElementById('testInput2');
+            const result = document.getElementById('testResult1');
+            
+            let status = 'info';
+            let message = '';
+            
+            if (input1.disabled || input2.disabled) {
+                status = 'error';
+                message = 'ERROR: One or more test inputs are disabled!';
+            } else if (input1.readOnly || input2.readOnly) {
+                status = 'error';
+                message = 'ERROR: One or more test inputs are read-only!';
+            } else {
+                status = 'success';
+                message = 'SUCCESS: Test inputs are working correctly. Try typing in them.';
+            }
+            
+            result.className = `status ${status}`;
+            result.textContent = message;
+        }
+
+        function checkGameInputs() {
+            const inputs = [
+                'sheepMoneyInput',
+                'housingAmount', 
+                'feedCalculation',
+                'woolCalculation',
+                'profitCalculation'
+            ];
+            
+            const result = document.getElementById('testResult2');
+            let message = '';
+            let status = 'info';
+            
+            inputs.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    const disabled = input.disabled ? 'DISABLED' : 'ENABLED';
+                    const readonly = input.readOnly ? 'READONLY' : 'EDITABLE';
+                    message += `${id}: ${disabled}, ${readonly}<br>`;
+                    
+                    if (input.disabled) {
+                        status = 'error';
+                    }
+                } else {
+                    message += `${id}: NOT FOUND<br>`;
+                    status = 'error';
+                }
+            });
+            
+            result.className = `status ${status}`;
+            result.innerHTML = message;
+        }
+
+        function disableInputs() {
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                input.disabled = true;
+                input.classList.add('disabled');
+            });
+            
+            const result = document.getElementById('testResult3');
+            result.className = 'status error';
+            result.textContent = 'All inputs have been disabled.';
+        }
+
+        function enableInputs() {
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                input.disabled = false;
+                input.classList.remove('disabled');
+            });
+            
+            const result = document.getElementById('testResult3');
+            result.className = 'status success';
+            result.textContent = 'All inputs have been enabled.';
+        }
+
+        function checkInputStates() {
+            const inputs = document.querySelectorAll('input[type="number"]');
+            const result = document.getElementById('testResult3');
+            let message = '';
+            let disabledCount = 0;
+            let enabledCount = 0;
+            
+            inputs.forEach((input, index) => {
+                if (input.disabled) {
+                    disabledCount++;
+                    message += `Input ${index + 1}: DISABLED<br>`;
+                } else {
+                    enabledCount++;
+                    message += `Input ${index + 1}: ENABLED<br>`;
+                }
+            });
+            
+            message += `<br>Total: ${enabledCount} enabled, ${disabledCount} disabled`;
+            
+            const status = disabledCount > 0 ? 'error' : 'success';
+            result.className = `status ${status}`;
+            result.innerHTML = message;
+        }
+
+        function runConsoleTests() {
+            const result = document.getElementById('testResult4');
+            
+            try {
+                // Test if game object exists
+                if (typeof window.sheepGame !== 'undefined') {
+                    console.log('Game object found:', window.sheepGame);
+                    result.className = 'status success';
+                    result.textContent = 'Game object found. Check console for details.';
+                } else {
+                    console.log('No game object found');
+                    result.className = 'status error';
+                    result.textContent = 'No game object found. This might be the issue.';
+                }
+                
+                // Test input elements
+                const gameInputs = [
+                    'sheepMoneyInput',
+                    'housingAmount',
+                    'feedCalculation',
+                    'woolCalculation',
+                    'profitCalculation'
+                ];
+                
+                gameInputs.forEach(id => {
+                    const element = document.getElementById(id);
+                    console.log(`${id}:`, element);
+                    if (element) {
+                        console.log(`${id} disabled:`, element.disabled);
+                        console.log(`${id} readonly:`, element.readOnly);
+                        console.log(`${id} classes:`, element.className);
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Error in console tests:', error);
+                result.className = 'status error';
+                result.textContent = 'Error in console tests. Check console for details.';
+            }
+        }
+
+        // Auto-run basic test on page load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                testInputs();
+                checkGameInputs();
+            }, 1000);
+        });
+    </script>
+</body>
+</html> 
