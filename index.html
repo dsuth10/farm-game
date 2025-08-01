@@ -11,13 +11,22 @@
 <body>
     <!-- Header Section -->
     <header class="game-header">
-        <h1>Sheep Station Manager</h1>
-        <div class="round-info">
-            <span class="round-counter">Round <span id="currentRound">1</span> of <span id="maxRounds">12</span></span>
+        <div class="header-content">
+            <h1>Sheep Station Manager</h1>
+            <div class="header-controls">
+                <button id="nextRoundBtn" class="btn btn-primary" disabled>⏭️ Next Round</button>
+                <button id="resetBtn" class="btn btn-secondary">🔄 Reset Game</button>
+                <button id="helpBtn" class="btn btn-secondary">❓ Help</button>
+            </div>
         </div>
-        <div class="season-info">
-            <span class="season-name" id="currentSeason">Spring</span>
-            <span class="season-icon" id="seasonIcon">🌸</span>
+        <div class="header-info">
+            <div class="round-info">
+                <span class="round-counter">Round <span id="currentRound">1</span> of <span id="maxRounds">12</span></span>
+            </div>
+            <div class="season-info">
+                <span class="season-name" id="currentSeason">Spring</span>
+                <span class="season-icon" id="seasonIcon">🌸</span>
+            </div>
         </div>
     </header>
 
@@ -36,7 +45,6 @@
                     <div class="flock-status-item">
                         <span class="flock-status-label">Housing Capacity:</span>
                         <span class="flock-status-value" id="sidebarHousingCapacity">0</span>
-                        <span class="flock-status-indicator" id="sidebarHousingStatus"></span>
                     </div>
                 </div>
             </div>
@@ -100,12 +108,7 @@
                 </div>
             </div>
 
-            <!-- Game Controls - Critical Information (Always Visible) -->
-            <div class="game-controls critical-info">
-                <button id="nextRoundBtn" class="btn btn-primary" disabled>⏭️ Next Round</button>
-                <button id="resetBtn" class="btn btn-secondary">🔄 Reset Game</button>
-                <button id="helpBtn" class="btn btn-secondary">❓ Help</button>
-            </div>
+
         </aside>
 
         <!-- Main Content Area -->

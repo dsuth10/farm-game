@@ -578,10 +578,7 @@ class SheepBusinessGame {
                 this.showWorkedExample(calculationType);
             }
 
-            // Auto-fill after 5 attempts with penalty
-            if (attemptCount >= 5) {
-                this.autoFillCalculation(calculationType, correctAnswer);
-            }
+            // Removed auto-fill functionality - students must solve the problem themselves
         }
     }
 
@@ -622,21 +619,7 @@ class SheepBusinessGame {
         this.showModal('workedExampleModal');
     }
 
-    /**
-     * Auto-fill calculation with penalty
-     */
-    autoFillCalculation(calculationType, correctAnswer) {
-        const inputElement = document.getElementById(`${calculationType}Calculation`);
-        inputElement.value = correctAnswer;
-        inputElement.disabled = true;
-        
-        // Apply penalty
-        this.gameState.balance -= 10;
-        this.updateDisplay();
-        
-        this.markCalculationCorrect(calculationType, correctAnswer);
-        this.showFeedback('Answer auto-filled with $10 penalty. Keep practicing!', 'warning');
-    }
+
 
     /**
      * Calculate final profit for the current round
@@ -878,19 +861,16 @@ class SheepBusinessGame {
         const sidebarFlockSizeEl = document.getElementById('sidebarFlockSize');
         const housingCapacityEl = document.getElementById('housingCapacity');
         const sidebarHousingCapacityEl = document.getElementById('sidebarHousingCapacity');
-        const sidebarHousingStatusEl = document.getElementById('sidebarHousingStatus');
         
         if (flockSizeEl) flockSizeEl.textContent = this.gameState.flockSize;
         if (sidebarFlockSizeEl) sidebarFlockSizeEl.textContent = this.gameState.flockSize;
         
         if (housingCapacityEl) housingCapacityEl.textContent = this.gameState.housingCapacity;
         if (sidebarHousingCapacityEl) sidebarHousingCapacityEl.textContent = this.gameState.housingCapacity;
-        if (sidebarHousingStatusEl) sidebarHousingStatusEl.textContent = this.getHousingStatus();
         
 
         
-        // Apply visual indicators for housing status
-        this.updateHousingVisualIndicators();
+
         
         // Update prices
         const sheepPriceEl = document.getElementById('sheepPrice');
@@ -1686,23 +1666,7 @@ class SheepBusinessGame {
         return this.gameState.flockSize <= this.gameState.housingCapacity;
     }
 
-    /**
-     * Get housing status message
-     */
-    getHousingStatus() {
-        const capacity = this.gameState.housingCapacity;
-        const flockSize = this.gameState.flockSize;
-        
-        if (flockSize > capacity) {
-            return '⚠️ Insufficient housing!';
-        } else if (flockSize === capacity) {
-            return '🏠 At capacity';
-        } else if (capacity - flockSize <= 2) {
-            return '🏠 Nearly full';
-        } else {
-            return '🏠 Available';
-        }
-    }
+
 
     /**
      * Check if housing capacity is sufficient for current flock size
@@ -1722,50 +1686,7 @@ class SheepBusinessGame {
         return this.gameState.housingCapacity;
     }
 
-    /**
-     * Update visual indicators for housing status
-     */
-    updateHousingVisualIndicators() {
-        const housingInfoDisplay = document.querySelector('.housing-info-display');
-        const sidebarHousingCapacity = document.getElementById('sidebarHousingCapacity');
-        const sidebarHousingStatus = document.getElementById('sidebarHousingStatus');
-        const capacity = this.gameState.housingCapacity;
-        const flockSize = this.gameState.flockSize;
-        
-        // Remove all existing classes
-        if (housingInfoDisplay) {
-            housingInfoDisplay.classList.remove('warning', 'danger', 'success');
-        }
-        if (sidebarHousingCapacity) {
-            sidebarHousingCapacity.classList.remove('near-limit', 'at-limit', 'available');
-        }
-        if (sidebarHousingStatus) {
-            sidebarHousingStatus.classList.remove('warning', 'danger', 'success');
-        }
-        
-        // Apply appropriate classes based on housing status
-        if (flockSize > capacity) {
-            // Insufficient housing
-            if (housingInfoDisplay) housingInfoDisplay.classList.add('danger');
-            if (sidebarHousingCapacity) sidebarHousingCapacity.classList.add('at-limit');
-            if (sidebarHousingStatus) sidebarHousingStatus.classList.add('danger');
-        } else if (flockSize === capacity) {
-            // At capacity
-            if (housingInfoDisplay) housingInfoDisplay.classList.add('warning');
-            if (sidebarHousingCapacity) sidebarHousingCapacity.classList.add('at-limit');
-            if (sidebarHousingStatus) sidebarHousingStatus.classList.add('warning');
-        } else if (capacity - flockSize <= 2) {
-            // Nearly full
-            if (housingInfoDisplay) housingInfoDisplay.classList.add('warning');
-            if (sidebarHousingCapacity) sidebarHousingCapacity.classList.add('near-limit');
-            if (sidebarHousingStatus) sidebarHousingStatus.classList.add('warning');
-        } else {
-            // Available capacity
-            if (housingInfoDisplay) housingInfoDisplay.classList.add('success');
-            if (sidebarHousingCapacity) sidebarHousingCapacity.classList.add('available');
-            if (sidebarHousingStatus) sidebarHousingStatus.classList.add('success');
-        }
-    }
+
 
     /**
      * Update purchase section visibility based on whether purchases can be skipped

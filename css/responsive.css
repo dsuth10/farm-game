@@ -20,12 +20,27 @@
         max-width: 1000px;
     }
     
-    .game-header h1 {
-        font-size: 3rem;
-    }
-    
     .game-header {
         padding: var(--spacing-xl);
+    }
+    
+    .header-content {
+        flex-direction: row;
+        gap: var(--spacing-lg);
+    }
+    
+    .header-content h1 {
+        font-size: 3rem;
+        flex: 1;
+    }
+    
+    .header-controls {
+        gap: var(--spacing-md);
+    }
+    
+    .header-controls .btn {
+        padding: var(--spacing-md) var(--spacing-lg);
+        font-size: var(--font-size-large);
     }
 }
 
@@ -246,8 +261,27 @@
         padding: var(--spacing-md);
     }
     
-    .game-header h1 {
+    .header-content {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        text-align: center;
+    }
+    
+    .header-content h1 {
         font-size: var(--font-size-2xl);
+        text-align: center;
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .header-controls {
+        gap: var(--spacing-sm);
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .header-controls .btn {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: var(--font-size-small);
     }
     
     .round-info, .season-info {
@@ -468,8 +502,28 @@
         padding: var(--spacing-sm);
     }
     
-    .game-header h1 {
+    .header-content {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+        text-align: center;
+    }
+    
+    .header-content h1 {
         font-size: var(--font-size-xl);
+        text-align: center;
+        margin-bottom: var(--spacing-xs);
+    }
+    
+    .header-controls {
+        gap: var(--spacing-xs);
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .header-controls .btn {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: var(--font-size-xs);
+        min-width: auto;
     }
     
     .round-info, .season-info {
@@ -606,8 +660,30 @@
         gap: var(--spacing-sm);
     }
     
-    .game-header h1 {
+    .header-content {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+        text-align: center;
+    }
+    
+    .header-content h1 {
         font-size: var(--font-size-large);
+        text-align: center;
+        margin-bottom: var(--spacing-xs);
+    }
+    
+    .header-controls {
+        gap: var(--spacing-xs);
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .header-controls .btn {
+        padding: var(--spacing-xs);
+        font-size: var(--font-size-xs);
+        min-width: auto;
+        flex: 1;
+        max-width: 120px;
     }
     
     .round-info, .season-info {
@@ -645,9 +721,29 @@
         padding: var(--spacing-xs);
     }
     
-    .game-header h1 {
+    .header-content {
+        flex-direction: row;
+        gap: var(--spacing-sm);
+        text-align: left;
+    }
+    
+    .header-content h1 {
         font-size: var(--font-size-large);
-        margin-bottom: var(--spacing-xs);
+        text-align: left;
+        margin-bottom: 0;
+        flex: 1;
+    }
+    
+    .header-controls {
+        gap: var(--spacing-xs);
+        justify-content: flex-end;
+        flex-wrap: nowrap;
+    }
+    
+    .header-controls .btn {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: var(--font-size-xs);
+        min-width: auto;
     }
     
     .game-container {

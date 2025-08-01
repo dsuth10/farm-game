@@ -82,18 +82,45 @@ h3 { font-size: var(--font-size-xl); }
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     color: white;
     padding: var(--spacing-lg);
-    text-align: center;
     box-shadow: var(--shadow-md);
 }
 
-.game-header h1 {
-    margin-bottom: var(--spacing-sm);
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.header-content h1 {
+    margin: 0;
     font-size: var(--font-size-3xl);
+    flex: 1;
+    text-align: left;
+}
+
+.header-controls {
+    display: flex;
+    gap: var(--spacing-sm);
+    align-items: center;
+}
+
+.header-controls .btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-base);
+    white-space: nowrap;
+}
+
+.header-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-xl);
 }
 
 .round-info, .season-info {
     display: inline-block;
-    margin: 0 var(--spacing-md);
+    margin: 0;
     font-size: var(--font-size-large);
 }
 

@@ -25,7 +25,6 @@ class GameValidation {
                 incorrect: 'Try again! Check your calculation.',
                 hint: 'Here\'s a hint to help you.',
                 workedExample: 'Let\'s work through this step by step.',
-                autoFill: 'Answer auto-filled with penalty. Keep practicing!',
                 roundComplete: 'All calculations correct! You can advance to the next round.',
                 gameComplete: 'Congratulations! You\'ve completed the game!'
             }
@@ -218,7 +217,6 @@ class GameValidation {
         let type = 'error';
         let showHint = false;
         let showWorkedExample = false;
-        let autoFill = false;
         let mathTip = '';
 
         if (attemptCount === 1) {
@@ -241,7 +239,7 @@ class GameValidation {
             if (mathTips && studentAnswer !== null && correctAnswer !== null) {
                 mathTip = mathTips.getTip(calculationType, 'second_error', studentAnswer, correctAnswer);
             }
-        } else if (attemptCount >= 3 && attemptCount < 5) {
+        } else if (attemptCount >= 3) {
             message = this.validationMessages.general.workedExample;
             type = 'warning';
             showHint = false;
@@ -250,17 +248,6 @@ class GameValidation {
             // Add targeted math tip on third+ error
             if (mathTips && studentAnswer !== null && correctAnswer !== null) {
                 mathTip = mathTips.getTip(calculationType, 'multiple_errors', studentAnswer, correctAnswer);
-            }
-        } else if (attemptCount >= 5) {
-            message = this.validationMessages.general.autoFill;
-            type = 'warning';
-            showHint = false;
-            showWorkedExample = false;
-            autoFill = true;
-            
-            // Add final math tip before auto-fill
-            if (mathTips && studentAnswer !== null && correctAnswer !== null) {
-                mathTip = mathTips.getTip(calculationType, 'final_error', studentAnswer, correctAnswer);
             }
         } else {
             message = this.validationMessages.general.incorrect;
@@ -274,7 +261,6 @@ class GameValidation {
             type: type,
             showHint: showHint,
             showWorkedExample: showWorkedExample,
-            autoFill: autoFill,
             mathTip: mathTip
         };
     }
