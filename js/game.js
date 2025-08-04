@@ -94,8 +94,7 @@ class SheepBusinessGame {
         this.updateMarketConditions();
         this.clearCalculations();
         this.updateTransactionRecord();
-        this.updateHousingPreview();
-        this.updateSheepPurchasePreview();
+
         this.initializeRoundData();
         this.updatePurchaseSectionVisibility();
         
@@ -215,21 +214,10 @@ class SheepBusinessGame {
             console.error('Housing purchase button not found');
         }
 
-        // Housing amount input for real-time preview
-        const housingInput = document.getElementById('housingAmount');
-        if (housingInput) {
-            housingInput.addEventListener('input', () => {
-                this.updateHousingPreview();
-            });
-        }
+
 
         // Sheep money input for real-time preview
-        const sheepInput = document.getElementById('sheepMoneyInput');
-        if (sheepInput) {
-            sheepInput.addEventListener('input', () => {
-                this.updateSheepPurchasePreview();
-            });
-        }
+
 
         // Guide toggle buttons
         document.querySelectorAll('.guide-toggle').forEach(button => {
@@ -441,7 +429,6 @@ class SheepBusinessGame {
 
         // Clear the input
         document.getElementById('sheepMoneyInput').value = '0';
-        this.updateSheepPurchasePreview();
         
         this.updateDisplay();
         this.updateTransactionRecord();
@@ -900,39 +887,9 @@ class SheepBusinessGame {
      * Update round-specific purchase displays
      */
     updateRoundPurchaseDisplays() {
-        // Update sheep purchase display
-        const sheepRoundPurchases = document.getElementById('sheepRoundPurchases');
-        const sheepRoundValue = document.getElementById('sheepRoundPurchasesValue');
+
         
-        if (sheepRoundValue && sheepRoundPurchases) {
-            if (this.gameState.sheepPurchasedThisRound > 0) {
-                const message = `During this round you have purchased ${this.gameState.sheepPurchasedThisRound} sheep`;
-                sheepRoundValue.textContent = message;
-                sheepRoundPurchases.classList.add('has-purchases');
-                sheepRoundPurchases.setAttribute('aria-label', message);
-            } else {
-                sheepRoundValue.textContent = 'No sheep purchased yet';
-                sheepRoundPurchases.classList.remove('has-purchases');
-                sheepRoundPurchases.setAttribute('aria-label', 'No sheep purchased in this round');
-            }
-        }
-        
-        // Update housing purchase display
-        const housingRoundPurchases = document.getElementById('housingRoundPurchases');
-        const housingRoundValue = document.getElementById('housingRoundPurchasesValue');
-        
-        if (housingRoundValue && housingRoundPurchases) {
-            if (this.gameState.housingUnitsPurchasedThisRound > 0) {
-                const message = `During this round you have purchased ${this.gameState.housingUnitsPurchasedThisRound} housing units`;
-                housingRoundValue.textContent = message;
-                housingRoundPurchases.classList.add('has-purchases');
-                housingRoundPurchases.setAttribute('aria-label', message);
-            } else {
-                housingRoundValue.textContent = 'No housing purchased yet';
-                housingRoundPurchases.classList.remove('has-purchases');
-                housingRoundPurchases.setAttribute('aria-label', 'No housing purchased in this round');
-            }
-        }
+
     }
 
     /**
@@ -960,11 +917,8 @@ class SheepBusinessGame {
             };
         }
         
-        // Update housing preview when prices change
-        this.updateHousingPreview();
-        
-        // Update sheep purchase preview when prices change
-        this.updateSheepPurchasePreview();
+
+
     }
 
     /**
@@ -1591,7 +1545,6 @@ class SheepBusinessGame {
         
         // Clear the input
         document.getElementById('housingAmount').value = '0';
-        this.updateHousingPreview();
         
         // Update display
         this.updateDisplay();
@@ -1614,50 +1567,9 @@ class SheepBusinessGame {
     /**
      * Update housing preview based on current input
      */
-    updateHousingPreview() {
-        const housingAmount = parseFloat(document.getElementById('housingAmount').value) || 0;
-        const housingCostPerUnit = this.gameState.marketPrices.housingCost;
-        
-        // Check if amount is an exact multiple
-        const isExactMultiple = housingAmount % housingCostPerUnit === 0;
-        const housingUnits = Math.floor(housingAmount / housingCostPerUnit);
-        
-        // Show preview with validation indicator
-        if (housingAmount > 0 && !isExactMultiple) {
-            document.getElementById('housingUnitsPreview').textContent = `${housingUnits} (Invalid - not exact multiple)`;
-            document.getElementById('housingUnitsPreview').style.color = '#ff6b6b';
-        } else {
-            document.getElementById('housingUnitsPreview').textContent = housingUnits;
-            document.getElementById('housingUnitsPreview').style.color = '';
-        }
-        
-        // Update housing cost per unit display
-        document.getElementById('housingCostPerUnit').textContent = `$${housingCostPerUnit}`;
-    }
 
-    /**
-     * Update sheep purchase preview based on current input
-     */
-    updateSheepPurchasePreview() {
-        const sheepAmount = parseFloat(document.getElementById('sheepMoneyInput').value) || 0;
-        const sheepCostPerUnit = this.gameState.marketPrices.sheepPurchasePrice;
-        
-        // Check if amount is an exact multiple
-        const isExactMultiple = sheepAmount % sheepCostPerUnit === 0;
-        const sheepUnits = Math.floor(sheepAmount / sheepCostPerUnit);
-        
-        // Show preview with validation indicator
-        if (sheepAmount > 0 && !isExactMultiple) {
-            document.getElementById('sheepUnitsPreview').textContent = `${sheepUnits} (Invalid - not exact multiple)`;
-            document.getElementById('sheepUnitsPreview').style.color = '#ff6b6b';
-        } else {
-            document.getElementById('sheepUnitsPreview').textContent = sheepUnits;
-            document.getElementById('sheepUnitsPreview').style.color = '';
-        }
-        
-        // Update sheep cost per unit display
-        document.getElementById('sheepCostPerUnit').textContent = `$${sheepCostPerUnit}`;
-    }
+
+
 
     /**
      * Check if current flock size exceeds housing capacity

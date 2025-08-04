@@ -720,35 +720,7 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.1);
 }
 
-.housing-info {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-md);
-    padding: var(--spacing-md);
-    background: var(--background-secondary);
-    border-radius: var(--border-radius-sm);
-}
 
-.housing-cost-info,
-.housing-units-preview {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xs);
-}
-
-.housing-cost-label,
-.housing-units-label {
-    font-size: var(--font-size-small);
-    color: var(--text-secondary);
-    font-weight: 500;
-}
-
-.housing-cost-value,
-.housing-units-value {
-    font-size: var(--font-size-large);
-    font-weight: 600;
-    color: var(--primary-color);
-}
 
 /* Sheep Purchase Section */
 .sheep-purchase-section {
@@ -760,40 +732,10 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: var(--shadow-sm);
 }
 
-/* Sheep Info Styles */
-.sheep-info {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-md);
-    padding: var(--spacing-md);
-    background: var(--background-secondary);
-    border-radius: var(--border-radius-sm);
-}
 
-.sheep-cost-info,
-.sheep-units-preview {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xs);
-}
-
-.sheep-cost-label,
-.sheep-units-label {
-    font-size: var(--font-size-small);
-    color: var(--text-secondary);
-    font-weight: 500;
-}
-
-.sheep-cost-value,
-.sheep-units-value {
-    font-size: var(--font-size-large);
-    font-weight: 600;
-    color: var(--primary-color);
-}
 
 /* Round-specific purchase displays */
-.sheep-round-purchases,
-.housing-round-purchases {
+.sheep-round-purchases {
     margin-top: var(--spacing-sm);
     padding: var(--spacing-sm);
     background-color: var(--background-secondary);
@@ -816,14 +758,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Highlight when purchases are made */
-.sheep-round-purchases.has-purchases,
-.housing-round-purchases.has-purchases {
+.sheep-round-purchases.has-purchases {
     background-color: rgba(39, 174, 96, 0.1);
     border-left-color: var(--success-color);
 }
 
-.sheep-round-purchases.has-purchases .round-purchases-value,
-.housing-round-purchases.has-purchases .round-purchases-value {
+.sheep-round-purchases.has-purchases .round-purchases-value {
     color: var(--success-color);
     font-weight: 600;
 }
