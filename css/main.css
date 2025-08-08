@@ -1821,3 +1821,17 @@ select:focus {
     }
 } 
 
+/* Number Inputs: Disable spinners and enforce manual entry */
+/* Remove spinner controls in Chromium/WebKit browsers */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Remove spinner controls in Firefox and standardize appearance */
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+

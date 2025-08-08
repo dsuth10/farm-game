@@ -306,7 +306,7 @@ class SheepBusinessGame {
             });
         });
 
-        // Enter key support for inputs
+        // Enter key support for inputs + disable wheel/arrow increments
         document.querySelectorAll('input[type="number"]').forEach(input => {
             input.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
@@ -319,6 +319,18 @@ class SheepBusinessGame {
                     } else if (input.id === 'housingAmount') {
                         this.handleHousingPurchase();
                     }
+                }
+            });
+
+            // Prevent mouse wheel from changing the value
+            input.addEventListener('wheel', (e) => {
+                e.preventDefault();
+            }, { passive: false });
+
+            // Prevent ArrowUp/ArrowDown/PageUp/PageDown from incrementing/decrementing
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'PageUp' || e.key === 'PageDown') {
+                    e.preventDefault();
                 }
             });
 
